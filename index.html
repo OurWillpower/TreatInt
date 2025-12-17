@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1e3a8a">
-<link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3063/3063823.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TreatInt | Global Medical Marketplace</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e3a8a">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3063/3063823.png">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
         body { font-family: 'Poppins', sans-serif; }
         .slider-container { position: relative; height: 100vh; overflow: hidden; }
@@ -29,20 +32,17 @@
     <nav class="bg-white shadow-md fixed w-full z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20">
-                
                 <div class="flex items-center">
                     <a href="index.html" class="text-3xl font-bold text-blue-900">
                         <i class="fas fa-globe-americas text-blue-500"></i> Treat<span class="text-blue-500">Int</span>
                     </a>
                 </div>
-
                 <div class="hidden md:flex items-center space-x-6">
                     <a href="treatments.html" class="text-gray-700 hover:text-blue-600 font-medium">Treatments</a>
                     <a href="hospitals.html" class="text-gray-700 hover:text-blue-600 font-medium">Hospitals</a>
                     <a href="ayush.html" class="text-green-700 hover:text-green-900 font-bold">AYUSH Centers</a>
                     <a href="empanel.html" class="text-blue-900 font-medium border-b-2 border-transparent hover:border-blue-900">Empanel With Us</a>
                 </div>
-
                 <div class="hidden md:flex items-center space-x-4">
                     <a href="contact.html" class="bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-700 transition font-semibold shadow-lg text-sm">
                         Get Free Quote
@@ -51,7 +51,6 @@
                         <i class="fas fa-user-circle text-xl mr-2"></i> Login
                     </a>
                 </div>
-
                 <div class="md:hidden flex items-center">
                     <button onclick="toggleMobileMenu()" class="text-gray-700 hover:text-blue-600 focus:outline-none">
                         <i class="fas fa-bars text-3xl"></i>
@@ -59,7 +58,6 @@
                 </div>
             </div>
         </div>
-
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t absolute w-full left-0 shadow-lg z-50">
             <div class="px-4 pt-2 pb-4 space-y-1">
                 <a href="treatments.html" class="block px-3 py-3 text-base font-medium text-gray-700 hover:bg-gray-50">Treatments</a>
@@ -133,16 +131,12 @@
     </a>
 
     <script>
-        // MOBILE MENU TOGGLE
         function toggleMobileMenu() {
             document.getElementById('mobile-menu').classList.toggle('hidden');
         }
-
-        // SLIDER LOGIC
         const slides = document.querySelectorAll('.slide');
         let currentSlide = 0;
         const totalSlides = slides.length;
-
         function nextSlide() {
             slides[currentSlide].classList.remove('active');
             currentSlide = (currentSlide + 1) % totalSlides;
