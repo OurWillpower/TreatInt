@@ -1,91 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1e3a8a">
-<link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/44/44386.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Partner Login | TreatInt</title>
+    <title>Secure Login | TreatInt</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/616/616490.png">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/616/616490.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { font-family: 'Poppins', sans-serif; }
+        .role-btn.active { background-color: #1e3a8a; color: white; border-color: #1e3a8a; }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body class="bg-gray-100 h-screen flex items-center justify-center">
 
-    <nav class="bg-white shadow-md fixed w-full z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20">
-                <div class="flex items-center">
-                    <a href="index.html" class="text-3xl font-bold text-blue-900">
-                        <i class="fas fa-globe-americas text-blue-500"></i> Treat<span class="text-blue-500">Int</span>
-                    </a>
-                </div>
-                <div class="hidden md:flex items-center space-x-6">
-                    <a href="treatments.html" class="text-gray-700 hover:text-blue-600 font-medium">Treatments</a>
-                    <a href="hospitals.html" class="text-gray-700 hover:text-blue-600 font-medium">Hospitals</a>
-                    <a href="ayush.html" class="text-green-700 hover:text-green-900 font-bold">AYUSH Centers</a>
-                    <a href="empanel.html" class="text-blue-900 font-medium border-b-2 border-transparent hover:border-blue-900">Empanel With Us</a>
-                </div>
-                <div class="hidden md:flex items-center space-x-4">
-                    <a href="contact.html" class="bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-700 transition font-semibold shadow-lg text-sm">
-                        Get Free Quote
-                    </a>
-                    <a href="login.html" class="text-blue-900 font-bold flex items-center border-b-2 border-blue-900">
-                        <i class="fas fa-user-circle text-xl mr-2"></i> Login
-                    </a>
-                </div>
-                <div class="md:hidden flex items-center">
-                    <button onclick="toggleMobileMenu()" class="text-gray-700 hover:text-blue-600 focus:outline-none">
-                        <i class="fas fa-bars text-3xl"></i>
-                    </button>
+    <div class="bg-white rounded-2xl shadow-2xl overflow-hidden max-w-5xl w-full flex flex-col md:flex-row m-4">
+        
+        <div class="md:w-1/2 bg-blue-900 text-white flex flex-col justify-center p-10 relative overflow-hidden">
+            <div class="relative z-10">
+                <a href="index.html" class="text-3xl font-bold mb-6 block text-white">
+                    <i class="fas fa-globe-americas"></i> TreatInt
+                </a>
+                <h2 class="text-3xl font-bold mb-4" id="hero-title">Welcome Back</h2>
+                <p class="opacity-80 mb-6" id="hero-text">Access your secure dashboard to manage treatments, documents, and communications.</p>
+                <div class="flex items-center space-x-2 text-sm opacity-70">
+                    <i class="fas fa-lock"></i>
+                    <span>256-bit SSL Encrypted</span>
                 </div>
             </div>
+            <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-blue-800 rounded-full opacity-50"></div>
         </div>
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t absolute w-full left-0 shadow-lg z-50">
-            <div class="px-4 pt-2 pb-4 space-y-1">
-                <a href="treatments.html" class="block px-3 py-3 text-base font-medium text-gray-700 hover:bg-gray-50">Treatments</a>
-                <a href="hospitals.html" class="block px-3 py-3 text-base font-medium text-gray-700 hover:bg-gray-50">Hospitals</a>
-                <a href="ayush.html" class="block px-3 py-3 text-base font-bold text-green-700 hover:bg-gray-50">AYUSH Centers</a>
-                <a href="empanel.html" class="block px-3 py-3 text-base font-medium text-blue-900 hover:bg-gray-50">Empanel With Us</a>
-                <a href="contact.html" class="block px-3 py-3 text-base font-medium text-blue-600 font-bold">Get Free Quote</a>
-                <a href="login.html" class="block px-3 py-3 text-base font-medium text-gray-500 bg-gray-100">Login</a>
+
+        <div class="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+            
+            <label class="block text-gray-700 text-sm font-bold mb-3">Select Account Type</label>
+            <div class="flex space-x-2 mb-6">
+                <button onclick="setRole('patient')" id="btn-patient" class="role-btn active flex-1 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">
+                    Patient
+                </button>
+                <button onclick="setRole('agent')" id="btn-agent" class="role-btn flex-1 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">
+                    Agent
+                </button>
+                <button onclick="setRole('hospital')" id="btn-hospital" class="role-btn flex-1 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">
+                    Hospital
+                </button>
             </div>
-        </div>
-    </nav>
 
-    <div class="h-20"></div>
-
-    <div class="min-h-[calc(100vh-80px)] flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row max-w-4xl w-full">
-            <div class="md:w-1/2 bg-blue-900 relative hidden md:block">
-                <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover opacity-50">
-                <div class="relative z-10 p-12 flex flex-col justify-center h-full text-white">
-                    <h2 class="text-4xl font-bold mb-4">Welcome Back</h2>
-                    <p class="text-lg opacity-90">Access your dashboard to manage patients, track commissions, and update hospital profiles.</p>
+            <h3 class="text-xl font-bold text-gray-800 mb-6" id="form-title">Patient Login</h3>
+            
+            <form onsubmit="handleLogin(event)">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" id="user-label">Mobile Number / Patient ID</label>
+                    <div class="flex items-center border rounded-lg px-3 py-3 focus-within:ring-2 ring-blue-500 bg-gray-50">
+                        <i class="fas fa-user text-gray-400 mr-3"></i>
+                        <input type="text" id="username" class="w-full outline-none bg-transparent" placeholder="Enter ID">
+                    </div>
                 </div>
-            </div>
-            <div class="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
-                <div class="text-center md:text-left mb-8"><h1 class="text-3xl font-bold text-gray-800">Partner Login</h1><p class="text-gray-500 mt-2">Please enter your credentials</p></div>
-                <form>
-                    <div class="mb-6"><label class="block text-gray-700 font-bold mb-2 text-sm">Email Address</label><input type="text" class="w-full border p-3 rounded-lg bg-gray-50" placeholder="name@company.com"></div>
-                    <div class="mb-6"><label class="block text-gray-700 font-bold mb-2 text-sm">Password</label><input type="password" class="w-full border p-3 rounded-lg bg-gray-50" placeholder="••••••••"></div>
-                    <button type="button" class="w-full bg-blue-900 text-white font-bold py-3 rounded-lg hover:bg-blue-800 transition shadow-lg mb-6">Login</button>
-                    <div class="text-center text-sm text-gray-500">Not a partner yet? <a href="empanel.html" class="text-blue-600 font-bold hover:underline">Empanel Now</a></div>
-                </form>
-            </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                    <div class="flex items-center border rounded-lg px-3 py-3 focus-within:ring-2 ring-blue-500 bg-gray-50">
+                        <i class="fas fa-lock text-gray-400 mr-3"></i>
+                        <input type="password" id="password" class="w-full outline-none bg-transparent" placeholder="Enter Password">
+                    </div>
+                </div>
+
+                <button class="w-full bg-blue-900 text-white font-bold py-3 rounded-lg hover:bg-blue-800 transition shadow-lg mb-4 text-lg">
+                    SECURE LOGIN <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+
+                <div class="text-center flex justify-between text-sm mt-4">
+                    <a href="#" class="text-gray-500 hover:text-blue-900">Forgot Password?</a>
+                    <a href="contact.html" class="text-blue-600 font-bold hover:underline">New User? Register</a>
+                </div>
+            </form>
         </div>
     </div>
 
-    <a href="https://wa.me/917039196489?text=Hello%20TreatInt,%20I%20need%20assistance." target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white rounded-full p-4 shadow-2xl hover:bg-green-600 transition z-50 flex items-center justify-center animate-bounce" style="width: 60px; height: 60px;">
-        <i class="fab fa-whatsapp text-4xl"></i>
-    </a>
-
     <script>
-        function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
+        let currentRole = 'patient';
+
+        function setRole(role) {
+            currentRole = role;
+            
+            // Update Buttons
+            document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + role).classList.add('active');
+
+            // Update UI Text
+            const title = document.getElementById('form-title');
+            const label = document.getElementById('user-label');
+            const heroTitle = document.getElementById('hero-title');
+            const heroText = document.getElementById('hero-text');
+
+            if(role === 'patient') {
+                title.innerText = "Patient Login";
+                label.innerText = "Mobile Number / Patient ID";
+                heroTitle.innerText = "Your Health Locker";
+                heroText.innerText = "Access your medical records, prescriptions, and priority support in one place.";
+            } else if(role === 'agent') {
+                title.innerText = "Partner Agent Login";
+                label.innerText = "Agent ID / Email";
+                heroTitle.innerText = "Grow Your Business";
+                heroText.innerText = "Track your referrals, monitor visa status, and view your earnings dashboard.";
+            } else {
+                title.innerText = "Hospital/Lab Login";
+                label.innerText = "Empanelment ID";
+                heroTitle.innerText = "Provider Portal";
+                heroText.innerText = "View incoming international patients and access verified medical history.";
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+
+            // Simple Demo Logic
+            if(user === roleToCreds(currentRole) && pass === "123") {
+                // Redirect to the specific dashboard (We will create these files next)
+                window.location.href = "dashboard-" + currentRole + ".html";
+            } else {
+                alert("Demo Login:\nUser: " + roleToCreds(currentRole) + "\nPass: 123");
+            }
+        }
+
+        function roleToCreds(role) {
+            if(role === 'patient') return 'patient';
+            if(role === 'agent') return 'agent';
+            return 'hospital';
+        }
     </script>
 
 </body>
