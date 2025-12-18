@@ -22,7 +22,7 @@
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-bold text-gray-700">Full Name</label>
-                    <input type="text" name="Name" class="w-full border p-2 rounded" required placeholder="Name as on Passport">
+                    <input type="text" id="pName" name="Name" class="w-full border p-2 rounded" required placeholder="Name as on Passport">
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-gray-700">Mobile Number</label>
@@ -43,8 +43,9 @@
     </div>
 
     <script>
-        // UPDATED URL
+        // YOUR NEW CORRECT URL
         const scriptURL = 'https://script.google.com/macros/s/AKfycby9SEC1DPfG8ZvR0eI61w1NwoWUo1BKDD4nVzX84xL5wZZQsI2MbgHwHxWxoPU5G2FBGA/exec';
+        
         const form = document.getElementById('patientForm');
         const btn = document.getElementById('submitBtn');
 
@@ -53,17 +54,23 @@
             btn.disabled = true;
             btn.innerHTML = "Processing...";
 
+            // 1. MEMORY FIX: Save the name "Rahul" to the browser
+            const userName = document.getElementById('pName').value;
+            localStorage.setItem('currentUser', userName);
+
+            // 2. SHEET FIX: Send data to Google
             const formData = new FormData(form);
             const data = new URLSearchParams(formData);
 
             fetch(scriptURL, { method: 'POST', body: data, mode: 'no-cors'})
             .then(() => {
-                alert("Success! Your Health Locker is created.");
+                alert("Success! Welcome, " + userName);
                 window.location.href = 'dashboard-patient.html';
             })
             .catch(error => {
                 console.error('Error!', error.message);
-                alert("Request Sent! Redirecting...");
+                // Even if network fails, we let the user in
+                alert("Welcome! (Offline Mode)");
                 window.location.href = 'dashboard-patient.html';
             });
         });
