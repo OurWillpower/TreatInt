@@ -40,8 +40,8 @@
                 <button onclick="setRole('patient')" id="btn-patient" class="role-btn active flex-1 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">
                     Patient
                 </button>
-                <button onclick="setRole('agent')" id="btn-agent" class="role-btn flex-1 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">
-                    Agent
+                <button onclick="setRole('partner')" id="btn-partner" class="role-btn flex-1 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">
+                    Partner
                 </button>
                 <button onclick="setRole('hospital')" id="btn-hospital" class="role-btn flex-1 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">
                     Hospital
@@ -100,9 +100,9 @@
                 label.innerText = "Mobile Number / Patient ID";
                 heroTitle.innerText = "Your Health Locker";
                 heroText.innerText = "Access your medical records, prescriptions, and priority support in one place.";
-            } else if(role === 'agent') {
-                title.innerText = "Partner Agent Login";
-                label.innerText = "Agent ID / Email";
+            } else if(role === 'partner') { // CHANGED FROM AGENT TO PARTNER
+                title.innerText = "Partner Login";
+                label.innerText = "Partner ID / Email";
                 heroTitle.innerText = "Grow Your Business";
                 heroText.innerText = "Track your referrals, monitor visa status, and view your earnings dashboard.";
             } else {
@@ -119,18 +119,13 @@
             const pass = document.getElementById('password').value;
 
             // Simple Demo Logic
-            if(user === roleToCreds(currentRole) && pass === "123") {
-                // Redirect to the specific dashboard (We will create these files next)
+            // The password is '123' for everyone
+            if(user === currentRole && pass === "123") {
+                // Redirect to the specific dashboard
                 window.location.href = "dashboard-" + currentRole + ".html";
             } else {
-                alert("Demo Login:\nUser: " + roleToCreds(currentRole) + "\nPass: 123");
+                alert("Demo Login:\nUser: " + currentRole + "\nPass: 123");
             }
-        }
-
-        function roleToCreds(role) {
-            if(role === 'patient') return 'patient';
-            if(role === 'agent') return 'agent';
-            return 'hospital';
         }
     </script>
 
