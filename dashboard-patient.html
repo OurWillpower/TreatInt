@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Health Locker | TreatInt</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/616/616490.png">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/616/616490.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .status-line { height: 4px; background: #e5e7eb; position: absolute; top: 15px; left: 0; width: 100%; z-index: 0; }
+        .status-fill { height: 4px; background: #10b981; position: absolute; top: 15px; left: 0; width: 50%; z-index: 0; }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <nav class="bg-blue-900 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <i class="fas fa-globe-americas text-2xl mr-2"></i>
+                    <span class="font-bold text-xl">TreatInt Locker</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="text-right hidden md:block">
+                        <div class="font-bold">Amit Kumar</div>
+                        <div class="text-xs text-blue-200">ID: P-2025-889</div>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" class="h-10 w-10 rounded-full border-2 border-white">
+                    <a href="index.html" class="text-sm bg-red-600 px-3 py-1 rounded hover:bg-red-700 ml-2">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        
+        <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+            <h2 class="text-lg font-bold text-gray-800 mb-6 border-b pb-2">Current Treatment Status</h2>
+            <div class="relative px-4">
+                <div class="status-line"></div>
+                <div class="status-fill"></div> <div class="relative z-10 flex justify-between text-center">
+                    <div>
+                        <div class="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-2"><i class="fas fa-check"></i></div>
+                        <p class="text-xs font-bold text-green-600">Registered</p>
+                    </div>
+                    <div>
+                        <div class="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-2"><i class="fas fa-file-medical"></i></div>
+                        <p class="text-xs font-bold text-green-600">Docs Verified</p>
+                    </div>
+                    <div>
+                        <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-2 ring-4 ring-blue-100"><i class="fas fa-plane"></i></div>
+                        <p class="text-xs font-bold text-blue-600">Visa Process</p>
+                    </div>
+                    <div>
+                        <div class="w-8 h-8 bg-gray-200 text-gray-400 rounded-full flex items-center justify-center mx-auto mb-2"><i class="fas fa-procedures"></i></div>
+                        <p class="text-xs text-gray-400">Surgery</p>
+                    </div>
+                    <div>
+                        <div class="w-8 h-8 bg-gray-200 text-gray-400 rounded-full flex items-center justify-center mx-auto mb-2"><i class="fas fa-home"></i></div>
+                        <p class="text-xs text-gray-400">Recovery</p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 bg-blue-50 p-4 rounded-lg border border-blue-100 flex items-start">
+                <i class="fas fa-info-circle text-blue-500 mt-1 mr-3"></i>
+                <p class="text-sm text-blue-800"><strong>Action Required:</strong> Your Medical Visa Invitation Letter has been generated. Please download it from the locker below and submit it to the Indian Embassy.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <div class="md:col-span-2 space-y-6">
+                
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="bg-gray-50 px-6 py-4 border-b flex justify-between items-center">
+                        <h3 class="font-bold text-gray-800"><i class="fas fa-folder-open text-yellow-500 mr-2"></i> Medical Records</h3>
+                        <button class="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700" onclick="alert('Upload feature coming soon!')">+ Upload New</button>
+                    </div>
+                    <div class="divide-y divide-gray-100">
+                        <div class="p-4 flex items-center justify-between hover:bg-gray-50">
+                            <div class="flex items-center">
+                                <div class="bg-red-100 text-red-500 p-3 rounded-lg mr-4"><i class="fas fa-file-pdf text-xl"></i></div>
+                                <div>
+                                    <p class="font-bold text-sm text-gray-800">Initial Diagnosis Report.pdf</p>
+                                    <p class="text-xs text-gray-500">Uploaded: 10 Oct 2025 • <span class="text-green-600 font-bold"><i class="fas fa-check-circle"></i> Verified</span></p>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="text-gray-400 hover:text-blue-600 p-2"><i class="fas fa-eye"></i></button>
+                                <button class="text-gray-400 hover:text-green-600 p-2"><i class="fas fa-print"></i></button>
+                            </div>
+                        </div>
+                        <div class="p-4 flex items-center justify-between hover:bg-gray-50">
+                            <div class="flex items-center">
+                                <div class="bg-blue-100 text-blue-500 p-3 rounded-lg mr-4"><i class="fas fa-file-image text-xl"></i></div>
+                                <div>
+                                    <p class="font-bold text-sm text-gray-800">MRI Scan_Knee.jpg</p>
+                                    <p class="text-xs text-gray-500">Uploaded: 12 Oct 2025 • <span class="text-green-600 font-bold"><i class="fas fa-check-circle"></i> Verified</span></p>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="text-gray-400 hover:text-blue-600 p-2"><i class="fas fa-eye"></i></button>
+                                <button class="text-gray-400 hover:text-green-600 p-2"><i class="fas fa-print"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="bg-gray-50 px-6 py-4 border-b">
+                        <h3 class="font-bold text-gray-800"><i class="fas fa-passport text-blue-500 mr-2"></i> Visa & Travel Documents</h3>
+                    </div>
+                    <div class="divide-y divide-gray-100">
+                        <div class="p-4 flex items-center justify-between hover:bg-gray-50">
+                            <div class="flex items-center">
+                                <div class="bg-purple-100 text-purple-500 p-3 rounded-lg mr-4"><i class="fas fa-file-contract text-xl"></i></div>
+                                <div>
+                                    <p class="font-bold text-sm text-gray-800">Apollo Hospital Invitation Letter.pdf</p>
+                                    <p class="text-xs text-gray-500">Generated: Yesterday • <span class="text-blue-600 font-bold">Ready for Visa</span></p>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="bg-blue-600 text-white text-xs px-3 py-1 rounded shadow hover:bg-blue-700">Download</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="md:col-span-1">
+                <div class="bg-white rounded-xl shadow-md p-6 border-t-4 border-yellow-400">
+                    <h3 class="font-bold text-gray-800 mb-4">Priority Support</h3>
+                    <div class="flex items-center mb-4">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-12 h-12 rounded-full border-2 border-yellow-400 mr-3">
+                        <div>
+                            <p class="text-sm font-bold">Sarah Jenkins</p>
+                            <p class="text-xs text-gray-500">Your Personal Case Manager</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-500 mb-4">Sarah is dedicated to your case. Contact her directly for Visa or Hospital admission queries.</p>
+                    
+                    <a href="https://wa.me/?text=Hi%20Sarah%2C%20I%20am%20patient%20P-2025-889.%20I%20need%20help." target="_blank" class="block w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg text-center shadow-lg transition transform hover:-translate-y-1">
+                        <i class="fab fa-whatsapp text-xl mr-2"></i> Chat on WhatsApp
+                    </a>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-6 mt-6">
+                    <h3 class="font-bold text-gray-800 mb-2">Hospital Details</h3>
+                    <p class="text-sm text-blue-900 font-bold">Apollo Hospital, Delhi</p>
+                    <p class="text-xs text-gray-500 mb-4">Mathura Rd, Sarita Vihar, New Delhi</p>
+                    <hr class="border-gray-100 my-2">
+                    <p class="text-xs text-gray-500"><strong>Doctor:</strong> Dr. S. Gupta (Cardiology)</p>
+                    <p class="text-xs text-gray-500"><strong>Appt:</strong> 24 Oct 2025, 10:00 AM</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
