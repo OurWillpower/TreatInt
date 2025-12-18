@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refer New Patient | TreatInt</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/616/616490.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style> body { font-family: 'Poppins', sans-serif; } </style>
+</head>
+<body class="bg-gray-100">
+
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <a href="dashboard-partner.html" class="text-blue-900 font-bold text-xl hover:text-blue-700">
+                        <i class="fas fa-arrow-left mr-2"></i> Back to Dashboard
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="text-right hidden md:block">
+                        <div class="font-bold text-gray-800">Rahul Medical Services</div>
+                        <div class="text-xs text-green-600 font-bold">Verified Partner</div>
+                    </div>
+                    <div class="h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-700 font-bold">RM</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="bg-blue-900 px-8 py-6 text-white">
+                <h1 class="text-2xl font-bold">New Patient Referral</h1>
+                <p class="opacity-80">Submit patient details for medical evaluation and visa processing.</p>
+            </div>
+            
+            <form onsubmit="handleSubmit(event)" class="p-8">
+                
+                <h3 class="text-gray-800 font-bold text-lg mb-4 border-b pb-2"><i class="fas fa-user-injured text-blue-500 mr-2"></i> Patient Details</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-gray-700 font-bold text-sm mb-2">Full Name (as on Passport)</label>
+                        <input type="text" class="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 ring-blue-500 bg-gray-50" placeholder="e.g. John Doe" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold text-sm mb-2">Age & Gender</label>
+                        <div class="flex gap-4">
+                            <input type="number" class="w-1/2 border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 ring-blue-500 bg-gray-50" placeholder="Age" required>
+                            <select class="w-1/2 border rounded-lg px-4 py-3 bg-gray-50">
+                                <option>Male</option>
+                                <option>Female</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold text-sm mb-2">Passport Number</label>
+                        <input type="text" class="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 ring-blue-500 bg-gray-50" placeholder="Required for Visa" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold text-sm mb-2">Country of Origin</label>
+                        <select class="w-full border rounded-lg px-4 py-3 bg-gray-50">
+                            <option>Bangladesh</option>
+                            <option>Nigeria</option>
+                            <option>Kenya</option>
+                            <option>Oman</option>
+                            <option>Iraq</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h3 class="text-gray-800 font-bold text-lg mb-4 border-b pb-2 mt-8"><i class="fas fa-notes-medical text-red-500 mr-2"></i> Medical Requirement</h3>
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-bold text-sm mb-2">Primary Complaint / Diagnosis</label>
+                    <input type="text" class="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 ring-blue-500 bg-gray-50" placeholder="e.g. Liver Cirrhosis, Knee Pain, Blocked Artery" required>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-bold text-sm mb-2">Brief Case Summary</label>
+                    <p class="text-xs text-gray-500 mb-2">Please provide a short summary of the patient's condition, current symptoms, and what treatment they are looking for.</p>
+                    <textarea class="w-full border rounded-lg px-4 py-3 h-32 focus:outline-none focus:ring-2 ring-blue-500 bg-gray-50" placeholder="Example: Patient diagnosed with Grade 3 Osteoarthritis in both knees. Difficulty walking for 2 years. Seeking bilateral knee replacement. Diabetic patient." required></textarea>
+                </div>
+
+                <h3 class="text-gray-800 font-bold text-lg mb-4 border-b pb-2 mt-8"><i class="fas fa-file-upload text-green-500 mr-2"></i> Upload Reports</h3>
+                <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center bg-gray-50 hover:bg-white transition cursor-pointer mb-8">
+                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
+                    <p class="font-bold text-gray-700">Drop Medical Reports Here</p>
+                    <p class="text-sm text-gray-500">or click to browse (PDF, JPG, DICOM)</p>
+                    <input type="file" class="hidden">
+                </div>
+
+                <div class="flex items-center justify-end gap-4">
+                    <a href="dashboard-partner.html" class="text-gray-500 font-bold hover:text-gray-700">Cancel</a>
+                    <button class="bg-blue-900 text-white font-bold px-8 py-3 rounded-lg hover:bg-blue-800 shadow-lg transition transform hover:-translate-y-1">
+                        Submit Referral <i class="fas fa-paper-plane ml-2"></i>
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function handleSubmit(e) {
+            e.preventDefault();
+            // Simulating submission
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            btn.classList.add('opacity-75');
+            
+            setTimeout(() => {
+                alert("Patient Referral Submitted Successfully! \nReference ID: REF-2025-998");
+                window.location.href = "dashboard-partner.html";
+            }, 1500);
+        }
+    </script>
+
+</body>
+</html>
