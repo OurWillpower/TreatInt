@@ -16,21 +16,23 @@
             <p class="text-gray-500 text-sm">Securely store your medical records</p>
         </div>
 
-        <form onsubmit="event.preventDefault(); alert('Account Created! Redirecting...'); window.location.href='dashboard-patient.html';">
+        <form id="patientForm">
+            <input type="hidden" name="action" value="register-patient">
+
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-bold text-gray-700">Full Name</label>
-                    <input type="text" class="w-full border p-2 rounded" required placeholder="Name as on Passport">
+                    <input type="text" name="Name" class="w-full border p-2 rounded" required placeholder="Name as on Passport">
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-gray-700">Mobile Number</label>
-                    <input type="text" class="w-full border p-2 rounded" required placeholder="+91...">
+                    <input type="text" name="Mobile" class="w-full border p-2 rounded" required placeholder="+91...">
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-gray-700">Create Password</label>
-                    <input type="password" class="w-full border p-2 rounded" required>
+                    <input type="password" name="Password" class="w-full border p-2 rounded" required>
                 </div>
-                <button class="w-full bg-blue-900 text-white font-bold py-3 rounded hover:bg-blue-800">
+                <button type="submit" id="submitBtn" class="w-full bg-blue-900 text-white font-bold py-3 rounded hover:bg-blue-800 transition">
                     Sign Up
                 </button>
             </div>
@@ -39,6 +41,29 @@
             Already have an account? <a href="login.html" class="text-blue-600 font-bold">Login</a>
         </p>
     </div>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyXqa0xST3Ft1CYuDRBHYi-QlROwaNErk7a23ESuXUwWmAHOX6oupoSz86GdU4HHMWNlg/exec';
+        const form = document.getElementById('patientForm');
+        const btn = document.getElementById('submitBtn');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            btn.disabled = true;
+            btn.innerHTML = "Processing...";
+
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+            .then(response => {
+                alert("Success! Your Health Locker is created.");
+                window.location.href = 'dashboard-patient.html';
+            })
+            .catch(error => {
+                alert('Error!', error.message);
+                btn.disabled = false;
+                btn.innerHTML = "Sign Up";
+            });
+        });
+    </script>
 
 </body>
 </html>
