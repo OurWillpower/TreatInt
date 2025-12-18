@@ -21,6 +21,20 @@
         .slide.slide-right { transform: translateX(-100%); } .slide.active.slide-right { transform: translateX(0); }
         .slide.zoom-in { transform: scale(1.1); } .slide.active.zoom-in { transform: scale(1); }
         .slide.slide-up { transform: translateY(100%); } .slide.active.slide-up { transform: translateY(0); }
+        
+        /* WHATSAPP ANIMATION */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+            animation: pulse-green 2s infinite;
+        }
+        @keyframes pulse-green {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -116,33 +130,25 @@
 
     <footer class="bg-gray-900 text-white py-8 text-center"><p>&copy; 2025 TreatInt. All Rights Reserved.</p></footer>
 
+    <a href="https://wa.me/?text=Hello%20TreatInt%2C%20I%20am%20interested%20in%20a%20medical%20treatment" target="_blank" class="whatsapp-float bg-green-500 text-white rounded-full p-4 shadow-2xl flex items-center justify-center w-16 h-16 transition hover:bg-green-600">
+        <i class="fab fa-whatsapp text-4xl"></i>
+    </a>
+
     <script>
         function handleSearch() {
             const query = document.getElementById('hero-search').value.toLowerCase().trim();
             if(!query) return;
-
-            // List of words that imply the user wants the HOSPITALS page
-            const hospitalKeywords = [
-                'hospital', 'apollo', 'medanta', 'fortis', 'max', 'tata', 'ananda', // Names
-                'mumbai', 'delhi', 'chennai', 'rishikesh', 'gurgaon', 'bangalore'   // Cities
-            ];
-
-            // Check if query contains any of the keywords above
+            const hospitalKeywords = ['hospital', 'apollo', 'medanta', 'fortis', 'max', 'tata', 'ananda', 'mumbai', 'delhi', 'chennai', 'rishikesh', 'gurgaon', 'bangalore'];
             const isHospitalSearch = hospitalKeywords.some(keyword => query.includes(keyword));
-
             if (isHospitalSearch) {
-                // Send to Hospitals page
                 window.location.href = "hospitals.html?search=" + encodeURIComponent(query);
             } else {
-                // Default to Treatments page
                 window.location.href = "treatments.html?search=" + encodeURIComponent(query);
             }
         }
-        
         document.getElementById('hero-search').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') handleSearch();
         });
-
         const slides = document.querySelectorAll('.slide');
         let currentSlide = 0;
         const totalSlides = slides.length;
