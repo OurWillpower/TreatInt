@@ -3,139 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Login | TreatInt</title>
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/616/616490.png">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/616/616490.png">
+    <title>Login | TreatInt</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body { font-family: 'Poppins', sans-serif; }
-        .role-btn.active { background-color: #1e3a8a; color: white; border-color: #1e3a8a; }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style> body { font-family: 'Poppins', sans-serif; } </style>
 </head>
 <body class="bg-gray-100 h-screen flex items-center justify-center">
 
-    <div class="bg-white rounded-2xl shadow-2xl overflow-hidden max-w-5xl w-full flex flex-col md:flex-row m-4">
-        
-        <div class="md:w-1/2 bg-blue-900 text-white flex flex-col justify-center p-10 relative overflow-hidden">
-            <div class="relative z-10">
-                <a href="index.html" class="text-3xl font-bold mb-6 block text-white">
-                    <i class="fas fa-globe-americas"></i> TreatInt
-                </a>
-                <h2 class="text-3xl font-bold mb-4" id="hero-title">Welcome Back</h2>
-                <p class="opacity-80 mb-6" id="hero-text">Access your secure dashboard to manage treatments, documents, and communications.</p>
-                <div class="flex items-center space-x-2 text-sm opacity-70">
-                    <i class="fas fa-lock"></i>
-                    <span>256-bit SSL Encrypted</span>
-                </div>
-            </div>
-            <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-blue-800 rounded-full opacity-50"></div>
+    <div class="bg-white p-8 rounded-xl shadow-lg max-w-md w-full">
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-bold text-gray-800">Welcome Back</h1>
+            <p class="text-gray-500 text-sm">Select your role to login</p>
         </div>
 
-        <div class="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
-            
-            <label class="block text-gray-700 text-sm font-bold mb-3">Select Account Type</label>
-            <div class="flex space-x-2 mb-6">
-                <button onclick="setRole('patient')" id="btn-patient" class="role-btn active flex-1 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">
-                    Patient
-                </button>
-                <button onclick="setRole('partner')" id="btn-partner" class="role-btn flex-1 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">
-                    Partner
-                </button>
-                <button onclick="setRole('hospital')" id="btn-hospital" class="role-btn flex-1 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-600 hover:bg-gray-50 transition">
-                    Hospital
+        <div class="flex bg-gray-100 p-1 rounded-lg mb-6">
+            <button onclick="setRole('patient')" id="tab-patient" class="flex-1 py-2 text-sm font-bold rounded-md bg-white shadow text-blue-900 transition">Patient</button>
+            <button onclick="setRole('partner')" id="tab-partner" class="flex-1 py-2 text-sm font-bold rounded-md text-gray-500 hover:text-gray-700 transition">Partner</button>
+            <button onclick="setRole('hospital')" id="tab-hospital" class="flex-1 py-2 text-sm font-bold rounded-md text-gray-500 hover:text-gray-700 transition">Hospital</button>
+        </div>
+
+        <form id="loginForm">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700" id="idLabel">Mobile Number</label>
+                    <input type="text" id="userId" class="w-full border p-2 rounded" required placeholder="+91...">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700">Password</label>
+                    <input type="password" id="userPass" class="w-full border p-2 rounded" required>
+                </div>
+                
+                <button type="submit" id="submitBtn" class="w-full bg-blue-900 text-white font-bold py-3 rounded hover:bg-blue-800 transition">
+                    Login
                 </button>
             </div>
+        </form>
 
-            <h3 class="text-xl font-bold text-gray-800 mb-6" id="form-title">Patient Login</h3>
-            
-            <form onsubmit="handleLogin(event)">
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" id="user-label">Mobile Number / Patient ID</label>
-                    <div class="flex items-center border rounded-lg px-3 py-3 focus-within:ring-2 ring-blue-500 bg-gray-50">
-                        <i class="fas fa-user text-gray-400 mr-3"></i>
-                        <input type="text" id="username" class="w-full outline-none bg-transparent" placeholder="Enter ID">
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Password</label>
-                    <div class="flex items-center border rounded-lg px-3 py-3 focus-within:ring-2 ring-blue-500 bg-gray-50">
-                        <i class="fas fa-lock text-gray-400 mr-3"></i>
-                        <input type="password" id="password" class="w-full outline-none bg-transparent" placeholder="Enter Password">
-                    </div>
-                </div>
-
-                <button class="w-full bg-blue-900 text-white font-bold py-3 rounded-lg hover:bg-blue-800 transition shadow-lg mb-4 text-lg">
-                    SECURE LOGIN <i class="fas fa-arrow-right ml-2"></i>
-                </button>
-
-                <div class="text-center flex justify-between text-sm mt-4">
-                    <a href="#" class="text-gray-500 hover:text-blue-900">Forgot Password?</a>
-                    <a href="register-patient.html" id="register-link" class="text-blue-600 font-bold hover:underline">New User? Register</a>
-                </div>
-            </form>
+        <div class="flex justify-between items-center mt-4 text-sm">
+            <a href="forgot-password.html" class="text-gray-500 hover:text-gray-800">Forgot Password?</a>
+            <a href="register-patient.html" class="text-blue-600 font-bold hover:underline">Create Account</a>
         </div>
     </div>
 
     <script>
+        // --- SUPABASE CONFIG ---
+        const supabaseUrl = 'https://atsdebykxuhtruuwcmlx.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // --- TAB LOGIC ---
         let currentRole = 'patient';
 
         function setRole(role) {
             currentRole = role;
             
-            // Update Buttons
-            document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('btn-' + role).classList.add('active');
+            // Reset styles
+            ['patient', 'partner', 'hospital'].forEach(r => {
+                const tab = document.getElementById('tab-' + r);
+                tab.classList.remove('bg-white', 'shadow', 'text-blue-900', 'text-green-800', 'text-gray-800');
+                tab.classList.add('text-gray-500');
+            });
 
-            // Update UI Text & Links
-            const title = document.getElementById('form-title');
-            const label = document.getElementById('user-label');
-            const heroTitle = document.getElementById('hero-title');
-            const heroText = document.getElementById('hero-text');
-            const regLink = document.getElementById('register-link');
+            // Set Active Style
+            const activeTab = document.getElementById('tab-' + role);
+            activeTab.classList.remove('text-gray-500');
+            activeTab.classList.add('bg-white', 'shadow');
+
+            // Change Colors & Labels based on role
+            const btn = document.getElementById('submitBtn');
+            const label = document.getElementById('idLabel');
 
             if(role === 'patient') {
-                title.innerText = "Patient Login";
-                label.innerText = "Mobile Number / Patient ID";
-                heroTitle.innerText = "Your Health Locker";
-                heroText.innerText = "Access your medical records, prescriptions, and priority support in one place.";
-                // Dynamic Link Change
-                regLink.href = "register-patient.html";
-                regLink.innerText = "New Patient? Create Locker";
-            } else if(role === 'partner') { 
-                title.innerText = "Partner Login";
-                label.innerText = "Partner ID / Email";
-                heroTitle.innerText = "Grow Your Business";
-                heroText.innerText = "Track your referrals, monitor visa status, and view your earnings dashboard.";
-                // Dynamic Link Change
-                regLink.href = "register-partner.html";
-                regLink.innerText = "New? Join Partner Network";
+                activeTab.classList.add('text-blue-900');
+                btn.className = "w-full bg-blue-900 text-white font-bold py-3 rounded hover:bg-blue-800 transition";
+                label.innerText = "Mobile Number";
+            } else if (role === 'partner') {
+                activeTab.classList.add('text-green-800');
+                btn.className = "w-full bg-green-700 text-white font-bold py-3 rounded hover:bg-green-800 transition";
+                label.innerText = "WhatsApp Number";
             } else {
-                title.innerText = "Hospital/Lab Login";
-                label.innerText = "Empanelment ID";
-                heroTitle.innerText = "Provider Portal";
-                heroText.innerText = "View incoming international patients and access verified medical history.";
-                // Dynamic Link Change
-                regLink.href = "register-hospital.html";
-                regLink.innerText = "New Hospital? Empanel Now";
+                activeTab.classList.add('text-gray-800');
+                btn.className = "w-full bg-gray-800 text-white font-bold py-3 rounded hover:bg-gray-900 transition";
+                label.innerText = "Official Email";
             }
         }
 
-        function handleLogin(e) {
+        // --- LOGIN LOGIC ---
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const user = document.getElementById('username').value;
-            const pass = document.getElementById('password').value;
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerText = "Verifying...";
 
-            // Demo Logic
-            if(user === currentRole && pass === "123") {
-                window.location.href = "dashboard-" + currentRole + ".html";
+            const id = document.getElementById('userId').value;
+            const pass = document.getElementById('userPass').value;
+
+            // Define Table and ID Column based on Role
+            let table, idColumn, redirectPage;
+
+            if (currentRole === 'patient') {
+                table = 'patients'; idColumn = 'mobile'; redirectPage = 'dashboard-patient.html';
+            } else if (currentRole === 'partner') {
+                table = 'partners'; idColumn = 'whatsapp'; redirectPage = 'dashboard-partner.html';
             } else {
-                alert("Demo Login:\nUser: " + currentRole + "\nPass: 123");
+                table = 'hospitals'; idColumn = 'email'; redirectPage = 'dashboard-hospital.html'; // Create this page later if needed
             }
-        }
-    </script>
 
+            try {
+                // Query Database
+                const { data, error } = await supabase
+                    .from(table)
+                    .select('*')
+                    .eq(idColumn, id)
+                    .eq('password', pass);
+
+                if (error) {
+                    throw error;
+                }
+
+                if (data.length > 0) {
+                    // Success
+                    localStorage.setItem('currentUser', data[0].name || data[0].hospital_name); // Save Name
+                    window.location.href = redirectPage;
+                } else {
+                    alert("Invalid ID or Password. Please try again.");
+                    btn.disabled = false;
+                    btn.innerText = "Login";
+                }
+
+            } catch (err) {
+                alert("Login Error: " + err.message);
+                btn.disabled = false;
+                btn.innerText = "Login";
+            }
+        });
+    </script>
 </body>
 </html>
