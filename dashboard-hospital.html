@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style> body { font-family: 'Poppins', sans-serif; } </style>
 </head>
 <body class="bg-gray-100">
@@ -34,14 +35,14 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div class="md:col-span-1 space-y-4">
                 <div class="bg-white p-4 rounded-xl shadow border-l-4 border-blue-600">
-                    <p class="text-xs font-bold text-gray-500 uppercase">Incoming Today</p>
-                    <h3 class="text-2xl font-bold">3 Patients</h3>
+                    <p class="text-xs font-bold text-gray-500 uppercase">Total Patients</p>
+                    <h3 class="text-2xl font-bold" id="stat-total">0</h3>
                 </div>
                 <div class="bg-white p-4 rounded-xl shadow border-l-4 border-yellow-500">
                     <p class="text-xs font-bold text-gray-500 uppercase">Pending Visas</p>
-                    <h3 class="text-2xl font-bold">5 Requests</h3>
+                    <h3 class="text-2xl font-bold" id="stat-pending">0</h3>
                 </div>
-                <button class="w-full bg-blue-900 text-white py-3 rounded-lg font-bold shadow hover:bg-blue-800">
+                <button onclick="alert('File Upload System Coming Next!')" class="w-full bg-blue-900 text-white py-3 rounded-lg font-bold shadow hover:bg-blue-800">
                     <i class="fas fa-upload mr-2"></i> Upload Visa Letter
                 </button>
             </div>
@@ -49,40 +50,21 @@
             <div class="md:col-span-3">
                 <div class="bg-white rounded-xl shadow overflow-hidden">
                     <div class="px-6 py-4 border-b flex justify-between items-center bg-gray-50">
-                        <h3 class="font-bold text-gray-800">International Arrivals</h3>
-                        <input type="text" placeholder="Search Patient ID..." class="border rounded px-3 py-1 text-sm">
+                        <h3 class="font-bold text-gray-800">Global Patient Registry</h3>
+                        <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search Name..." class="border rounded px-3 py-1 text-sm">
                     </div>
                     <table class="w-full text-sm text-left text-gray-500">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-100">
                             <tr>
-                                <th class="px-4 py-3">Patient</th>
-                                <th class="px-4 py-3">Condition</th>
-                                <th class="px-4 py-3">Arrival Date</th>
+                                <th class="px-4 py-3">Patient Name</th>
+                                <th class="px-4 py-3">Source (Referral)</th>
+                                <th class="px-4 py-3">Registered Date</th>
                                 <th class="px-4 py-3">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr class="border-b hover:bg-gray-50">
-                                <td class="px-4 py-3 font-bold text-gray-900">
-                                    Sarah Jenkins<br>
-                                    <span class="text-xs font-normal text-gray-500">ID: P-8821</span>
-                                </td>
-                                <td class="px-4 py-3">Cardiac Surgery</td>
-                                <td class="px-4 py-3 text-red-600 font-bold">Today, 14:00</td>
-                                <td class="px-4 py-3">
-                                    <button class="text-blue-600 hover:underline">View File</button>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-3 font-bold text-gray-900">
-                                    Mohd. Rahim<br>
-                                    <span class="text-xs font-normal text-gray-500">ID: P-9901</span>
-                                </td>
-                                <td class="px-4 py-3">Knee Replacement</td>
-                                <td class="px-4 py-3 text-gray-800">22 Oct 2025</td>
-                                <td class="px-4 py-3">
-                                    <button class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs font-bold">Issue Visa Letter</button>
-                                </td>
+                        <tbody id="patientTableBody">
+                            <tr>
+                                <td colspan="4" class="px-6 py-4 text-center">Loading live data...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -92,18 +74,96 @@
     </div>
 
     <script>
-        // 1. Get Name from Login
-        const storedName = localStorage.getItem('currentUser');
-        
-        if (storedName) {
-            document.getElementById('display-name').innerText = storedName;
+        // --- CONFIGURATION ---
+        const supabaseUrl = 'https://atsdebykxuhtruuwcmlx.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // 1. CHECK LOGIN
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) {
+            window.location.href = 'login.html';
         } else {
-            document.getElementById('display-name').innerText = "Admin";
+            document.getElementById('display-name').innerText = currentUser;
+            loadPatients();
         }
 
         function logout() {
             localStorage.removeItem('currentUser');
             window.location.href = 'index.html';
+        }
+
+        // 2. LOAD PATIENTS
+        async function loadPatients() {
+            try {
+                // Fetch ALL patients
+                const { data, error } = await supabaseClient
+                    .from('patients')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                // Update Stats
+                document.getElementById('stat-total').innerText = data.length;
+                document.getElementById('stat-pending').innerText = data.length; // Assuming all need visas for now
+
+                // Render Table
+                const tableBody = document.getElementById('patientTableBody');
+                tableBody.innerHTML = "";
+
+                if (data.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="4" class="text-center py-4">No patients registered yet.</td></tr>`;
+                    return;
+                }
+
+                data.forEach(patient => {
+                    const date = new Date(patient.created_at).toLocaleDateString();
+                    
+                    // Logic: If referred_by exists, show Partner Name, else show "Direct"
+                    const sourceBadge = patient.referred_by 
+                        ? `<span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded"><i class="fas fa-handshake"></i> ${patient.referred_by}</span>`
+                        : `<span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded">Direct Website</span>`;
+
+                    const row = `
+                        <tr class="bg-white border-b hover:bg-gray-50 search-item">
+                            <td class="px-4 py-3 font-bold text-gray-900">
+                                ${patient.name}<br>
+                                <span class="text-xs font-normal text-gray-500">Mobile: ${patient.mobile}</span>
+                            </td>
+                            <td class="px-4 py-3">${sourceBadge}</td>
+                            <td class="px-4 py-3 text-gray-600">${date}</td>
+                            <td class="px-4 py-3">
+                                <button onclick="alert('Opening File for: ${patient.name}')" class="text-blue-600 hover:underline text-xs font-bold">View Medical File</button>
+                            </td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+
+            } catch (err) {
+                console.error(err);
+                alert("Error loading patients: " + err.message);
+            }
+        }
+
+        // 3. SIMPLE SEARCH FILTER
+        function filterTable() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const rows = document.getElementsByClassName('search-item');
+
+            for (let i = 0; i < rows.length; i++) {
+                const nameCell = rows[i].getElementsByTagName("td")[0];
+                if (nameCell) {
+                    const txtValue = nameCell.textContent || nameCell.innerText;
+                    if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                        rows[i].style.display = "";
+                    } else {
+                        rows[i].style.display = "none";
+                    }
+                }
+            }
         }
     </script>
 
