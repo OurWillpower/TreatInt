@@ -15,12 +15,15 @@
     <nav class="bg-gray-900 text-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center">
+                <a href="index.html" class="flex items-center hover:opacity-80 transition">
                     <i class="fas fa-hospital text-2xl mr-2"></i>
                     <span class="font-bold text-xl">TreatInt Hospital</span>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <div class="text-right hidden md:block">
+                </a>
+                <div class="flex items-center space-x-6">
+                    <a href="index.html" class="hover:text-gray-200 transition flex items-center gap-2">
+                        <i class="fas fa-home"></i> <span class="hidden md:inline">Home</span>
+                    </a>
+                    <div class="text-right hidden md:block border-l border-gray-600 pl-4">
                         <div class="font-bold" id="display-name">Loading...</div>
                         <div class="text-xs text-gray-400">Admin Console</div>
                     </div>
@@ -32,6 +35,14 @@
 
     <div class="max-w-7xl mx-auto px-4 py-8">
         
+        <div class="text-sm text-gray-500 mb-6 flex items-center">
+            <a href="hospital-home.html" class="hover:text-blue-800 hover:underline transition font-bold text-blue-900">
+                <i class="fas fa-arrow-left mr-1"></i> Back to Console
+            </a> 
+            <span class="mx-2">/</span> 
+            <span class="font-bold text-gray-800">Global Registry</span>
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div class="md:col-span-1 space-y-4">
                 <div class="bg-white p-4 rounded-xl shadow border-l-4 border-blue-600">
@@ -63,9 +74,7 @@
                             </tr>
                         </thead>
                         <tbody id="patientTableBody">
-                            <tr>
-                                <td colspan="4" class="px-6 py-4 text-center">Loading live data...</td>
-                            </tr>
+                            <tr><td colspan="4" class="px-6 py-4 text-center">Loading live data...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -79,9 +88,7 @@
                 <h3 class="font-bold text-lg" id="modalPatientName">Medical Records</h3>
                 <button onclick="closeModal()" class="text-white hover:text-red-200 text-2xl">&times;</button>
             </div>
-            <div id="modalContent" class="p-6 max-h-96 overflow-y-auto">
-                <p class="text-gray-500 text-center">Loading files...</p>
-            </div>
+            <div id="modalContent" class="p-6 max-h-96 overflow-y-auto"></div>
             <div class="bg-gray-100 px-6 py-3 text-right">
                 <button onclick="closeModal()" class="bg-gray-500 text-white px-4 py-2 rounded text-sm hover:bg-gray-600">Close</button>
             </div>
@@ -89,162 +96,70 @@
     </div>
 
     <script>
-        // --- CONFIGURATION ---
         const supabaseUrl = 'https://atsdebykxuhtruuwcmlx.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // 1. CHECK LOGIN
         const currentUser = localStorage.getItem('currentUser');
-        if (!currentUser) {
-            window.location.href = 'login.html';
-        } else {
-            document.getElementById('display-name').innerText = currentUser;
-            loadPatients();
-        }
+        if (!currentUser) { window.location.href = 'login.html'; }
+        else { document.getElementById('display-name').innerText = currentUser; loadPatients(); }
+        function logout() { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; }
 
-        function logout() {
-            localStorage.removeItem('currentUser');
-            window.location.href = 'index.html';
-        }
-
-        // 2. LOAD PATIENTS
         async function loadPatients() {
             try {
-                // Fetch patients
-                const { data, error } = await supabaseClient
-                    .from('patients')
-                    .select('*')
-                    .order('created_at', { ascending: false });
-
+                const { data, error } = await supabaseClient.from('patients').select('*').order('created_at', { ascending: false });
                 if (error) throw error;
 
-                // Fetch File Counts to show meaningful stats
                 const { data: files } = await supabaseClient.storage.from('medical-records').list();
                 document.getElementById('stat-files').innerText = files ? files.length : 0;
                 document.getElementById('stat-total').innerText = data.length;
 
                 const tableBody = document.getElementById('patientTableBody');
                 tableBody.innerHTML = "";
-
-                if (data.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="4" class="text-center py-4">No patients registered yet.</td></tr>`;
-                    return;
-                }
+                if (data.length === 0) { tableBody.innerHTML = `<tr><td colspan="4" class="text-center py-4">No patients registered yet.</td></tr>`; return; }
 
                 data.forEach(patient => {
                     const date = new Date(patient.created_at).toLocaleDateString();
-                    
-                    const sourceBadge = patient.referred_by 
-                        ? `<span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded"><i class="fas fa-handshake"></i> ${patient.referred_by}</span>`
-                        : `<span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded">Direct Website</span>`;
-
+                    const sourceBadge = patient.referred_by ? `<span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded"><i class="fas fa-handshake"></i> ${patient.referred_by}</span>` : `<span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded">Direct Website</span>`;
                     const row = `
                         <tr class="bg-white border-b hover:bg-gray-50 search-item">
-                            <td class="px-4 py-3 font-bold text-gray-900">
-                                ${patient.name}<br>
-                                <span class="text-xs font-normal text-gray-500">Mobile: ${patient.mobile}</span>
-                            </td>
+                            <td class="px-4 py-3 font-bold text-gray-900">${patient.name}<br><span class="text-xs font-normal text-gray-500">Mobile: ${patient.mobile}</span></td>
                             <td class="px-4 py-3">${sourceBadge}</td>
                             <td class="px-4 py-3 text-gray-600">${date}</td>
-                            <td class="px-4 py-3">
-                                <button onclick="openFileModal('${patient.name}')" class="bg-blue-100 text-blue-700 hover:bg-blue-200 px-3 py-1 rounded text-xs font-bold transition">
-                                    <i class="fas fa-folder-open"></i> View Files
-                                </button>
-                            </td>
-                        </tr>
-                    `;
+                            <td class="px-4 py-3"><button onclick="openFileModal('${patient.name}')" class="bg-blue-100 text-blue-700 hover:bg-blue-200 px-3 py-1 rounded text-xs font-bold transition"><i class="fas fa-folder-open"></i> View Files</button></td>
+                        </tr>`;
                     tableBody.innerHTML += row;
                 });
-
-            } catch (err) {
-                console.error(err);
-                alert("Error loading data: " + err.message);
-            }
+            } catch (err) { console.error(err); alert("Error loading data: " + err.message); }
         }
 
-        // 3. FILE VIEWER LOGIC
         async function openFileModal(patientName) {
             const modal = document.getElementById('fileModal');
             const content = document.getElementById('modalContent');
             const title = document.getElementById('modalPatientName');
-            
             modal.classList.remove('hidden');
             title.innerText = "Files: " + patientName;
             content.innerHTML = '<div class="text-center py-4"><i class="fas fa-spinner fa-spin text-blue-500 text-2xl"></i><p class="text-xs text-gray-400 mt-2">Scanning database...</p></div>';
 
             try {
-                // List all files
-                const { data: files, error } = await supabaseClient
-                    .storage
-                    .from('medical-records')
-                    .list();
-
-                if (error) throw error;
-
-                // FILTER: Only show files starting with this Patient's Name
+                const { data: files } = await supabaseClient.storage.from('medical-records').list();
                 const patientFiles = files.filter(f => f.name.startsWith(patientName));
+                if (patientFiles.length === 0) { content.innerHTML = '<div class="text-center text-gray-400 py-4"><p>No documents found.</p></div>'; return; }
 
-                if (patientFiles.length === 0) {
-                    content.innerHTML = '<div class="text-center text-gray-400 py-4"><i class="fas fa-folder-open text-4xl mb-2"></i><p>No documents found for this patient.</p></div>';
-                    return;
-                }
-
-                // Generate List
                 content.innerHTML = '<ul class="space-y-2"></ul>';
                 const ul = content.querySelector('ul');
-
                 for (const file of patientFiles) {
-                    // Create Secure Link (Signed URL)
-                    const { data: signedUrl } = await supabaseClient
-                        .storage
-                        .from('medical-records')
-                        .createSignedUrl(file.name, 60); // Valid for 60 seconds
-
-                    const cleanName = file.name.split('_').slice(2).join('_'); // Hide prefix
-                    
+                    const { data: signedUrl } = await supabaseClient.storage.from('medical-records').createSignedUrl(file.name, 60);
+                    const cleanName = file.name.split('_').slice(2).join('_');
                     const li = document.createElement('li');
-                    li.className = "flex justify-between items-center bg-gray-50 p-3 rounded hover:bg-blue-50 transition";
-                    li.innerHTML = `
-                        <div class="flex items-center">
-                            <i class="fas fa-file-pdf text-red-500 mr-3"></i>
-                            <span class="text-sm font-bold text-gray-700">${cleanName}</span>
-                        </div>
-                        <a href="${signedUrl.signedUrl}" target="_blank" class="text-blue-600 text-xs font-bold hover:underline">
-                            Open <i class="fas fa-external-link-alt ml-1"></i>
-                        </a>
-                    `;
+                    li.className = "flex justify-between items-center bg-gray-50 p-3 rounded";
+                    li.innerHTML = `<div class="flex items-center"><i class="fas fa-file-pdf text-red-500 mr-3"></i><span class="text-sm font-bold text-gray-700">${cleanName}</span></div><a href="${signedUrl.signedUrl}" target="_blank" class="text-blue-600 text-xs font-bold hover:underline">Open <i class="fas fa-external-link-alt ml-1"></i></a>`;
                     ul.appendChild(li);
                 }
-
-            } catch (err) {
-                content.innerHTML = '<p class="text-red-500 text-center">Error fetching files.</p>';
-                console.error(err);
-            }
+            } catch (err) { content.innerHTML = '<p class="text-red-500 text-center">Error fetching files.</p>'; }
         }
-
-        function closeModal() {
-            document.getElementById('fileModal').classList.add('hidden');
-        }
-
-        // 4. SEARCH LOGIC
-        function filterTable() {
-            const input = document.getElementById('searchInput');
-            const filter = input.value.toLowerCase();
-            const rows = document.getElementsByClassName('search-item');
-
-            for (let i = 0; i < rows.length; i++) {
-                const nameCell = rows[i].getElementsByTagName("td")[0];
-                if (nameCell) {
-                    const txtValue = nameCell.textContent || nameCell.innerText;
-                    if (txtValue.toLowerCase().indexOf(filter) > -1) {
-                        rows[i].style.display = "";
-                    } else {
-                        rows[i].style.display = "none";
-                    }
-                }
-            }
-        }
+        function closeModal() { document.getElementById('fileModal').classList.add('hidden'); }
+        function filterTable() { const input = document.getElementById('searchInput'); const filter = input.value.toLowerCase(); const rows = document.getElementsByClassName('search-item'); for (let i = 0; i < rows.length; i++) { const nameCell = rows[i].getElementsByTagName("td")[0]; if (nameCell) { const txtValue = nameCell.textContent || nameCell.innerText; if (txtValue.toLowerCase().indexOf(filter) > -1) { rows[i].style.display = ""; } else { rows[i].style.display = "none"; } } } }
     </script>
 </body>
 </html>
