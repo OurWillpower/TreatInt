@@ -1,28 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Health Locker | TreatInt</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style> body { font-family: 'Poppins', sans-serif; } </style>
-</head>
 <body class="bg-blue-50">
 
     <nav class="bg-blue-900 text-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center cursor-pointer" onclick="window.location.reload()">
+                
+                <a href="index.html" class="flex items-center hover:opacity-80 transition">
                     <i class="fas fa-heartbeat text-2xl mr-2"></i>
                     <span class="font-bold text-xl">TreatInt Locker</span>
-                </div>
+                </a>
 
                 <div class="flex items-center space-x-6">
-                    <a href="dashboard-patient.html" class="hover:text-blue-200 transition">
-                        <i class="fas fa-home"></i> Home
+                    <a href="index.html" class="hover:text-blue-200 transition flex items-center gap-2">
+                        <i class="fas fa-home"></i> <span>Home</span>
                     </a>
                     
                     <div class="text-right hidden md:block border-l border-blue-700 pl-4">
@@ -30,8 +19,8 @@
                         <div class="text-xs text-blue-200">Patient Account</div>
                     </div>
                     
-                    <button onclick="logout()" class="text-sm bg-red-500 px-3 py-1 rounded hover:bg-red-600 ml-2">
-                        <i class="fas fa-sign-out-alt"></i> Logout
+                    <button onclick="logout()" class="text-sm bg-red-500 px-3 py-1 rounded hover:bg-red-600 ml-2 flex items-center gap-2">
+                        <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
                     </button>
                 </div>
             </div>
@@ -40,161 +29,16 @@
 
     <div class="max-w-4xl mx-auto px-4 py-8">
         
-        <div class="text-sm text-gray-500 mb-4">
-            <a href="#" class="hover:underline">Dashboard</a> <span class="mx-2">/</span> <span class="font-bold text-gray-800">My Health Locker</span>
+        <div class="text-sm text-gray-500 mb-4 flex items-center">
+            <a href="dashboard-patient.html" class="hover:text-blue-600 hover:underline transition">Dashboard</a> 
+            <span class="mx-2">/</span> 
+            <span class="font-bold text-gray-800">My Health Locker</span>
         </div>
 
-        <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
-            <h2 class="text-xl font-bold text-gray-800 mb-4">Upload Medical Records</h2>
-            <div class="border-2 border-dashed border-blue-200 rounded-lg p-8 text-center hover:bg-blue-50 transition group">
-                <input type="file" id="fileInput" class="hidden" onchange="handleFileSelect()">
-                <label for="fileInput" class="cursor-pointer block">
-                    <i class="fas fa-cloud-upload-alt text-4xl text-blue-400 mb-2 group-hover:scale-110 transition-transform"></i>
-                    <p class="text-gray-600 font-bold">Click to Upload Report</p>
-                    <p class="text-xs text-gray-400">PDF, JPG, PNG (Max 5MB)</p>
-                </label>
-                <div id="fileNameDisplay" class="mt-4 text-sm font-bold text-green-600 hidden"></div>
-            </div>
-            <button id="uploadBtn" onclick="uploadFile()" class="w-full mt-4 bg-blue-900 text-white font-bold py-3 rounded hover:bg-blue-800 transition hidden shadow-lg">
-                Confirm Upload
-            </button>
-        </div>
+        ```
 
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div class="px-6 py-4 border-b bg-gray-50 flex justify-between items-center">
-                <h3 class="font-bold text-gray-800">My Saved Documents</h3>
-                <button onclick="loadFiles()" class="text-blue-600 text-xs hover:underline"><i class="fas fa-sync"></i> Refresh List</button>
-            </div>
-            <div id="fileList" class="divide-y divide-gray-100 max-h-96 overflow-y-auto">
-                <div class="p-6 text-center text-gray-400 text-sm">Loading your locker...</div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // --- CONFIGURATION ---
-        const supabaseUrl = 'https://atsdebykxuhtruuwcmlx.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
-        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-
-        // 1. CHECK LOGIN
-        const currentUser = localStorage.getItem('currentUser');
-        if (!currentUser) {
-            window.location.href = 'login.html';
-        } else {
-            document.getElementById('display-name').innerText = currentUser;
-            loadFiles(); // Load files on startup
-        }
-
-        function logout() {
-            localStorage.removeItem('currentUser');
-            window.location.href = 'index.html';
-        }
-
-        // 2. FILE SELECTION UI
-        function handleFileSelect() {
-            const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
-            if (file) {
-                document.getElementById('fileNameDisplay').innerText = "Selected: " + file.name;
-                document.getElementById('fileNameDisplay').classList.remove('hidden');
-                document.getElementById('uploadBtn').classList.remove('hidden');
-            }
-        }
-
-        // 3. UPLOAD LOGIC
-        async function uploadFile() {
-            const btn = document.getElementById('uploadBtn');
-            const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
-
-            if (!file) return;
-
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
-
-            try {
-                // Create a unique file name: "PatientName_Timestamp_FileName"
-                const fileName = `${currentUser}_${Date.now()}_${file.name}`;
-
-                // Upload to Supabase Storage Bucket 'medical-records'
-                const { data, error } = await supabaseClient
-                    .storage
-                    .from('medical-records')
-                    .upload(fileName, file);
-
-                if (error) throw error;
-
-                alert("Success! Your medical record has been securely stored.");
-                
-                // Reset UI
-                fileInput.value = "";
-                document.getElementById('fileNameDisplay').classList.add('hidden');
-                document.getElementById('uploadBtn').classList.add('hidden');
-                btn.disabled = false;
-                btn.innerText = "Confirm Upload";
-
-                // Refresh List
-                loadFiles();
-
-            } catch (err) {
-                alert("Upload Failed: " + err.message);
-                btn.disabled = false;
-                btn.innerText = "Confirm Upload";
-            }
-        }
-
-        // 4. LOAD FILES LOGIC
-        async function loadFiles() {
-            const listDiv = document.getElementById('fileList');
-            
-            try {
-                // List all files in the bucket
-                const { data, error } = await supabaseClient
-                    .storage
-                    .from('medical-records')
-                    .list();
-
-                if (error) throw error;
-
-                // Filter files that belong to THIS user (based on name prefix)
-                const myFiles = data.filter(file => file.name.startsWith(currentUser));
-
-                if (myFiles.length === 0) {
-                    listDiv.innerHTML = '<div class="p-6 text-center text-gray-400 text-sm">No documents uploaded yet.</div>';
-                    return;
-                }
-
-                listDiv.innerHTML = ""; // Clear loader
-
-                myFiles.forEach(file => {
-                    const date = new Date(file.created_at).toLocaleDateString();
-                    const cleanName = file.name.split('_').slice(2).join('_'); // Remove Prefix
-
-                    const row = `
-                        <div class="p-4 flex justify-between items-center hover:bg-gray-50 transition">
-                            <div class="flex items-center">
-                                <div class="bg-blue-100 p-3 rounded-full text-blue-600 mr-4">
-                                    <i class="fas fa-file-medical"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-bold text-gray-800">${cleanName}</p>
-                                    <p class="text-xs text-gray-400">${date} • ${(file.metadata.size / 1024).toFixed(1)} KB</p>
-                                </div>
-                            </div>
-                            <span class="text-green-600 text-xs font-bold bg-green-50 px-3 py-1 rounded-full border border-green-200">
-                                <i class="fas fa-check-circle"></i> Stored
-                            </span>
-                        </div>
-                    `;
-                    listDiv.innerHTML += row;
-                });
-
-            } catch (err) {
-                console.error(err);
-                listDiv.innerHTML = '<div class="p-6 text-center text-red-400 text-sm">Error loading files.</div>';
-            }
-        }
-    </script>
-</body>
-</html>
+### **Summary of Links:**
+* **TreatInt Locker (Logo):** Goes to `index.html` (Main Landing Page).
+* **Home:** Goes to `index.html` (Main Landing Page).
+* **Dashboard (Breadcrumb):** Reloads `dashboard-patient.html` (Current Page).
+* **Logout:** Clears session and goes to `index.html`.
