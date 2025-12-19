@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitation Desk | TreatInt</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style> body { font-family: 'Poppins', sans-serif; } </style>
+</head>
+<body class="bg-gray-100">
+
+    <nav class="bg-gray-900 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <a href="index.html" class="flex items-center hover:opacity-80 transition">
+                    <i class="fas fa-hospital text-2xl mr-2"></i>
+                    <span class="font-bold text-xl">TreatInt Hospital</span>
+                </a>
+                <div class="flex items-center space-x-6">
+                    <a href="hospital-home.html" class="hover:text-gray-200 transition flex items-center gap-2">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                    <div class="text-right hidden md:block border-l border-gray-600 pl-4">
+                        <div class="font-bold" id="display-name">Loading...</div>
+                        <div class="text-xs text-gray-400">Admin Console</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-5xl mx-auto px-4 py-8">
+        
+        <div class="text-sm text-gray-500 mb-6 flex items-center">
+            <a href="hospital-home.html" class="hover:text-blue-800 hover:underline transition font-bold text-blue-900">
+                <i class="fas fa-arrow-left mr-1"></i> Back to Console
+            </a> 
+            <span class="mx-2">/</span> 
+            <span class="font-bold text-gray-800">Invitation Desk</span>
+        </div>
+
+        <div class="bg-white rounded-xl shadow overflow-hidden">
+            <div class="px-6 py-4 border-b bg-yellow-50 flex justify-between items-center">
+                <div>
+                    <h3 class="font-bold text-lg text-gray-800">Issue Visa Invitations</h3>
+                    <p class="text-xs text-gray-500">Upload PDF letters for patients to download.</p>
+                </div>
+                <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search Patient..." class="border rounded px-3 py-2 text-sm w-64">
+            </div>
+
+            <table class="w-full text-sm text-left text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                    <tr>
+                        <th class="px-6 py-3">Patient Name</th>
+                        <th class="px-6 py-3">Contact</th>
+                        <th class="px-6 py-3">Visa Status</th>
+                        <th class="px-6 py-3 text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="invitationTableBody">
+                    <tr><td colspan="4" class="px-6 py-4 text-center">Loading patients...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="uploadModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md p-6">
+            <h3 class="text-lg font-bold text-gray-800 mb-2">Upload Invitation Letter</h3>
+            <p class="text-sm text-gray-500 mb-4">For Patient: <span id="modalPatientName" class="font-bold text-black"></span></p>
+            
+            <input type="file" id="fileInput" accept=".pdf" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 mb-4"/>
+            
+            <div class="flex justify-end space-x-3">
+                <button onclick="closeModal()" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded">Cancel</button>
+                <button onclick="confirmUpload()" id="uploadBtn" class="px-4 py-2 bg-blue-900 text-white font-bold rounded hover:bg-blue-800">Upload & Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://atsdebykxuhtruuwcmlx.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) window.location.href = 'login.html';
+        else document.getElementById('display-name').innerText = currentUser;
+
+        let selectedPatient = "";
+
+        // 1. LOAD PATIENTS
+        async function loadPatients() {
+            try {
+                // Get Patients
+                const { data: patients, error } = await supabaseClient
+                    .from('patients')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                // Get Files to check if Invitation exists
+                const { data: files } = await supabaseClient.storage.from('medical-records').list();
+                
+                const tbody = document.getElementById('invitationTableBody');
+                tbody.innerHTML = "";
+
+                if(patients.length === 0) {
+                     tbody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center">No patients found.</td></tr>';
+                     return;
+                }
+
+                patients.forEach(patient => {
+                    // Check if a file named "Invitation_PatientName..." exists
+                    const hasInvite = files ? files.some(f => f.name.startsWith(`Invitation_${patient.name}`)) : false;
+
+                    let status = hasInvite 
+                        ? `<span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">Invitation Sent</span>` 
+                        : `<span class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs font-bold">Not Issued</span>`;
+
+                    let actionBtn = hasInvite
+                        ? `<button class="text-gray-400 text-xs font-bold cursor-not-allowed" disabled>Completed</button>`
+                        : `<button onclick="openModal('${patient.name}')" class="bg-blue-900 text-white px-3 py-1 rounded text-xs font-bold hover:bg-blue-800">Upload PDF</button>`;
+
+                    const row = `
+                        <tr class="bg-white border-b hover:bg-gray-50 search-item">
+                            <td class="px-6 py-4 font-bold text-gray-900">${patient.name}</td>
+                            <td class="px-6 py-4 text-gray-500">${patient.mobile}</td>
+                            <td class="px-6 py-4">${status}</td>
+                            <td class="px-6 py-4 text-right">${actionBtn}</td>
+                        </tr>`;
+                    tbody.innerHTML += row;
+                });
+
+            } catch (err) {
+                console.error(err);
+                alert("Error: " + err.message);
+            }
+        }
+
+        // 2. MODAL LOGIC
+        function openModal(name) {
+            selectedPatient = name;
+            document.getElementById('modalPatientName').innerText = name;
+            document.getElementById('uploadModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('uploadModal').classList.add('hidden');
+            document.getElementById('fileInput').value = ""; // Reset
+        }
+
+        // 3. UPLOAD LOGIC
+        async function confirmUpload() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            const btn = document.getElementById('uploadBtn');
+
+            if (!file) { alert("Please select a PDF file first."); return; }
+
+            btn.disabled = true;
+            btn.innerText = "Uploading...";
+
+            try {
+                // Naming Convention: Invitation_PatientName_Timestamp.pdf
+                const fileName = `Invitation_${selectedPatient}_${Date.now()}.pdf`;
+
+                const { error } = await supabaseClient
+                    .storage
+                    .from('medical-records')
+                    .upload(fileName, file);
+
+                if (error) throw error;
+
+                alert("Success! Invitation Letter Sent.");
+                closeModal();
+                loadPatients(); // Refresh list
+
+            } catch (err) {
+                alert("Upload Failed: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Upload & Send";
+            }
+        }
+
+        function filterTable() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const rows = document.getElementsByClassName('search-item');
+            for (let i = 0; i < rows.length; i++) {
+                const txtValue = rows[i].textContent || rows[i].innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+
+        loadPatients(); // Init
+    </script>
+</body>
+</html>
