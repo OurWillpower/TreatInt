@@ -32,7 +32,7 @@
                     <input type="password" id="pPassword" class="w-full border p-2 rounded" required>
                 </div>
                 <button type="submit" id="submitBtn" class="w-full bg-blue-900 text-white font-bold py-3 rounded hover:bg-blue-800 transition">
-                    Sign Up Now
+                    Test Connection
                 </button>
             </div>
         </form>
@@ -42,43 +42,60 @@
     </div>
 
     <script>
-        // --- 2. YOUR DATABASE CONFIGURATION ---
+        // --- CONFIGURATION ---
         const supabaseUrl = 'https://atsdebykxuhtruuwcmlx.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
         
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        // CHECK 1: Did library load?
+        if (typeof supabase === 'undefined') {
+            alert("CRITICAL ERROR: Supabase library did not load. Check internet connection.");
+        }
 
-        // --- 3. SAVE LOGIC ---
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
         const form = document.getElementById('patientForm');
         const btn = document.getElementById('submitBtn');
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             btn.disabled = true;
-            btn.innerHTML = "Saving to Database...";
-
+            btn.innerHTML = "Attempting to Save...";
+            
             const name = document.getElementById('pName').value;
             const mobile = document.getElementById('pMobile').value;
             const password = document.getElementById('pPassword').value;
 
-            // Save to Local Memory (so Dashboard knows who you are)
-            localStorage.setItem('currentUser', name);
-
-            // Save to Supabase
-            const { data, error } = await supabase
-                .from('patients') // Must match your Table Name
-                .insert([
-                    { name: name, mobile: mobile, password: password }
-                ]);
-
-            if (error) {
-                console.error('Database Error:', error);
-                alert("Error: " + error.message + "\n(Check if Table Name is 'patients' and RLS is unchecked)");
+            // CHECK 2: Values
+            if(!name || !mobile || !password) {
+                alert("Error: Fields cannot be empty");
                 btn.disabled = false;
-                btn.innerHTML = "Sign Up Now";
-            } else {
-                alert("Success! Account Created in Supabase.");
-                window.location.href = 'dashboard-patient.html';
+                return;
+            }
+
+            try {
+                // Save to Supabase
+                const { data, error } = await _supabase
+                    .from('patients') 
+                    .insert([
+                        { name: name, mobile: mobile, password: password }
+                    ])
+                    .select();
+
+                if (error) {
+                    // CHECK 3: Database Error
+                    alert("DATABASE ERROR:\n" + error.message + "\n\n(Hint: Did you disable RLS?)");
+                    console.error(error);
+                    btn.disabled = false;
+                    btn.innerHTML = "Test Connection";
+                } else {
+                    alert("SUCCESS! Data saved to Supabase.");
+                    localStorage.setItem('currentUser', name);
+                    window.location.href = 'dashboard-patient.html';
+                }
+            } catch (err) {
+                // CHECK 4: Network/Code Error
+                alert("CODE ERROR:\n" + err.message);
+                btn.disabled = false;
             }
         });
     </script>
