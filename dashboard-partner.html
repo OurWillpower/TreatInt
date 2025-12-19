@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style> body { font-family: 'Poppins', sans-serif; } </style>
 </head>
 <body class="bg-gray-50">
@@ -33,9 +34,9 @@
         
         <div class="flex justify-between items-center mb-8">
             <h2 class="text-2xl font-bold text-gray-800">Your Performance</h2>
-            <button class="bg-green-600 text-white px-6 py-2 rounded-lg font-bold shadow hover:bg-green-700 transition">
+            <a href="refer-patient.html" class="bg-green-600 text-white px-6 py-2 rounded-lg font-bold shadow hover:bg-green-700 transition inline-block">
                 <i class="fas fa-plus-circle mr-2"></i> Refer New Patient
-            </button>
+            </a>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -43,7 +44,7 @@
                 <div class="flex justify-between items-center">
                     <div>
                         <p class="text-gray-500 text-sm font-bold uppercase">Total Referrals</p>
-                        <h3 class="text-3xl font-bold text-gray-800">12</h3>
+                        <h3 class="text-3xl font-bold text-gray-800" id="stat-total">0</h3>
                     </div>
                     <div class="bg-green-100 p-3 rounded-full text-green-600"><i class="fas fa-users text-xl"></i></div>
                 </div>
@@ -52,7 +53,7 @@
                 <div class="flex justify-between items-center">
                     <div>
                         <p class="text-gray-500 text-sm font-bold uppercase">Active Cases</p>
-                        <h3 class="text-3xl font-bold text-gray-800">4</h3>
+                        <h3 class="text-3xl font-bold text-gray-800">0</h3>
                     </div>
                     <div class="bg-blue-100 p-3 rounded-full text-blue-600"><i class="fas fa-procedures text-xl"></i></div>
                 </div>
@@ -60,8 +61,8 @@
             <div class="bg-white p-6 rounded-xl shadow border-l-4 border-yellow-500">
                 <div class="flex justify-between items-center">
                     <div>
-                        <p class="text-gray-500 text-sm font-bold uppercase">Total Commission</p>
-                        <h3 class="text-3xl font-bold text-gray-800">$4,250</h3>
+                        <p class="text-gray-500 text-sm font-bold uppercase">Estimated Commission</p>
+                        <h3 class="text-3xl font-bold text-gray-800">$0</h3>
                     </div>
                     <div class="bg-yellow-100 p-3 rounded-full text-yellow-600"><i class="fas fa-wallet text-xl"></i></div>
                 </div>
@@ -70,30 +71,21 @@
 
         <div class="bg-white rounded-xl shadow overflow-hidden">
             <div class="px-6 py-4 border-b">
-                <h3 class="font-bold text-gray-800">Recent Referrals</h3>
+                <h3 class="font-bold text-gray-800">My Referrals</h3>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-sm text-left text-gray-500">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
+                            <th class="px-6 py-3">Date</th>
                             <th class="px-6 py-3">Patient Name</th>
-                            <th class="px-6 py-3">Country</th>
+                            <th class="px-6 py-3">Mobile</th>
                             <th class="px-6 py-3">Status</th>
-                            <th class="px-6 py-3">Commission</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr class="bg-white border-b hover:bg-gray-50">
-                            <td class="px-6 py-4 font-bold text-gray-900">Ahmed Al-Sayed</td>
-                            <td class="px-6 py-4">UAE</td>
-                            <td class="px-6 py-4"><span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded">Visa Process</span></td>
-                            <td class="px-6 py-4 text-green-600 font-bold">$450 (Pending)</td>
-                        </tr>
-                        <tr class="bg-white hover:bg-gray-50">
-                            <td class="px-6 py-4 font-bold text-gray-900">John Doe</td>
-                            <td class="px-6 py-4">Kenya</td>
-                            <td class="px-6 py-4"><span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded">Discharged</span></td>
-                            <td class="px-6 py-4 text-green-600 font-bold">$800 (Paid)</td>
+                    <tbody id="referralTableBody">
+                        <tr>
+                            <td colspan="4" class="px-6 py-4 text-center">Loading data...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -102,21 +94,75 @@
     </div>
 
     <script>
-        // 1. Get Name from Login
-        const storedName = localStorage.getItem('currentUser');
+        // --- CONFIGURATION ---
+        const supabaseUrl = 'https://atsdebykxuhtruuwcmlx.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // 1. CHECK LOGIN
+        const currentPartner = localStorage.getItem('currentUser');
         
-        if (storedName) {
-            document.getElementById('display-name').innerText = storedName;
+        if (!currentPartner) {
+            window.location.href = 'login.html';
         } else {
-            // Security: If no login found, go back to login page
-            // Comment out the next line if you want to test without logging in
-            // window.location.href = 'login.html';
-            document.getElementById('display-name').innerText = "Partner";
+            document.getElementById('display-name').innerText = currentPartner;
+            loadReferrals();
         }
 
         function logout() {
             localStorage.removeItem('currentUser');
             window.location.href = 'index.html';
+        }
+
+        // 2. FETCH REFERRALS
+        async function loadReferrals() {
+            try {
+                // Fetch patients where 'referred_by' matches the logged-in partner
+                const { data, error } = await supabaseClient
+                    .from('patients')
+                    .select('*')
+                    .eq('referred_by', currentPartner)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                // Update Stats
+                document.getElementById('stat-total').innerText = data.length;
+
+                // Render Table
+                const tableBody = document.getElementById('referralTableBody');
+                tableBody.innerHTML = ""; // Clear loading message
+
+                if (data.length === 0) {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="4" class="px-6 py-4 text-center text-gray-400">
+                                No referrals yet. Click "Refer New Patient" to start.
+                            </td>
+                        </tr>`;
+                    return;
+                }
+
+                data.forEach(patient => {
+                    const date = new Date(patient.created_at).toLocaleDateString();
+                    
+                    const row = `
+                        <tr class="bg-white border-b hover:bg-gray-50">
+                            <td class="px-6 py-4">${date}</td>
+                            <td class="px-6 py-4 font-bold text-gray-900">${patient.name}</td>
+                            <td class="px-6 py-4">${patient.mobile}</td>
+                            <td class="px-6 py-4">
+                                <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded">Registered</span>
+                            </td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+
+            } catch (err) {
+                console.error(err);
+                alert("Error loading data: " + err.message);
+            }
         }
     </script>
 
