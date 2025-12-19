@@ -15,16 +15,24 @@
     <nav class="bg-blue-900 text-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center">
+                <div class="flex items-center cursor-pointer" onclick="window.location.reload()">
                     <i class="fas fa-heartbeat text-2xl mr-2"></i>
                     <span class="font-bold text-xl">TreatInt Locker</span>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <div class="text-right hidden md:block">
+
+                <div class="flex items-center space-x-6">
+                    <a href="dashboard-patient.html" class="hover:text-blue-200 transition">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                    
+                    <div class="text-right hidden md:block border-l border-blue-700 pl-4">
                         <div class="font-bold" id="display-name">Loading...</div>
                         <div class="text-xs text-blue-200">Patient Account</div>
                     </div>
-                    <button onclick="logout()" class="text-sm bg-red-500 px-3 py-1 rounded hover:bg-red-600 ml-2">Logout</button>
+                    
+                    <button onclick="logout()" class="text-sm bg-red-500 px-3 py-1 rounded hover:bg-red-600 ml-2">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
                 </div>
             </div>
         </div>
@@ -32,18 +40,22 @@
 
     <div class="max-w-4xl mx-auto px-4 py-8">
         
+        <div class="text-sm text-gray-500 mb-4">
+            <a href="#" class="hover:underline">Dashboard</a> <span class="mx-2">/</span> <span class="font-bold text-gray-800">My Health Locker</span>
+        </div>
+
         <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
             <h2 class="text-xl font-bold text-gray-800 mb-4">Upload Medical Records</h2>
-            <div class="border-2 border-dashed border-blue-200 rounded-lg p-8 text-center hover:bg-blue-50 transition">
+            <div class="border-2 border-dashed border-blue-200 rounded-lg p-8 text-center hover:bg-blue-50 transition group">
                 <input type="file" id="fileInput" class="hidden" onchange="handleFileSelect()">
                 <label for="fileInput" class="cursor-pointer block">
-                    <i class="fas fa-cloud-upload-alt text-4xl text-blue-400 mb-2"></i>
+                    <i class="fas fa-cloud-upload-alt text-4xl text-blue-400 mb-2 group-hover:scale-110 transition-transform"></i>
                     <p class="text-gray-600 font-bold">Click to Upload Report</p>
                     <p class="text-xs text-gray-400">PDF, JPG, PNG (Max 5MB)</p>
                 </label>
                 <div id="fileNameDisplay" class="mt-4 text-sm font-bold text-green-600 hidden"></div>
             </div>
-            <button id="uploadBtn" onclick="uploadFile()" class="w-full mt-4 bg-blue-900 text-white font-bold py-3 rounded hover:bg-blue-800 transition hidden">
+            <button id="uploadBtn" onclick="uploadFile()" class="w-full mt-4 bg-blue-900 text-white font-bold py-3 rounded hover:bg-blue-800 transition hidden shadow-lg">
                 Confirm Upload
             </button>
         </div>
@@ -51,9 +63,9 @@
         <div class="bg-white rounded-xl shadow-lg overflow-hidden">
             <div class="px-6 py-4 border-b bg-gray-50 flex justify-between items-center">
                 <h3 class="font-bold text-gray-800">My Saved Documents</h3>
-                <button onclick="loadFiles()" class="text-blue-600 text-xs hover:underline"><i class="fas fa-sync"></i> Refresh</button>
+                <button onclick="loadFiles()" class="text-blue-600 text-xs hover:underline"><i class="fas fa-sync"></i> Refresh List</button>
             </div>
-            <div id="fileList" class="divide-y divide-gray-100">
+            <div id="fileList" class="divide-y divide-gray-100 max-h-96 overflow-y-auto">
                 <div class="p-6 text-center text-gray-400 text-sm">Loading your locker...</div>
             </div>
         </div>
@@ -113,7 +125,7 @@
 
                 if (error) throw error;
 
-                alert("Success! File Uploaded.");
+                alert("Success! Your medical record has been securely stored.");
                 
                 // Reset UI
                 fileInput.value = "";
@@ -156,25 +168,23 @@
                 listDiv.innerHTML = ""; // Clear loader
 
                 myFiles.forEach(file => {
-                    // Create Download URL
-                    // Note: Since bucket is private, we normally need signed URLs. 
-                    // For this MVP, we will just list them.
-                    
                     const date = new Date(file.created_at).toLocaleDateString();
                     const cleanName = file.name.split('_').slice(2).join('_'); // Remove Prefix
 
                     const row = `
-                        <div class="p-4 flex justify-between items-center hover:bg-gray-50">
+                        <div class="p-4 flex justify-between items-center hover:bg-gray-50 transition">
                             <div class="flex items-center">
-                                <div class="bg-blue-100 p-2 rounded text-blue-600 mr-3">
-                                    <i class="fas fa-file-alt"></i>
+                                <div class="bg-blue-100 p-3 rounded-full text-blue-600 mr-4">
+                                    <i class="fas fa-file-medical"></i>
                                 </div>
                                 <div>
                                     <p class="text-sm font-bold text-gray-800">${cleanName}</p>
                                     <p class="text-xs text-gray-400">${date} • ${(file.metadata.size / 1024).toFixed(1)} KB</p>
                                 </div>
                             </div>
-                            <span class="text-green-600 text-xs font-bold bg-green-50 px-2 py-1 rounded">Stored</span>
+                            <span class="text-green-600 text-xs font-bold bg-green-50 px-3 py-1 rounded-full border border-green-200">
+                                <i class="fas fa-check-circle"></i> Stored
+                            </span>
                         </div>
                     `;
                     listDiv.innerHTML += row;
