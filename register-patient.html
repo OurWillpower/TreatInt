@@ -31,6 +31,18 @@
                     <label class="block text-sm font-bold text-gray-700">Create Password</label>
                     <input type="password" id="pPassword" class="w-full border p-2 rounded" required>
                 </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-gray-700">Did someone refer you? (Optional)</label>
+                    <select id="referralType" class="w-full border p-2 rounded mb-2" onchange="toggleReferralField()">
+                        <option value="Direct">No, I came directly</option>
+                        <option value="Partner">Partner Agency</option>
+                        <option value="Hospital">Hospital</option>
+                        <option value="Individual">Individual Person</option>
+                    </select>
+                    <input type="text" id="referralName" class="w-full border p-2 rounded hidden" placeholder="Enter Name of Person/Agency">
+                </div>
+
                 <button type="submit" id="submitBtn" class="w-full bg-blue-900 text-white font-bold py-3 rounded hover:bg-blue-800 transition">
                     Sign Up
                 </button>
@@ -45,8 +57,20 @@
         // --- CONFIGURATION ---
         const supabaseUrl = 'https://atsdebykxuhtruuwcmlx.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
-        
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // SHOW/HIDE INPUT FIELD
+        function toggleReferralField() {
+            const type = document.getElementById('referralType').value;
+            const input = document.getElementById('referralName');
+            if (type === 'Direct') {
+                input.classList.add('hidden');
+                input.value = ""; // Clear if hidden
+            } else {
+                input.classList.remove('hidden');
+                input.required = true; // Make mandatory if selected
+            }
+        }
 
         const form = document.getElementById('patientForm');
         const btn = document.getElementById('submitBtn');
@@ -59,14 +83,38 @@
             const name = document.getElementById('pName').value;
             const mobile = document.getElementById('pMobile').value;
             const password = document.getElementById('pPassword').value;
+            
+            // LOGIC: Combine Type + Name (e.g., "Partner: ABC Agency")
+            const refType = document.getElementById('referralType').value;
+            const refName = document.getElementById('referralName').value;
+            let finalReferral = "Direct Website";
+
+            if (refType !== 'Direct' && refName) {
+                finalReferral = refType + ": " + refName;
+            }
 
             try {
                 // Save to Supabase
                 const { data, error } = await _supabase
                     .from('patients') 
-                    .insert([{ name: name, mobile: mobile, password: password }]);
+                    .insert([{ 
+                        name: name, 
+                        mobile: mobile, 
+                        password: password,
+                        referred_by: finalReferral // SAVES THE SOURCE
+                    }]);
 
-                if (error) {
-                    alert("Registration Error: " + error.message);
-                    btn.disabled = false;
-                    btn.innerHTML = "Sign Up";
+                if (error) throw error;
+
+                localStorage.setItem('currentUser', name);
+                window.location.href = 'dashboard-patient.html';
+                
+            } catch (err) {
+                alert("Error: " + err.message);
+                btn.disabled = false;
+                btn.innerHTML = "Sign Up";
+            }
+        });
+    </script>
+</body>
+</html>
