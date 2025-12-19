@@ -33,9 +33,9 @@
     <div class="max-w-7xl mx-auto px-4 py-8">
         
         <div class="flex justify-between items-center mb-8">
-            <h2 class="text-2xl font-bold text-gray-800">Your Performance</h2>
-            <a href="refer-patient.html" class="bg-green-600 text-white px-6 py-2 rounded-lg font-bold shadow hover:bg-green-700 transition inline-block">
-                <i class="fas fa-plus-circle mr-2"></i> Refer New Patient
+            <h2 class="text-2xl font-bold text-gray-800">Your Referrals</h2>
+            <a href="refer-patient.html" class="bg-green-600 text-white px-6 py-2 rounded-lg font-bold shadow hover:bg-green-700 transition inline-flex items-center">
+                <i class="fas fa-plus-circle mr-2"></i> Register New Patient
             </a>
         </div>
 
@@ -52,40 +52,40 @@
             <div class="bg-white p-6 rounded-xl shadow border-l-4 border-blue-500">
                 <div class="flex justify-between items-center">
                     <div>
-                        <p class="text-gray-500 text-sm font-bold uppercase">Active Cases</p>
-                        <h3 class="text-3xl font-bold text-gray-800">0</h3>
+                        <p class="text-gray-500 text-sm font-bold uppercase">Files Submitted</p>
+                        <h3 class="text-3xl font-bold text-gray-800" id="stat-files">0</h3>
                     </div>
-                    <div class="bg-blue-100 p-3 rounded-full text-blue-600"><i class="fas fa-procedures text-xl"></i></div>
+                    <div class="bg-blue-100 p-3 rounded-full text-blue-600"><i class="fas fa-file-medical text-xl"></i></div>
                 </div>
             </div>
             <div class="bg-white p-6 rounded-xl shadow border-l-4 border-yellow-500">
                 <div class="flex justify-between items-center">
                     <div>
-                        <p class="text-gray-500 text-sm font-bold uppercase">Estimated Commission</p>
-                        <h3 class="text-3xl font-bold text-gray-800">$0</h3>
+                        <p class="text-gray-500 text-sm font-bold uppercase">Action Required</p>
+                        <h3 class="text-3xl font-bold text-gray-800" id="stat-pending">0</h3>
                     </div>
-                    <div class="bg-yellow-100 p-3 rounded-full text-yellow-600"><i class="fas fa-wallet text-xl"></i></div>
+                    <div class="bg-yellow-100 p-3 rounded-full text-yellow-600"><i class="fas fa-exclamation-triangle text-xl"></i></div>
                 </div>
             </div>
         </div>
 
         <div class="bg-white rounded-xl shadow overflow-hidden">
-            <div class="px-6 py-4 border-b">
-                <h3 class="font-bold text-gray-800">My Referrals</h3>
+            <div class="px-6 py-4 border-b bg-gray-50">
+                <h3 class="font-bold text-gray-800">My Patient List</h3>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-sm text-left text-gray-500">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-100">
                         <tr>
                             <th class="px-6 py-3">Date</th>
                             <th class="px-6 py-3">Patient Name</th>
                             <th class="px-6 py-3">Mobile</th>
-                            <th class="px-6 py-3">Status</th>
+                            <th class="px-6 py-3">Current Status</th>
                         </tr>
                     </thead>
                     <tbody id="referralTableBody">
                         <tr>
-                            <td colspan="4" class="px-6 py-4 text-center">Loading data...</td>
+                            <td colspan="4" class="px-6 py-4 text-center">Scanning database...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -101,7 +101,6 @@
 
         // 1. CHECK LOGIN
         const currentPartner = localStorage.getItem('currentUser');
-        
         if (!currentPartner) {
             window.location.href = 'login.html';
         } else {
@@ -114,50 +113,70 @@
             window.location.href = 'index.html';
         }
 
-        // 2. FETCH REFERRALS
+        // 2. FETCH REFERRALS & CHECK STATUS
         async function loadReferrals() {
             try {
-                // Fetch patients where 'referred_by' matches the logged-in partner
-                const { data, error } = await supabaseClient
+                // A. Fetch patients linked to this partner (Use ILIKE for flexible matching)
+                const { data: patients, error } = await supabaseClient
                     .from('patients')
                     .select('*')
-                    .eq('referred_by', currentPartner)
+                    .ilike('referred_by', `%${currentPartner}%`) 
                     .order('created_at', { ascending: false });
 
                 if (error) throw error;
 
-                // Update Stats
-                document.getElementById('stat-total').innerText = data.length;
+                // Update Total Count
+                document.getElementById('stat-total').innerText = patients.length;
 
-                // Render Table
                 const tableBody = document.getElementById('referralTableBody');
-                tableBody.innerHTML = ""; // Clear loading message
+                tableBody.innerHTML = "";
 
-                if (data.length === 0) {
+                if (patients.length === 0) {
                     tableBody.innerHTML = `
                         <tr>
                             <td colspan="4" class="px-6 py-4 text-center text-gray-400">
-                                No referrals yet. Click "Refer New Patient" to start.
+                                No referrals yet. Click "Register New Patient" to start.
                             </td>
                         </tr>`;
                     return;
                 }
 
-                data.forEach(patient => {
+                // B. Fetch ALL files once (More efficient than looping)
+                const { data: allFiles } = await supabaseClient.storage.from('medical-records').list();
+                
+                let filesCount = 0;
+                let pendingCount = 0;
+
+                // C. Loop through patients and check their file status
+                patients.forEach(patient => {
                     const date = new Date(patient.created_at).toLocaleDateString();
                     
+                    // Check if any file starts with this patient's name
+                    const hasFiles = allFiles ? allFiles.some(f => f.name.startsWith(patient.name)) : false;
+
+                    let statusBadge;
+                    if (hasFiles) {
+                        filesCount++;
+                        statusBadge = `<span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded"><i class="fas fa-check-circle"></i> Docs Received</span>`;
+                    } else {
+                        pendingCount++;
+                        statusBadge = `<span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded"><i class="fas fa-clock"></i> Pending Upload</span>`;
+                    }
+
                     const row = `
                         <tr class="bg-white border-b hover:bg-gray-50">
-                            <td class="px-6 py-4">${date}</td>
+                            <td class="px-6 py-4 text-gray-400">${date}</td>
                             <td class="px-6 py-4 font-bold text-gray-900">${patient.name}</td>
                             <td class="px-6 py-4">${patient.mobile}</td>
-                            <td class="px-6 py-4">
-                                <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded">Registered</span>
-                            </td>
+                            <td class="px-6 py-4">${statusBadge}</td>
                         </tr>
                     `;
                     tableBody.innerHTML += row;
                 });
+
+                // Update Dashboard Counters
+                document.getElementById('stat-files').innerText = filesCount;
+                document.getElementById('stat-pending').innerText = pendingCount;
 
             } catch (err) {
                 console.error(err);
