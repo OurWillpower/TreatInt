@@ -8,7 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style> body { font-family: 'Poppins', sans-serif; } </style>
 </head>
-<body class="bg-gray-100 h-screen flex items-center justify-center">
+<body class="bg-gray-100 h-screen flex flex-col items-center justify-center p-4">
+
+    <div id="statusBanner" class="hidden w-full max-w-md mb-6 p-4 rounded-lg text-sm text-center shadow-md"></div>
 
     <div class="bg-white p-8 rounded-xl shadow-lg max-w-md w-full">
         <div class="text-center mb-6">
@@ -26,11 +28,11 @@
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-bold text-gray-700" id="idLabel">Mobile Number</label>
-                    <input type="text" id="userId" class="w-full border p-2 rounded" required placeholder="Enter ID...">
+                    <input type="text" id="userId" class="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" required placeholder="Enter ID...">
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-gray-700">Password</label>
-                    <input type="password" id="userPass" class="w-full border p-2 rounded" required>
+                    <input type="password" id="userPass" class="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                 </div>
                 
                 <button type="submit" id="submitBtn" class="w-full bg-blue-900 text-white font-bold py-3 rounded hover:bg-blue-800 transition">
@@ -39,8 +41,6 @@
             </div>
         </form>
 
-        <div id="errorMsg" class="mt-4 text-xs text-red-600 bg-red-50 p-2 rounded hidden text-center"></div>
-
         <div class="flex justify-between items-center mt-4 text-sm">
             <a href="forgot-password.html" class="text-gray-500 hover:text-gray-800">Forgot Password?</a>
             <a href="register-patient.html" class="text-blue-600 font-bold hover:underline">Create Account</a>
@@ -48,25 +48,48 @@
     </div>
 
     <script>
-        // --- DIRECT CONFIGURATION ---
+        // --- CONFIGURATION ---
         const SUPABASE_URL = 'https://atsdebykxuhtruuwcmlx.supabase.co';
+        // Key from your history/dashboard
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
         
         let currentRole = 'patient';
 
-        // Role Switching Logic
+        // --- 1. IMMEDIATE CONNECTION TEST ---
+        window.onload = async function() {
+            const banner = document.getElementById('statusBanner');
+            try {
+                // Try to fetch the root URL to check connectivity
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/`, {
+                    method: 'HEAD',
+                    headers: { 'apikey': SUPABASE_KEY }
+                });
+                console.log("Connection Test: Success");
+            } catch (err) {
+                console.error("Connection Test Failed:", err);
+                banner.classList.remove('hidden');
+                banner.classList.add('bg-red-100', 'text-red-700', 'border', 'border-red-400');
+                banner.innerHTML = `
+                    <strong>Connection Blocked!</strong><br>
+                    Your browser or network is blocking the database.<br>
+                    <span class="text-xs">Try disabling AdBlocker, switching to Mobile Data, or using a different browser.</span>
+                `;
+            }
+        };
+
+        // --- 2. ROLE SWITCHING LOGIC ---
         function setRole(role) {
             currentRole = role;
+            // Reset styles
             ['patient', 'partner', 'hospital'].forEach(r => {
                 const tab = document.getElementById('tab-' + r);
-                tab.classList.remove('bg-white', 'shadow', 'text-blue-900', 'text-green-800', 'text-gray-800');
-                tab.classList.add('text-gray-500');
+                tab.className = "flex-1 py-2 text-sm font-bold rounded-md text-gray-500 hover:text-gray-700 transition";
             });
 
+            // Set Active Style
             const activeTab = document.getElementById('tab-' + role);
-            activeTab.classList.remove('text-gray-500');
-            activeTab.classList.add('bg-white', 'shadow');
-
+            activeTab.className = "flex-1 py-2 text-sm font-bold rounded-md bg-white shadow transition";
+            
             const btn = document.getElementById('submitBtn');
             const label = document.getElementById('idLabel');
 
@@ -85,20 +108,20 @@
             }
         }
 
-        // --- ROBUST LOGIN LOGIC (Using Fetch) ---
+        // --- 3. LOGIN LOGIC ---
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
-            const errorDiv = document.getElementById('errorMsg');
+            const banner = document.getElementById('statusBanner');
             
             btn.disabled = true;
             btn.innerText = "Verifying...";
-            errorDiv.classList.add('hidden');
+            banner.classList.add('hidden'); // Hide previous errors
 
             const id = document.getElementById('userId').value.trim();
             const pass = document.getElementById('userPass').value.trim();
 
-            // Determine table details
+            // Setup variables based on role
             let table, idColumn, redirectPage;
             if (currentRole === 'patient') {
                 table = 'patients'; idColumn = 'mobile'; redirectPage = 'patient-home.html';
@@ -108,12 +131,12 @@
                 table = 'hospitals'; idColumn = 'email'; redirectPage = 'hospital-home.html';
             }
 
-            // Construct Direct URL
-            // We encodeURIComponent to handle '+' signs in phone numbers correctly
-            const targetUrl = `${SUPABASE_URL}/rest/v1/${table}?${idColumn}=eq.${encodeURIComponent(id)}&password=eq.${encodeURIComponent(pass)}&select=*`;
+            // Construct URL carefully
+            // We search for a row where ID matches AND Password matches
+            const url = `${SUPABASE_URL}/rest/v1/${table}?${idColumn}=eq.${encodeURIComponent(id)}&password=eq.${encodeURIComponent(pass)}&select=*`;
 
             try {
-                const response = await fetch(targetUrl, {
+                const response = await fetch(url, {
                     method: 'GET',
                     headers: {
                         'apikey': SUPABASE_KEY,
@@ -123,32 +146,39 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error(`Server Error: ${response.status} ${response.statusText}`);
+                    throw new Error(`Server Error: ${response.status}`);
                 }
 
                 const data = await response.json();
 
                 if (data.length > 0) {
-                    // Success!
+                    // LOGIN SUCCESS
                     const user = data[0];
-                    const name = user.name || user.hospital_name || user.contact_person || 'User';
-                    localStorage.setItem('currentUser', name);
+                    // Save Name/ID for other pages to use
+                    const userName = user.name || user.hospital_name || user.contact_person || 'User';
+                    localStorage.setItem('currentUser', userName);
                     window.location.href = redirectPage;
                 } else {
-                    // No data found = Wrong Password
-                    throw new Error("Invalid ID or Password. Please check and try again.");
+                    // LOGIN FAILED (Wrong ID/Pass)
+                    banner.classList.remove('hidden', 'bg-red-100', 'text-red-700');
+                    banner.classList.add('bg-yellow-100', 'text-yellow-800', 'border', 'border-yellow-400');
+                    banner.innerHTML = "<strong>Login Failed:</strong> Invalid ID or Password.";
+                    btn.disabled = false;
+                    btn.innerText = "Login";
                 }
 
             } catch (err) {
+                // NETWORK/SYSTEM ERROR
                 console.error(err);
-                errorDiv.innerText = err.message;
-                errorDiv.classList.remove('hidden');
+                banner.classList.remove('hidden', 'bg-yellow-100', 'text-yellow-800');
+                banner.classList.add('bg-red-100', 'text-red-700', 'border', 'border-red-400');
                 
-                // If it is a fetch error specifically
-                if(err.message.includes("Failed to fetch")) {
-                    errorDiv.innerText = "Network Blocked. Please disable AdBlocker or try a different internet connection.";
+                if (err.message.includes('Failed to fetch')) {
+                    banner.innerHTML = "<strong>Network Error:</strong> Cannot reach server. Please turn off AdBlocker or try Mobile Data.";
+                } else {
+                    banner.innerHTML = `<strong>System Error:</strong> ${err.message}`;
                 }
-            } finally {
+                
                 btn.disabled = false;
                 btn.innerText = "Login";
             }
