@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hospital Admin | TreatInt</title>
+    <title>Master Registry | TreatInt</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -16,17 +16,13 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <a href="index.html" class="flex items-center hover:opacity-80 transition">
-                    <i class="fas fa-hospital text-2xl mr-2"></i>
-                    <span class="font-bold text-xl">TreatInt Hospital</span>
+                    <i class="fas fa-user-shield text-2xl mr-2"></i>
+                    <span class="font-bold text-xl">TreatInt Admin</span>
                 </a>
                 <div class="flex items-center space-x-6">
-                    <a href="index.html" class="hover:text-gray-200 transition flex items-center gap-2">
-                        <i class="fas fa-home"></i> <span class="hidden md:inline">Home</span>
+                    <a href="hospital-home.html" class="hover:text-gray-200 transition flex items-center gap-2">
+                        <i class="fas fa-home"></i> Console
                     </a>
-                    <div class="text-right hidden md:block border-l border-gray-600 pl-4">
-                        <div class="font-bold" id="display-name">Loading...</div>
-                        <div class="text-xs text-gray-400">Admin Console</div>
-                    </div>
                     <button onclick="logout()" class="text-sm bg-red-600 px-3 py-1 rounded hover:bg-red-700 ml-2">Logout</button>
                 </div>
             </div>
@@ -35,63 +31,63 @@
 
     <div class="max-w-7xl mx-auto px-4 py-8">
         
-        <div class="text-sm text-gray-500 mb-6 flex items-center">
-            <a href="hospital-home.html" class="hover:text-blue-800 hover:underline transition font-bold text-blue-900">
-                <i class="fas fa-arrow-left mr-1"></i> Back to Console
-            </a> 
-            <span class="mx-2">/</span> 
-            <span class="font-bold text-gray-800">Global Registry</span>
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800">Master Patient Records</h2>
+                <p class="text-sm text-gray-500">View, Edit, or Delete any patient record.</p>
+            </div>
+            <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search Name or Mobile..." class="border-2 border-gray-300 rounded-lg px-4 py-2 text-sm w-64 focus:border-blue-500 outline-none">
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="md:col-span-1 space-y-4">
-                <div class="bg-white p-4 rounded-xl shadow border-l-4 border-blue-600">
-                    <p class="text-xs font-bold text-gray-500 uppercase">Total Patients</p>
-                    <h3 class="text-2xl font-bold" id="stat-total">0</h3>
-                </div>
-                <div class="bg-white p-4 rounded-xl shadow border-l-4 border-yellow-500">
-                    <p class="text-xs font-bold text-gray-500 uppercase">Files Uploaded</p>
-                    <h3 class="text-2xl font-bold" id="stat-files">0</h3>
-                </div>
-                <button onclick="location.reload()" class="w-full bg-blue-900 text-white py-3 rounded-lg font-bold shadow hover:bg-blue-800">
-                    <i class="fas fa-sync mr-2"></i> Refresh Data
-                </button>
-            </div>
-
-            <div class="md:col-span-3">
-                <div class="bg-white rounded-xl shadow overflow-hidden">
-                    <div class="px-6 py-4 border-b flex justify-between items-center bg-gray-50">
-                        <h3 class="font-bold text-gray-800">Global Patient Registry</h3>
-                        <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search Name..." class="border rounded px-3 py-1 text-sm w-64">
-                    </div>
-                    <table class="w-full text-sm text-left text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-100">
-                            <tr>
-                                <th class="px-4 py-3">Patient Name</th>
-                                <th class="px-4 py-3">Source</th>
-                                <th class="px-4 py-3">Registered Date</th>
-                                <th class="px-4 py-3">Records</th>
-                            </tr>
-                        </thead>
-                        <tbody id="patientTableBody">
-                            <tr><td colspan="4" class="px-6 py-4 text-center">Loading live data...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        <div class="bg-white rounded-xl shadow overflow-hidden">
+            <table class="w-full text-sm text-left text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-200">
+                    <tr>
+                        <th class="px-6 py-4">Registered</th>
+                        <th class="px-6 py-4">Patient Details</th>
+                        <th class="px-6 py-4">Passport Info</th>
+                        <th class="px-6 py-4">Referral Source</th>
+                        <th class="px-6 py-4 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="patientTableBody">
+                    <tr><td colspan="5" class="px-6 py-8 text-center text-gray-400">Loading database...</td></tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <div id="fileModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden">
-            <div class="bg-blue-900 text-white px-6 py-4 flex justify-between items-center">
-                <h3 class="font-bold text-lg" id="modalPatientName">Medical Records</h3>
-                <button onclick="closeModal()" class="text-white hover:text-red-200 text-2xl">&times;</button>
+    <div id="editModal" class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md p-6">
+            <div class="flex justify-between items-center mb-4 border-b pb-2">
+                <h3 class="text-lg font-bold text-gray-800">Edit Record</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-red-500"><i class="fas fa-times"></i></button>
             </div>
-            <div id="modalContent" class="p-6 max-h-96 overflow-y-auto"></div>
-            <div class="bg-gray-100 px-6 py-3 text-right">
-                <button onclick="closeModal()" class="bg-gray-500 text-white px-4 py-2 rounded text-sm hover:bg-gray-600">Close</button>
-            </div>
+            
+            <form id="editForm" class="space-y-4">
+                <input type="hidden" id="editId">
+                
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase">Patient Name</label>
+                    <input type="text" id="editName" class="w-full border p-2 rounded" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase">Mobile Number</label>
+                    <input type="text" id="editMobile" class="w-full border p-2 rounded" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase">Passport Number</label>
+                    <input type="text" id="editPassport" class="w-full border p-2 rounded" placeholder="Enter if available">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase">Country</label>
+                    <input type="text" id="editCountry" class="w-full border p-2 rounded" placeholder="e.g. Bangladesh">
+                </div>
+                
+                <button type="submit" id="saveBtn" class="w-full bg-blue-900 text-white font-bold py-3 rounded hover:bg-blue-800 transition mt-4">
+                    Save Changes
+                </button>
+            </form>
         </div>
     </div>
 
@@ -101,65 +97,125 @@
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
         const currentUser = localStorage.getItem('currentUser');
-        if (!currentUser) { window.location.href = 'login.html'; }
-        else { document.getElementById('display-name').innerText = currentUser; loadPatients(); }
+        if (!currentUser) window.location.href = 'login.html';
+
         function logout() { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; }
 
+        // 1. LOAD PATIENTS
         async function loadPatients() {
             try {
-                const { data, error } = await supabaseClient.from('patients').select('*').order('created_at', { ascending: false });
+                const { data, error } = await supabaseClient
+                    .from('patients')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
                 if (error) throw error;
 
-                const { data: files } = await supabaseClient.storage.from('medical-records').list();
-                document.getElementById('stat-files').innerText = files ? files.length : 0;
-                document.getElementById('stat-total').innerText = data.length;
+                const tbody = document.getElementById('patientTableBody');
+                tbody.innerHTML = "";
 
-                const tableBody = document.getElementById('patientTableBody');
-                tableBody.innerHTML = "";
-                if (data.length === 0) { tableBody.innerHTML = `<tr><td colspan="4" class="text-center py-4">No patients registered yet.</td></tr>`; return; }
+                if (data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center">No records found.</td></tr>`;
+                    return;
+                }
 
-                data.forEach(patient => {
-                    const date = new Date(patient.created_at).toLocaleDateString();
-                    const sourceBadge = patient.referred_by ? `<span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded"><i class="fas fa-handshake"></i> ${patient.referred_by}</span>` : `<span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded">Direct Website</span>`;
+                data.forEach(p => {
+                    const date = new Date(p.created_at).toLocaleDateString();
+                    // Handle missing passport info safely
+                    const passportInfo = p.passport_number 
+                        ? `<span class="text-gray-800 font-bold">${p.passport_number}</span><br><span class="text-xs">${p.country || 'Unknown'}</span>`
+                        : `<span class="text-red-400 text-xs italic">Not Updated</span>`;
+
                     const row = `
                         <tr class="bg-white border-b hover:bg-gray-50 search-item">
-                            <td class="px-4 py-3 font-bold text-gray-900">${patient.name}<br><span class="text-xs font-normal text-gray-500">Mobile: ${patient.mobile}</span></td>
-                            <td class="px-4 py-3">${sourceBadge}</td>
-                            <td class="px-4 py-3 text-gray-600">${date}</td>
-                            <td class="px-4 py-3"><button onclick="openFileModal('${patient.name}')" class="bg-blue-100 text-blue-700 hover:bg-blue-200 px-3 py-1 rounded text-xs font-bold transition"><i class="fas fa-folder-open"></i> View Files</button></td>
-                        </tr>`;
-                    tableBody.innerHTML += row;
+                            <td class="px-6 py-4 text-gray-500 text-xs">${date}</td>
+                            <td class="px-6 py-4">
+                                <p class="font-bold text-gray-900 text-base">${p.name}</p>
+                                <p class="text-xs text-gray-500">${p.mobile}</p>
+                            </td>
+                            <td class="px-6 py-4">${passportInfo}</td>
+                            <td class="px-6 py-4">
+                                <span class="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded">${p.referred_by || 'Direct'}</span>
+                            </td>
+                            <td class="px-6 py-4 text-right space-x-2">
+                                <button onclick="openEdit('${p.id}', '${p.name}', '${p.mobile}', '${p.passport_number || ''}', '${p.country || ''}')" class="bg-blue-100 text-blue-700 hover:bg-blue-200 px-3 py-1 rounded text-xs font-bold">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button onclick="deletePatient('${p.id}')" class="bg-red-100 text-red-600 hover:bg-red-200 px-3 py-1 rounded text-xs font-bold">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
                 });
-            } catch (err) { console.error(err); alert("Error loading data: " + err.message); }
+
+            } catch (err) { console.error(err); alert("Error: " + err.message); }
         }
 
-        async function openFileModal(patientName) {
-            const modal = document.getElementById('fileModal');
-            const content = document.getElementById('modalContent');
-            const title = document.getElementById('modalPatientName');
-            modal.classList.remove('hidden');
-            title.innerText = "Files: " + patientName;
-            content.innerHTML = '<div class="text-center py-4"><i class="fas fa-spinner fa-spin text-blue-500 text-2xl"></i><p class="text-xs text-gray-400 mt-2">Scanning database...</p></div>';
+        // 2. EDIT LOGIC
+        function openEdit(id, name, mobile, passport, country) {
+            document.getElementById('editId').value = id;
+            document.getElementById('editName').value = name;
+            document.getElementById('editMobile').value = mobile;
+            document.getElementById('editPassport').value = passport;
+            document.getElementById('editCountry').value = country;
+            document.getElementById('editModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').classList.add('hidden');
+        }
+
+        document.getElementById('editForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('saveBtn');
+            btn.disabled = true; btn.innerText = "Saving...";
+
+            const id = document.getElementById('editId').value;
+            const updates = {
+                name: document.getElementById('editName').value,
+                mobile: document.getElementById('editMobile').value,
+                passport_number: document.getElementById('editPassport').value,
+                country: document.getElementById('editCountry').value
+            };
 
             try {
-                const { data: files } = await supabaseClient.storage.from('medical-records').list();
-                const patientFiles = files.filter(f => f.name.startsWith(patientName));
-                if (patientFiles.length === 0) { content.innerHTML = '<div class="text-center text-gray-400 py-4"><p>No documents found.</p></div>'; return; }
+                // IMPORTANT: Ensure your 'patients' table has these columns!
+                const { error } = await supabaseClient.from('patients').update(updates).eq('id', id);
+                if (error) throw error;
+                
+                alert("Record Updated Successfully");
+                closeModal();
+                loadPatients();
+            } catch (err) {
+                alert("Update Failed: " + err.message);
+            } finally {
+                btn.disabled = false; btn.innerText = "Save Changes";
+            }
+        });
 
-                content.innerHTML = '<ul class="space-y-2"></ul>';
-                const ul = content.querySelector('ul');
-                for (const file of patientFiles) {
-                    const { data: signedUrl } = await supabaseClient.storage.from('medical-records').createSignedUrl(file.name, 60);
-                    const cleanName = file.name.split('_').slice(2).join('_');
-                    const li = document.createElement('li');
-                    li.className = "flex justify-between items-center bg-gray-50 p-3 rounded";
-                    li.innerHTML = `<div class="flex items-center"><i class="fas fa-file-pdf text-red-500 mr-3"></i><span class="text-sm font-bold text-gray-700">${cleanName}</span></div><a href="${signedUrl.signedUrl}" target="_blank" class="text-blue-600 text-xs font-bold hover:underline">Open <i class="fas fa-external-link-alt ml-1"></i></a>`;
-                    ul.appendChild(li);
-                }
-            } catch (err) { content.innerHTML = '<p class="text-red-500 text-center">Error fetching files.</p>'; }
+        // 3. DELETE LOGIC
+        async function deletePatient(id) {
+            if(!confirm("Are you sure? This will remove the patient and all their bookings.")) return;
+            try {
+                const { error } = await supabaseClient.from('patients').delete().eq('id', id);
+                if (error) throw error;
+                loadPatients();
+            } catch (err) { alert("Error: " + err.message); }
         }
-        function closeModal() { document.getElementById('fileModal').classList.add('hidden'); }
-        function filterTable() { const input = document.getElementById('searchInput'); const filter = input.value.toLowerCase(); const rows = document.getElementsByClassName('search-item'); for (let i = 0; i < rows.length; i++) { const nameCell = rows[i].getElementsByTagName("td")[0]; if (nameCell) { const txtValue = nameCell.textContent || nameCell.innerText; if (txtValue.toLowerCase().indexOf(filter) > -1) { rows[i].style.display = ""; } else { rows[i].style.display = "none"; } } } }
+
+        // 4. SEARCH LOGIC
+        function filterTable() {
+            const filter = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.getElementsByClassName('search-item');
+            for (let row of rows) {
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(filter) ? "" : "none";
+            }
+        }
+
+        loadPatients();
     </script>
 </body>
 </html>
