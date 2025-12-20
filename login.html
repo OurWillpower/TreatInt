@@ -47,6 +47,8 @@
     </div>
 
     <script>
+        // --- SUPABASE CONFIGURATION ---
+        // Double-check these values match your Dashboard > Settings > API
         const supabaseUrl = 'https://atsdebykxuhtruuwcmlx.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
         
@@ -54,6 +56,7 @@
 
         let currentRole = 'patient';
 
+        // Role Switching Logic
         function setRole(role) {
             currentRole = role;
             ['patient', 'partner', 'hospital'].forEach(r => {
@@ -84,48 +87,61 @@
             }
         }
 
+        // Login Submission Logic
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
             btn.innerText = "Verifying...";
 
-            const id = document.getElementById('userId').value;
-            const pass = document.getElementById('userPass').value;
+            const id = document.getElementById('userId').value.trim();
+            const pass = document.getElementById('userPass').value.trim();
 
+            // Determine table and redirect based on role
             let table, idColumn, redirectPage;
             if (currentRole === 'patient') {
                 table = 'patients'; 
                 idColumn = 'mobile'; 
-                redirectPage = 'patient-home.html'; // UPDATED
+                redirectPage = 'patient-home.html';
             } else if (currentRole === 'partner') {
                 table = 'partners'; 
                 idColumn = 'whatsapp'; 
-                redirectPage = 'partner-home.html'; // UPDATED
+                redirectPage = 'partner-home.html';
             } else {
                 table = 'hospitals'; 
                 idColumn = 'email'; 
-                redirectPage = 'hospital-home.html'; // UPDATED
+                redirectPage = 'hospital-home.html';
             }
 
             try {
+                // Fetch user from Supabase
                 const { data, error } = await supabaseClient
                     .from(table)
                     .select('*')
                     .eq(idColumn, id)
                     .eq('password', pass);
 
-                if (error) throw error;
+                if (error) {
+                    throw error; // This catches network errors too
+                }
 
-                if (data.length > 0) {
-                    localStorage.setItem('currentUser', data[0].name || data[0].hospital_name);
+                if (data && data.length > 0) {
+                    // Success: Save user info and redirect
+                    localStorage.setItem('currentUser', data[0].name || data[0].hospital_name || data[0].contact_person);
                     window.location.href = redirectPage;
                 } else {
-                    alert("Invalid ID or Password.");
+                    // No matching user found
+                    alert("Invalid ID or Password. Please try again.");
                     btn.disabled = false; btn.innerText = "Login";
                 }
             } catch (err) {
-                alert("Login Error: " + err.message);
+                console.error("Login Error Details:", err);
+                // "Failed to fetch" usually means AdBlocker is on or internet is down
+                if(err.message.includes("Failed to fetch")) {
+                    alert("Connection Error: Please disable AdBlocker or check your internet.");
+                } else {
+                    alert("Login Error: " + err.message);
+                }
                 btn.disabled = false; btn.innerText = "Login";
             }
         });
