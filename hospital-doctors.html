@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Doctors | TreatInt</title>
+    <title>Doctors & Appointments | TreatInt</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -32,25 +32,49 @@
         </div>
     </nav>
 
-    <div class="max-w-5xl mx-auto px-4 py-8">
+    <div class="max-w-6xl mx-auto px-4 py-8">
         
         <div class="text-sm text-gray-500 mb-6 flex items-center">
             <a href="hospital-home.html" class="hover:text-purple-800 hover:underline transition font-bold text-purple-900">
                 <i class="fas fa-arrow-left mr-1"></i> Back to Console
             </a> 
             <span class="mx-2">/</span> 
-            <span class="font-bold text-gray-800">Doctor Management</span>
+            <span class="font-bold text-gray-800">Doctors & Appointments</span>
+        </div>
+
+        <div class="bg-white rounded-xl shadow overflow-hidden mb-12 border-t-4 border-yellow-500">
+            <div class="px-6 py-4 border-b bg-yellow-50 flex justify-between items-center">
+                <div>
+                    <h3 class="font-bold text-lg text-gray-800">Appointment Requests</h3>
+                    <p class="text-xs text-gray-500">Paste Zoom/Meet links for confirmed patients.</p>
+                </div>
+                <button onclick="loadAppointments()" class="text-yellow-700 text-xs font-bold hover:underline"><i class="fas fa-sync"></i> Refresh</button>
+            </div>
+            <table class="w-full text-sm text-left text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                    <tr>
+                        <th class="px-6 py-3">Patient</th>
+                        <th class="px-6 py-3">Doctor</th>
+                        <th class="px-6 py-3">Time</th>
+                        <th class="px-6 py-3">Meeting Link</th>
+                        <th class="px-6 py-3 text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="appointmentTableBody">
+                    <tr><td colspan="5" class="px-6 py-4 text-center">Loading requests...</td></tr>
+                </tbody>
+            </table>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             
             <div class="md:col-span-1">
-                <div class="bg-white p-6 rounded-xl shadow-lg">
-                    <h3 class="font-bold text-lg text-gray-800 mb-4">Add New Doctor</h3>
+                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-purple-500">
+                    <h3 class="font-bold text-lg text-gray-800 mb-4">Add Doctor</h3>
                     <form id="addDoctorForm" class="space-y-4">
                         <div>
                             <label class="block text-xs font-bold text-gray-500 uppercase">Doctor Name</label>
-                            <input type="text" id="docName" class="w-full border p-2 rounded" required placeholder="Dr. John Doe">
+                            <input type="text" id="docName" class="w-full border p-2 rounded focus:ring-purple-500" required placeholder="Dr. John Doe">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-gray-500 uppercase">Specialty</label>
@@ -60,15 +84,11 @@
                                 <option>Orthopedics</option>
                                 <option>General Medicine</option>
                                 <option>Oncology</option>
+                                <option>Pediatrics</option>
                             </select>
                         </div>
-                        <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase">Video Link (Meet/Zoom)</label>
-                            <input type="text" id="docLink" class="w-full border p-2 rounded" required placeholder="https://meet.google.com/..." >
-                            <p class="text-xs text-gray-400 mt-1">Paste a permanent meeting link here.</p>
-                        </div>
                         <button type="submit" id="submitBtn" class="w-full bg-purple-900 text-white font-bold py-3 rounded hover:bg-purple-800 transition">
-                            Save Doctor
+                            Add to List
                         </button>
                     </form>
                 </div>
@@ -77,19 +97,18 @@
             <div class="md:col-span-2">
                 <div class="bg-white rounded-xl shadow overflow-hidden">
                     <div class="px-6 py-4 border-b bg-purple-50">
-                        <h3 class="font-bold text-lg text-gray-800">Medical Team</h3>
+                        <h3 class="font-bold text-lg text-gray-800">Available Doctors</h3>
                     </div>
                     <table class="w-full text-sm text-left text-gray-500">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-100">
                             <tr>
                                 <th class="px-6 py-3">Name</th>
                                 <th class="px-6 py-3">Specialty</th>
-                                <th class="px-6 py-3">Link Status</th>
                                 <th class="px-6 py-3 text-right">Action</th>
                             </tr>
                         </thead>
                         <tbody id="doctorTableBody">
-                            <tr><td colspan="4" class="px-6 py-4 text-center">Loading team...</td></tr>
+                            <tr><td colspan="3" class="px-6 py-4 text-center">Loading team...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -107,7 +126,80 @@
         if (!currentUser) window.location.href = 'login.html';
         else document.getElementById('display-name').innerText = currentUser;
 
-        // 1. LOAD DOCTORS
+        // --- 1. APPOINTMENT LOGIC ---
+        async function loadAppointments() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('appointments')
+                    .select('*')
+                    .order('date', { ascending: false });
+
+                if (error) throw error;
+
+                const tbody = document.getElementById('appointmentTableBody');
+                tbody.innerHTML = "";
+
+                if (data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-center text-gray-400">No appointments booked yet.</td></tr>`;
+                    return;
+                }
+
+                data.forEach(apt => {
+                    // Check if link exists
+                    const hasLink = apt.meet_link && apt.meet_link.length > 5;
+                    
+                    let linkInput = hasLink 
+                        ? `<span class="text-green-600 font-bold text-xs"><i class="fas fa-check"></i> Sent</span>`
+                        : `<input type="text" id="link-${apt.id}" placeholder="Paste Zoom Link..." class="border rounded px-2 py-1 text-xs w-full">`;
+
+                    let actionBtn = hasLink
+                        ? `<button onclick="updateLink(${apt.id})" class="text-blue-600 text-xs font-bold hover:underline">Edit</button>`
+                        : `<button onclick="saveLink(${apt.id})" class="bg-green-600 text-white px-3 py-1 rounded text-xs font-bold hover:bg-green-700">Send</button>`;
+
+                    const row = `
+                        <tr class="bg-white border-b hover:bg-gray-50">
+                            <td class="px-6 py-4 font-bold text-gray-900">${apt.patient_name}</td>
+                            <td class="px-6 py-4 text-purple-700">${apt.doctor_name}</td>
+                            <td class="px-6 py-4 text-xs">${apt.date}<br>${apt.time}</td>
+                            <td class="px-6 py-4 w-64">${linkInput}</td>
+                            <td class="px-6 py-4 text-right">${actionBtn}</td>
+                        </tr>`;
+                    tbody.innerHTML += row;
+                });
+
+            } catch (err) { console.error(err); }
+        }
+
+        async function saveLink(id) {
+            const link = document.getElementById(`link-${id}`).value;
+            if (!link) { alert("Please paste a link first."); return; }
+
+            try {
+                const { error } = await supabaseClient
+                    .from('appointments')
+                    .update({ meet_link: link })
+                    .eq('id', id);
+
+                if (error) throw error;
+                alert("Link Sent to Patient!");
+                loadAppointments();
+            } catch (err) { alert("Error: " + err.message); }
+        }
+
+        async function updateLink(id) {
+            // Simple prompt for quick editing
+            const newLink = prompt("Enter new meeting link:");
+            if(newLink) {
+                 try {
+                    const { error } = await supabaseClient.from('appointments').update({ meet_link: newLink }).eq('id', id);
+                    if (error) throw error;
+                    loadAppointments();
+                } catch (err) { alert("Error: " + err.message); }
+            }
+        }
+
+
+        // --- 2. DOCTOR LOGIC ---
         async function loadDoctors() {
             try {
                 const { data, error } = await supabaseClient
@@ -121,7 +213,7 @@
                 tbody.innerHTML = "";
 
                 if (data.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center">No doctors added yet.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="3" class="px-6 py-4 text-center">No doctors added.</td></tr>`;
                     return;
                 }
 
@@ -130,7 +222,6 @@
                         <tr class="bg-white border-b hover:bg-gray-50">
                             <td class="px-6 py-4 font-bold text-gray-900">${doc.name}</td>
                             <td class="px-6 py-4"><span class="bg-purple-100 text-purple-800 text-xs font-bold px-2 py-1 rounded">${doc.specialty}</span></td>
-                            <td class="px-6 py-4 text-green-600 font-bold text-xs"><i class="fas fa-check-circle"></i> Active</td>
                             <td class="px-6 py-4 text-right">
                                 <button onclick="deleteDoctor(${doc.id})" class="text-red-500 hover:text-red-700 text-xs font-bold">Remove</button>
                             </td>
@@ -138,31 +229,27 @@
                     tbody.innerHTML += row;
                 });
 
-            } catch (err) {
-                console.error(err);
-                alert("Error loading doctors: " + err.message);
-            }
+            } catch (err) { console.error(err); }
         }
 
-        // 2. ADD DOCTOR
         document.getElementById('addDoctorForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
-            btn.innerText = "Saving...";
+            btn.innerText = "Adding...";
 
             const name = document.getElementById('docName').value;
             const specialty = document.getElementById('docSpecialty').value;
-            const link = document.getElementById('docLink').value;
+            // No link needed here anymore
 
             try {
                 const { error } = await supabaseClient
                     .from('doctors')
-                    .insert([{ name: name, specialty: specialty, meet_link: link }]);
+                    .insert([{ name: name, specialty: specialty }]);
 
                 if (error) throw error;
 
-                alert("Success! Doctor Added.");
+                alert("Doctor Added!");
                 document.getElementById('addDoctorForm').reset();
                 loadDoctors();
 
@@ -170,23 +257,21 @@
                 alert("Error: " + err.message);
             } finally {
                 btn.disabled = false;
-                btn.innerText = "Save Doctor";
+                btn.innerText = "Add to List";
             }
         });
 
-        // 3. DELETE DOCTOR
         async function deleteDoctor(id) {
-            if(!confirm("Are you sure you want to remove this doctor?")) return;
-
+            if(!confirm("Remove this doctor?")) return;
             try {
                 const { error } = await supabaseClient.from('doctors').delete().eq('id', id);
                 if (error) throw error;
                 loadDoctors();
-            } catch (err) {
-                alert("Error: " + err.message);
-            }
+            } catch (err) { alert("Error: " + err.message); }
         }
 
+        // Init
+        loadAppointments();
         loadDoctors();
     </script>
 </body>
