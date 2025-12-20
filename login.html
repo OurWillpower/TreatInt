@@ -6,7 +6,6 @@
     <title>Login | TreatInt</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style> body { font-family: 'Poppins', sans-serif; } </style>
 </head>
 <body class="bg-gray-100 h-screen flex items-center justify-center">
@@ -27,7 +26,7 @@
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-bold text-gray-700" id="idLabel">Mobile Number</label>
-                    <input type="text" id="userId" class="w-full border p-2 rounded" required placeholder="+91...">
+                    <input type="text" id="userId" class="w-full border p-2 rounded" required placeholder="Enter ID...">
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-gray-700">Password</label>
@@ -40,6 +39,8 @@
             </div>
         </form>
 
+        <div id="errorMsg" class="mt-4 text-xs text-red-600 bg-red-50 p-2 rounded hidden text-center"></div>
+
         <div class="flex justify-between items-center mt-4 text-sm">
             <a href="forgot-password.html" class="text-gray-500 hover:text-gray-800">Forgot Password?</a>
             <a href="register-patient.html" class="text-blue-600 font-bold hover:underline">Create Account</a>
@@ -47,12 +48,10 @@
     </div>
 
     <script>
-        // --- SUPABASE CONFIGURATION ---
-        const supabaseUrl = 'https://atsdebykxuhtruuwcmlx.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
+        // --- DIRECT CONFIGURATION ---
+        const SUPABASE_URL = 'https://atsdebykxuhtruuwcmlx.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
         
-        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-
         let currentRole = 'patient';
 
         // Role Switching Logic
@@ -86,61 +85,72 @@
             }
         }
 
-        // Login Submission Logic
+        // --- ROBUST LOGIN LOGIC (Using Fetch) ---
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
+            const errorDiv = document.getElementById('errorMsg');
+            
             btn.disabled = true;
             btn.innerText = "Verifying...";
+            errorDiv.classList.add('hidden');
 
             const id = document.getElementById('userId').value.trim();
             const pass = document.getElementById('userPass').value.trim();
 
-            // Determine table and redirect based on role
+            // Determine table details
             let table, idColumn, redirectPage;
             if (currentRole === 'patient') {
-                table = 'patients'; 
-                idColumn = 'mobile'; 
-                redirectPage = 'patient-home.html';
+                table = 'patients'; idColumn = 'mobile'; redirectPage = 'patient-home.html';
             } else if (currentRole === 'partner') {
-                table = 'partners'; 
-                idColumn = 'whatsapp'; 
-                redirectPage = 'partner-home.html';
+                table = 'partners'; idColumn = 'whatsapp'; redirectPage = 'partner-home.html';
             } else {
-                table = 'hospitals'; 
-                idColumn = 'email'; 
-                redirectPage = 'hospital-home.html';
+                table = 'hospitals'; idColumn = 'email'; redirectPage = 'hospital-home.html';
             }
 
-            try {
-                // Fetch user from Supabase
-                const { data, error } = await supabaseClient
-                    .from(table)
-                    .select('*')
-                    .eq(idColumn, id)
-                    .eq('password', pass);
+            // Construct Direct URL
+            // We encodeURIComponent to handle '+' signs in phone numbers correctly
+            const targetUrl = `${SUPABASE_URL}/rest/v1/${table}?${idColumn}=eq.${encodeURIComponent(id)}&password=eq.${encodeURIComponent(pass)}&select=*`;
 
-                if (error) {
-                    console.error("Supabase Error:", error);
-                    throw error;
+            try {
+                const response = await fetch(targetUrl, {
+                    method: 'GET',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server Error: ${response.status} ${response.statusText}`);
                 }
 
-                if (data && data.length > 0) {
-                    // Success: Save user info and redirect
-                    localStorage.setItem('currentUser', data[0].name || data[0].hospital_name || data[0].contact_person);
+                const data = await response.json();
+
+                if (data.length > 0) {
+                    // Success!
+                    const user = data[0];
+                    const name = user.name || user.hospital_name || user.contact_person || 'User';
+                    localStorage.setItem('currentUser', name);
                     window.location.href = redirectPage;
                 } else {
-                    alert("Invalid ID or Password. Please try again.");
-                    btn.disabled = false; btn.innerText = "Login";
+                    // No data found = Wrong Password
+                    throw new Error("Invalid ID or Password. Please check and try again.");
                 }
+
             } catch (err) {
-                console.error("Catch Error:", err);
+                console.error(err);
+                errorDiv.innerText = err.message;
+                errorDiv.classList.remove('hidden');
+                
+                // If it is a fetch error specifically
                 if(err.message.includes("Failed to fetch")) {
-                    alert("Network Error: Please disable AdBlocker, check internet, or try a different network.");
-                } else {
-                    alert("Login Error: " + err.message);
+                    errorDiv.innerText = "Network Blocked. Please disable AdBlocker or try a different internet connection.";
                 }
-                btn.disabled = false; btn.innerText = "Login";
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Login";
             }
         });
     </script>
