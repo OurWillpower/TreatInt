@@ -6,7 +6,7 @@
     <title>Login | TreatInt</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style> body { font-family: 'Poppins', sans-serif; } </style>
 </head>
 <body class="bg-gray-100 h-screen flex items-center justify-center">
@@ -48,7 +48,6 @@
 
     <script>
         // --- SUPABASE CONFIGURATION ---
-        // Double-check these values match your Dashboard > Settings > API
         const supabaseUrl = 'https://atsdebykxuhtruuwcmlx.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
         
@@ -122,7 +121,8 @@
                     .eq('password', pass);
 
                 if (error) {
-                    throw error; // This catches network errors too
+                    console.error("Supabase Error:", error);
+                    throw error;
                 }
 
                 if (data && data.length > 0) {
@@ -130,15 +130,13 @@
                     localStorage.setItem('currentUser', data[0].name || data[0].hospital_name || data[0].contact_person);
                     window.location.href = redirectPage;
                 } else {
-                    // No matching user found
                     alert("Invalid ID or Password. Please try again.");
                     btn.disabled = false; btn.innerText = "Login";
                 }
             } catch (err) {
-                console.error("Login Error Details:", err);
-                // "Failed to fetch" usually means AdBlocker is on or internet is down
+                console.error("Catch Error:", err);
                 if(err.message.includes("Failed to fetch")) {
-                    alert("Connection Error: Please disable AdBlocker or check your internet.");
+                    alert("Network Error: Please disable AdBlocker, check internet, or try a different network.");
                 } else {
                     alert("Login Error: " + err.message);
                 }
