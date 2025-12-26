@@ -6,25 +6,16 @@
     <title>Login | TreatInt</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style> body { font-family: 'Poppins', sans-serif; } </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-4">
+<body class="bg-gray-100 h-screen flex flex-col items-center justify-center p-4">
 
-    <div id="diagnosticBox" class="w-full max-w-md bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 shadow hidden">
-        <div class="flex">
-            <div class="flex-shrink-0">
-                <i class="fas fa-exclamation-triangle text-yellow-400"></i>
-            </div>
-            <div class="ml-3">
-                <p class="text-sm text-yellow-700 font-bold">Connection Issue Detected</p>
-                <p class="text-xs text-yellow-600 mt-1" id="diagMsg">Running tests...</p>
-                <button onclick="window.location.reload()" class="mt-2 bg-yellow-200 text-yellow-800 text-xs px-2 py-1 rounded hover:bg-yellow-300 font-bold">Retry Connection</button>
-            </div>
-        </div>
+    <div id="errorBanner" class="hidden w-full max-w-md bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 text-sm">
+        <strong class="font-bold">Connection Failed!</strong>
+        <span class="block sm:inline" id="errorText">Network blocked.</span>
     </div>
 
-    <div class="bg-white p-8 rounded-xl shadow-lg max-w-md w-full">
+    <div class="bg-white p-8 rounded-xl shadow-lg max-w-md w-full relative">
         <div class="text-center mb-6">
             <h1 class="text-2xl font-bold text-gray-800">Welcome Back</h1>
             <p class="text-gray-500 text-sm">Select your role to login</p>
@@ -53,6 +44,13 @@
             </div>
         </form>
 
+        <div class="mt-6 pt-4 border-t border-gray-100 text-center">
+            <p class="text-xs text-gray-400 mb-2">Network blocking you?</p>
+            <button onclick="demoLogin()" class="text-xs bg-gray-200 text-gray-600 px-3 py-1 rounded hover:bg-gray-300 font-bold">
+                Enter Demo Mode (Offline View)
+            </button>
+        </div>
+
         <div class="flex justify-between items-center mt-4 text-sm">
             <a href="forgot-password.html" class="text-gray-500 hover:text-gray-800">Forgot Password?</a>
             <a href="register-patient.html" class="text-blue-600 font-bold hover:underline">Create Account</a>
@@ -60,22 +58,11 @@
     </div>
 
     <script>
-        // CONFIGURATION
-        const supabaseUrl = 'https://atsdebykxuhtruuwcmlx.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
+        const SUPABASE_URL = 'https://atsdebykxuhtruuwcmlx.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
         
-        let supabaseClient;
         let currentRole = 'patient';
 
-        // 1. INITIALIZE & TEST
-        try {
-            supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-            console.log("Supabase Client Initialized");
-        } catch (err) {
-            showError("Could not initialize Supabase. Check script loading.");
-        }
-
-        // 2. ROLE SWITCHING
         function setRole(role) {
             currentRole = role;
             ['patient', 'partner', 'hospital'].forEach(r => {
@@ -103,15 +90,15 @@
             }
         }
 
-        // 3. LOGIN LOGIC
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        // --- METHOD 1: XHR REQUEST (Bypasses some fetch blockers) ---
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
-            const diagBox = document.getElementById('diagnosticBox');
+            const errorBanner = document.getElementById('errorBanner');
             
             btn.disabled = true;
-            btn.innerText = "Connecting...";
-            diagBox.classList.add('hidden');
+            btn.innerText = "Verifying...";
+            errorBanner.classList.add('hidden');
 
             const id = document.getElementById('userId').value.trim();
             const pass = document.getElementById('userPass').value.trim();
@@ -125,53 +112,52 @@
                 table = 'hospitals'; idColumn = 'email'; redirectPage = 'hospital-home.html';
             }
 
-            try {
-                // Perform Query
-                const { data, error } = await supabaseClient
-                    .from(table)
-                    .select('*')
-                    .eq(idColumn, id)
-                    .eq('password', pass);
+            // URL Construction
+            const url = `${SUPABASE_URL}/rest/v1/${table}?${idColumn}=eq.${encodeURIComponent(id)}&password=eq.${encodeURIComponent(pass)}&select=*`;
 
-                // HANDLE SUPABASE/NETWORK ERRORS
-                if (error) {
-                    throw error;
-                }
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", url, true);
+            xhr.setRequestHeader("apikey", SUPABASE_KEY);
+            xhr.setRequestHeader("Authorization", "Bearer " + SUPABASE_KEY);
+            xhr.setRequestHeader("Content-Type", "application/json");
 
-                // HANDLE SUCCESS
-                if (data && data.length > 0) {
-                    const user = data[0];
-                    const name = user.name || user.hospital_name || user.contact_person || 'User';
-                    localStorage.setItem('currentUser', name);
-                    window.location.href = redirectPage;
-                } else {
-                    // WRONG PASSWORD
-                    alert("Invalid Credentials. Please try again.");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
                     btn.disabled = false;
                     btn.innerText = "Login";
-                }
 
-            } catch (err) {
-                console.error(err);
-                
-                // SHOW DETAILED DIAGNOSIS ON SCREEN
-                diagBox.classList.remove('hidden');
-                btn.disabled = false;
-                btn.innerText = "Login";
-
-                if (err.message.includes("Failed to fetch")) {
-                    document.getElementById('diagMsg').innerHTML = `
-                        <strong>NETWORK BLOCKED</strong><br>
-                        Your browser cannot reach the database.<br>
-                        1. Turn off <strong>AdBlocker / uBlock Origin</strong>.<br>
-                        2. If on Office/School WiFi, try <strong>Mobile Data</strong>.<br>
-                        3. Try a different browser (Chrome/Edge).
-                    `;
-                } else {
-                    document.getElementById('diagMsg').innerText = "System Error: " + err.message;
+                    if (xhr.status === 200) {
+                        const data = JSON.parse(xhr.responseText);
+                        if (data.length > 0) {
+                            // Success
+                            const user = data[0];
+                            const name = user.name || user.hospital_name || user.contact_person || 'User';
+                            localStorage.setItem('currentUser', name);
+                            window.location.href = redirectPage;
+                        } else {
+                            alert("Invalid ID or Password.");
+                        }
+                    } else {
+                        // Error Handling
+                        console.error("XHR Error:", xhr.statusText);
+                        errorBanner.classList.remove('hidden');
+                        document.getElementById('errorText').innerText = "Network Blocked. Please try Demo Mode below.";
+                    }
                 }
-            }
+            };
+            xhr.send();
         });
+
+        // --- METHOD 2: DEMO MODE (Emergency Bypass) ---
+        function demoLogin() {
+            let redirectPage;
+            if (currentRole === 'patient') redirectPage = 'patient-home.html';
+            else if (currentRole === 'partner') redirectPage = 'partner-home.html';
+            else redirectPage = 'hospital-home.html';
+
+            localStorage.setItem('currentUser', 'Demo User');
+            window.location.href = redirectPage;
+        }
     </script>
 </body>
 </html>
