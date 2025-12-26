@@ -41,7 +41,7 @@
             </button>
         </div>
 
-        <div class="grid grid-cols-5 gap-4 mb-8 text-center text-xs font-bold text-gray-500 uppercase">
+        <div class="grid grid-cols-5 gap-4 mb-8 text-center text-xs font-bold text-gray-500 uppercase hidden md:grid">
             <div class="bg-white p-2 rounded shadow border-b-4 border-gray-400">1. Home</div>
             <div class="bg-white p-2 rounded shadow border-b-4 border-blue-500">2. Travel (Tickets/Cab)</div>
             <div class="bg-white p-2 rounded shadow border-b-4 border-green-500">3. Hospitalisation</div>
@@ -56,7 +56,7 @@
                         <th class="px-6 py-4">Patient Name</th>
                         <th class="px-6 py-4">Current Stage</th>
                         <th class="px-6 py-4">Service Details</th>
-                        <th class="px-6 py-4">Last Update</th>
+                        <th class="px-6 py-4">Pickup Req</th>
                         <th class="px-6 py-4 text-right">Action</th>
                     </tr>
                 </thead>
@@ -69,16 +69,16 @@
 
     <div id="updateModal" class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-center justify-center z-50">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-md p-6">
-            <div class="flex justify-between items-center mb-4">
+            <div class="flex justify-between items-center mb-4 border-b pb-2">
                 <h3 class="text-lg font-bold text-gray-800">Update Status</h3>
                 <button onclick="closeModal()" class="text-gray-400 hover:text-red-500"><i class="fas fa-times"></i></button>
             </div>
             
             <form id="updateForm" class="space-y-4">
                 <input type="hidden" id="editId">
-                <div class="bg-blue-50 p-2 rounded mb-2">
+                <div class="bg-blue-50 p-3 rounded mb-2">
                     <p class="text-xs font-bold text-blue-800 uppercase">Patient</p>
-                    <p class="font-bold text-gray-800" id="modalPatientName">...</p>
+                    <p class="font-bold text-gray-800 text-lg" id="modalPatientName">...</p>
                 </div>
 
                 <div>
@@ -95,10 +95,10 @@
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Service Details / Notes</label>
                     <textarea id="newNotes" rows="3" class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-500" placeholder="e.g. Flight AI-202 Confirmed, Driver: Ramesh (98900...), Room 305 allocated"></textarea>
-                    <p class="text-[10px] text-gray-400">Patient will see this note on their dashboard.</p>
+                    <p class="text-[10px] text-gray-400 mt-1">The patient will see this update on their dashboard.</p>
                 </div>
                 
-                <button type="submit" id="saveBtn" class="w-full bg-blue-900 text-white font-bold py-3 rounded hover:bg-blue-800 transition">
+                <button type="submit" id="saveBtn" class="w-full bg-blue-900 text-white font-bold py-3 rounded hover:bg-blue-800 transition shadow-lg mt-2">
                     Update Journey
                 </button>
             </form>
@@ -129,7 +129,7 @@
 
                 tbody.innerHTML = "";
                 if (data.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-gray-400">No active journeys.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-gray-400">No active journeys found.</td></tr>`;
                     return;
                 }
 
@@ -139,23 +139,26 @@
                     if(trip.current_stage === 'Travel') badgeColor = "bg-blue-100 text-blue-800";
                     if(trip.current_stage === 'Hospital') badgeColor = "bg-green-100 text-green-800";
                     if(trip.current_stage === 'Rehab') badgeColor = "bg-yellow-100 text-yellow-800";
+                    if(trip.current_stage === 'Return') badgeColor = "bg-purple-100 text-purple-800";
                     
                     const notes = trip.driver_details || "No updates yet.";
+                    const cleanNotes = notes.replace(/'/g, "\\'"); // Escape quotes for JS
 
                     const row = `
                         <tr class="bg-white border-b hover:bg-gray-50">
                             <td class="px-6 py-4 font-bold text-gray-900">${trip.patient_name}</td>
                             <td class="px-6 py-4">
-                                <span class="${badgeColor} px-3 py-1 rounded-full text-xs font-bold uppercase border">${trip.current_stage || 'Pending'}</span>
+                                <span class="${badgeColor} px-3 py-1 rounded-full text-xs font-bold uppercase border border-opacity-20">${trip.current_stage || 'Pending'}</span>
                             </td>
                             <td class="px-6 py-4">
                                 <p class="text-xs text-gray-600 truncate w-64" title="${notes}">${notes}</p>
                             </td>
-                            <td class="px-6 py-4 text-xs text-gray-400">
-                                ${trip.pickup_type || 'N/A'}
+                            <td class="px-6 py-4 text-xs text-gray-500">
+                                <div class="font-bold">${trip.pickup_type || 'None'}</div>
+                                <div class="text-[10px]">${trip.arrival_date || ''}</div>
                             </td>
                             <td class="px-6 py-4 text-right">
-                                <button onclick="openModal('${trip.id}', '${trip.patient_name}', '${trip.current_stage}', '${notes.replace(/'/g, "\\'")}')" class="bg-blue-900 text-white px-4 py-2 rounded text-xs font-bold hover:bg-blue-800 shadow">
+                                <button onclick="openModal('${trip.id}', '${trip.patient_name}', '${trip.current_stage}', '${cleanNotes}')" class="bg-blue-900 text-white px-4 py-2 rounded text-xs font-bold hover:bg-blue-800 shadow transition">
                                     Update
                                 </button>
                             </td>
@@ -197,13 +200,13 @@
                     .from('logistics')
                     .update({ 
                         current_stage: stage,
-                        driver_details: notes // We use this field for general status notes
+                        driver_details: notes 
                     })
                     .eq('id', id);
 
                 if (error) throw error;
 
-                alert("Patient Status Updated!");
+                alert("Patient Journey Updated Successfully!");
                 closeModal();
                 loadLogistics();
 
