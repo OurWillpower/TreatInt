@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hospital Dashboard | TreatInt</title>
+    <title>Hospital Console | TreatInt</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style> body { font-family: 'Poppins', sans-serif; } </style>
 </head>
 <body class="bg-gray-100">
@@ -14,66 +15,95 @@
     <nav class="bg-gray-900 text-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
-                <a href="index.html" class="flex items-center hover:opacity-80 transition">
-                    <i class="fas fa-hospital text-2xl mr-2"></i>
-                    <span class="font-bold text-xl">TreatInt Hospital</span>
-                </a>
+                <div class="flex items-center">
+                    <i class="fas fa-hospital-alt text-2xl mr-2"></i>
+                    <span class="font-bold text-xl">TreatInt Admin</span>
+                </div>
                 <div class="flex items-center space-x-6">
                     <div class="text-right hidden md:block border-l border-gray-600 pl-4">
-                        <div class="font-bold" id="display-name">Welcome</div>
-                        <div class="text-xs text-gray-400">Admin Account</div>
+                        <div class="font-bold" id="display-name">Loading...</div>
+                        <div class="text-xs text-gray-400">Hospital Console</div>
                     </div>
-                    <button onclick="logout()" class="text-sm bg-red-600 px-3 py-1 rounded hover:bg-red-700 ml-2">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
+                    <button onclick="logout()" class="text-sm bg-red-600 px-3 py-1 rounded hover:bg-red-700 ml-2">Logout</button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <div class="max-w-6xl mx-auto px-4 py-12">
-        <h2 class="text-3xl font-bold text-gray-800 mb-2">Hospital Admin Console</h2>
-        <p class="text-gray-500 mb-8">Manage incoming international patients.</p>
+    <div class="max-w-6xl mx-auto px-4 py-8">
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">Hospital Command Center</h2>
+        <p class="text-gray-500 mb-8">Manage international patients, appointments, and logistics.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             
-            <a href="dashboard-hospital.html" class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl hover:-translate-y-1 transition group cursor-pointer border-t-4 border-gray-800">
-                <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 group-hover:bg-blue-600 transition">
-                    <i class="fas fa-procedures text-2xl text-blue-600 group-hover:text-white transition"></i>
+            <a href="dashboard-hospital.html" class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-blue-500 hover:shadow-2xl transition group hover:-translate-y-1">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-gray-800 text-lg">Patient Registry</h3>
+                    <div class="bg-blue-100 p-3 rounded-full text-blue-600 group-hover:bg-blue-500 group-hover:text-white transition">
+                        <i class="fas fa-users text-xl"></i>
+                    </div>
                 </div>
-                <h3 class="text-xl font-bold text-gray-800 mb-2">Patient Registry</h3>
-                <p class="text-gray-500 text-sm">View all registered patients, download medical files, and check referrals.</p>
-                <div class="mt-4 text-blue-900 font-bold text-sm group-hover:underline">Access Registry &rarr;</div>
+                <p class="text-sm text-gray-500 mb-4">View and edit master records. Search database by Name or Mobile.</p>
+                <span class="text-blue-600 font-bold text-sm group-hover:underline">Open Registry &rarr;</span>
             </a>
 
-            <a href="hospital-invitation.html" class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl hover:-translate-y-1 transition group cursor-pointer border-t-4 border-yellow-500">
-                <div class="bg-yellow-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 group-hover:bg-yellow-500 transition">
-                    <i class="fas fa-passport text-2xl text-yellow-600 group-hover:text-white transition"></i>
+            <a href="hospital-invitation.html" class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-green-500 hover:shadow-2xl transition group hover:-translate-y-1">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-gray-800 text-lg">Visa Desk</h3>
+                    <div class="bg-green-100 p-3 rounded-full text-green-600 group-hover:bg-green-500 group-hover:text-white transition">
+                        <i class="fas fa-file-signature text-xl"></i>
+                    </div>
                 </div>
-                <h3 class="text-xl font-bold text-gray-800 mb-2">Invitation Desk</h3>
-                <p class="text-gray-500 text-sm">Upload Official Visa Invitation Letters for patients to download.</p>
-                <div class="mt-4 text-yellow-700 font-bold text-sm group-hover:underline">Manage Invitations &rarr;</div>
+                <p class="text-sm text-gray-500 mb-4">Issue Visa Invitation Letters and download patient passports.</p>
+                <span class="text-green-600 font-bold text-sm group-hover:underline">Issue Letters &rarr;</span>
             </a>
 
-            <a href="hospital-doctors.html" class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl hover:-translate-y-1 transition group cursor-pointer border-t-4 border-purple-500">
-                <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 group-hover:bg-purple-500 transition">
-                    <i class="fas fa-user-md text-2xl text-purple-600 group-hover:text-white transition"></i>
+            <a href="hospital-doctors.html" class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-purple-500 hover:shadow-2xl transition group hover:-translate-y-1">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-gray-800 text-lg">Clinical & Booking</h3>
+                    <div class="bg-purple-100 p-3 rounded-full text-purple-600 group-hover:bg-purple-500 group-hover:text-white transition">
+                        <i class="fas fa-user-md text-xl"></i>
+                    </div>
                 </div>
-                <h3 class="text-xl font-bold text-gray-800 mb-2">Doctor Mgmt</h3>
-                <p class="text-gray-500 text-sm">Add doctors, set specialties, and manage video consultation links.</p>
-                <div class="mt-4 text-purple-700 font-bold text-sm group-hover:underline">Manage Team &rarr;</div>
+                <p class="text-sm text-gray-500 mb-4">Manage Doctor list, verify payments, and send Zoom links.</p>
+                <span class="text-purple-600 font-bold text-sm group-hover:underline">Manage Doctors &rarr;</span>
             </a>
+
+            <a href="hospital-logistics.html" class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-yellow-500 hover:shadow-2xl transition group hover:-translate-y-1">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-gray-800 text-lg">Logistics Manager</h3>
+                    <div class="bg-yellow-100 p-3 rounded-full text-yellow-600 group-hover:bg-yellow-500 group-hover:text-white transition">
+                        <i class="fas fa-ambulance text-xl"></i>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-500 mb-4">Track Patient Travel, Hospital Admission, Rehab, and Discharge.</p>
+                <span class="text-yellow-600 font-bold text-sm group-hover:underline">Track Journeys &rarr;</span>
+            </a>
+
+            <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 opacity-70">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-gray-500 text-lg">Partner Network</h3>
+                    <div class="bg-gray-200 p-3 rounded-full text-gray-400">
+                        <i class="fas fa-handshake text-xl"></i>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-400 mb-4">Manage referral agents and commission payouts.</p>
+                <span class="text-gray-400 font-bold text-sm cursor-not-allowed">Coming Soon</span>
+            </div>
 
         </div>
     </div>
 
     <script>
+        const supabaseUrl = 'https://atsdebykxuhtruuwcmlx.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
         const currentUser = localStorage.getItem('currentUser');
-        if (!currentUser) {
-            window.location.href = 'login.html';
-        } else {
-            document.getElementById('display-name').innerText = currentUser;
-        }
+        if (!currentUser) window.location.href = 'login.html';
+        
+        document.getElementById('display-name').innerText = currentUser;
 
         function logout() {
             localStorage.removeItem('currentUser');
