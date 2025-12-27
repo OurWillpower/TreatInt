@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Partner Portal | TreatInt</title>
+    <title>Partner Dashboard | TreatInt</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -12,7 +12,7 @@
 </head>
 <body class="bg-gray-50">
 
-    <nav class="bg-green-800 text-white shadow-lg">
+    <nav class="bg-green-900 text-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <a href="index.html" class="flex items-center hover:opacity-80 transition">
@@ -20,87 +20,99 @@
                     <span class="font-bold text-xl">TreatInt Partner</span>
                 </a>
                 <div class="flex items-center space-x-6">
-                    <a href="index.html" class="hover:text-green-200 transition flex items-center gap-2">
-                        <i class="fas fa-home"></i> <span class="hidden md:inline">Home</span>
-                    </a>
-                    <div class="text-right hidden md:block border-l border-green-600 pl-4">
-                        <div class="font-bold" id="display-name">Loading...</div>
-                        <div class="text-xs text-green-200">Verified Partner</div>
+                    <div class="text-right hidden md:block border-l border-green-700 pl-4">
+                        <div class="font-bold" id="display-name">Partner</div>
+                        <div class="text-xs text-green-200">ID: <span id="partner-code">...</span></div>
                     </div>
-                    <button onclick="logout()" class="text-sm bg-red-600 px-3 py-1 rounded hover:bg-red-700 ml-2">Logout</button>
+                    <button onclick="logout()" class="text-sm bg-red-500 px-3 py-1 rounded hover:bg-red-600 ml-2">Logout</button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="max-w-6xl mx-auto px-4 py-12">
         
-        <div class="text-sm text-gray-500 mb-6 flex items-center">
-            <a href="partner-home.html" class="hover:text-green-700 hover:underline transition font-bold text-green-900">
-                <i class="fas fa-arrow-left mr-1"></i> Back to Dashboard
-            </a> 
-            <span class="mx-2">/</span> 
-            <span class="font-bold text-gray-800">Referral Management</span>
-        </div>
-
-        <div class="flex justify-between items-center mb-8">
-            <h2 class="text-2xl font-bold text-gray-800">Your Referrals</h2>
-            <a href="refer-patient.html" class="bg-green-600 text-white px-6 py-2 rounded-lg font-bold shadow hover:bg-green-700 transition inline-flex items-center">
-                <i class="fas fa-plus-circle mr-2"></i> Register New Patient
-            </a>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-white p-6 rounded-xl shadow border-l-4 border-green-500">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-blue-500">
                 <div class="flex justify-between items-center">
                     <div>
                         <p class="text-gray-500 text-sm font-bold uppercase">Total Referrals</p>
-                        <h3 class="text-3xl font-bold text-gray-800" id="stat-total">0</h3>
+                        <h3 class="text-3xl font-bold text-gray-800" id="total-referrals">0</h3>
                     </div>
-                    <div class="bg-green-100 p-3 rounded-full text-green-600"><i class="fas fa-users text-xl"></i></div>
+                    <div class="bg-blue-100 p-3 rounded-full text-blue-600"><i class="fas fa-users text-2xl"></i></div>
                 </div>
             </div>
-            <div class="bg-white p-6 rounded-xl shadow border-l-4 border-blue-500">
+            
+            <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-purple-500">
                 <div class="flex justify-between items-center">
                     <div>
-                        <p class="text-gray-500 text-sm font-bold uppercase">Files Submitted</p>
-                        <h3 class="text-3xl font-bold text-gray-800" id="stat-files">0</h3>
+                        <p class="text-gray-500 text-sm font-bold uppercase">Consultations</p>
+                        <h3 class="text-3xl font-bold text-gray-800" id="total-consults">0</h3>
                     </div>
-                    <div class="bg-blue-100 p-3 rounded-full text-blue-600"><i class="fas fa-file-medical text-xl"></i></div>
+                    <div class="bg-purple-100 p-3 rounded-full text-purple-600"><i class="fas fa-video text-2xl"></i></div>
                 </div>
             </div>
-            <div class="bg-white p-6 rounded-xl shadow border-l-4 border-yellow-500">
+
+            <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-green-500">
                 <div class="flex justify-between items-center">
                     <div>
-                        <p class="text-gray-500 text-sm font-bold uppercase">Action Required</p>
-                        <h3 class="text-3xl font-bold text-gray-800" id="stat-pending">0</h3>
+                        <p class="text-gray-500 text-sm font-bold uppercase">Total Earnings</p>
+                        <h3 class="text-3xl font-bold text-green-600" id="total-earnings">₹0</h3>
                     </div>
-                    <div class="bg-yellow-100 p-3 rounded-full text-yellow-600"><i class="fas fa-exclamation-triangle text-xl"></i></div>
+                    <div class="bg-green-100 p-3 rounded-full text-green-600"><i class="fas fa-wallet text-2xl"></i></div>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow overflow-hidden">
-            <div class="px-6 py-4 border-b bg-gray-50">
-                <h3 class="font-bold text-gray-800">My Patient List</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <div class="lg:col-span-1 space-y-6">
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="font-bold text-gray-800 mb-2">Refer a Patient</h3>
+                    <p class="text-sm text-gray-500 mb-4">Share this link or register them yourself.</p>
+                    
+                    <button onclick="copyLink()" class="w-full bg-green-100 text-green-800 font-bold py-2 rounded border border-green-300 hover:bg-green-200 flex justify-center items-center mb-2">
+                        <i class="fas fa-link mr-2"></i> Copy Referral Link
+                    </button>
+                    <a href="register-patient.html" class="block w-full text-center bg-blue-900 text-white font-bold py-2 rounded hover:bg-blue-800">
+                        Register Patient Now
+                    </a>
+                </div>
+                
+                <div class="bg-blue-50 p-6 rounded-xl border border-blue-100">
+                    <h3 class="font-bold text-blue-900 mb-3 text-sm">Your Commission Rates</h3>
+                    <ul class="space-y-2 text-sm text-blue-800">
+                        <li class="flex justify-between"><span>Registration:</span> <span class="font-bold">₹0</span></li>
+                        <li class="flex justify-between"><span>e-Consultation:</span> <span class="font-bold">₹200</span></li>
+                        <li class="flex justify-between"><span>Visa Issued:</span> <span class="font-bold">₹500</span></li>
+                    </ul>
+                </div>
             </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left text-gray-500">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-100">
-                        <tr>
-                            <th class="px-6 py-3">Date</th>
-                            <th class="px-6 py-3">Patient Name</th>
-                            <th class="px-6 py-3">Mobile</th>
-                            <th class="px-6 py-3">Current Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="referralTableBody">
-                        <tr>
-                            <td colspan="4" class="px-6 py-4 text-center">Scanning database...</td>
-                        </tr>
-                    </tbody>
-                </table>
+
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="px-6 py-4 border-b bg-gray-50 flex justify-between items-center">
+                        <h3 class="font-bold text-gray-800">Referral History</h3>
+                        <button onclick="loadDashboard()" class="text-xs text-blue-600 hover:underline">Refresh</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                                <tr>
+                                    <th class="px-6 py-3">Date</th>
+                                    <th class="px-6 py-3">Patient Name</th>
+                                    <th class="px-6 py-3">Status</th>
+                                    <th class="px-6 py-3 text-right">Commission</th>
+                                </tr>
+                            </thead>
+                            <tbody id="referralTable">
+                                <tr><td colspan="4" class="px-6 py-4 text-center">Loading data...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
+
         </div>
     </div>
 
@@ -109,71 +121,94 @@
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-        const currentPartner = localStorage.getItem('currentUser');
-        if (!currentPartner) {
-            window.location.href = 'login.html';
-        } else {
-            document.getElementById('display-name').innerText = currentPartner;
-            loadReferrals();
-        }
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) window.location.href = 'login.html';
+        
+        // Partner ID is usually their Phone/Name. In a real app, we'd store a unique code.
+        // For this MVP, we assume the 'currentUser' name is the Referral Code.
+        document.getElementById('display-name').innerText = currentUser;
+        document.getElementById('partner-code').innerText = currentUser;
 
-        function logout() {
-            localStorage.removeItem('currentUser');
-            window.location.href = 'index.html';
-        }
+        function logout() { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; }
 
-        async function loadReferrals() {
+        async function loadDashboard() {
             try {
+                // 1. Get Patients referred by this Partner
                 const { data: patients, error } = await supabaseClient
                     .from('patients')
                     .select('*')
-                    .ilike('referred_by', `%${currentPartner}%`) 
+                    .eq('referred_by', currentUser)
                     .order('created_at', { ascending: false });
 
                 if (error) throw error;
-                document.getElementById('stat-total').innerText = patients.length;
 
-                const tableBody = document.getElementById('referralTableBody');
-                tableBody.innerHTML = "";
+                // 2. Get Appointments for these patients (to calculate earnings)
+                // Note: In a complex app, we'd use a join. Here we do a simple loop or second fetch.
+                // For MVP, we will just list patients and assume earnings based on status logic if we had status columns.
+                // Let's stick to showing the Registry list first.
+
+                const tbody = document.getElementById('referralTable');
+                tbody.innerHTML = "";
+
+                let count = 0;
+                let earnings = 0;
+                let consults = 0;
 
                 if (patients.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center text-gray-400">No referrals yet.</td></tr>`;
-                    return;
+                    tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center">No referrals yet. Start sharing your link!</td></tr>`;
+                } else {
+                    // Fetch all appointments for earnings calc
+                    const { data: allAppointments } = await supabaseClient.from('appointments').select('*');
+
+                    patients.forEach(p => {
+                        count++;
+                        const date = new Date(p.created_at).toLocaleDateString();
+                        
+                        // Check if this patient booked a consult
+                        // We check if patient name exists in appointments list
+                        const hasConsult = allAppointments.some(apt => apt.patient_name === p.name);
+                        
+                        let status = `<span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">Registered</span>`;
+                        let comm = 0;
+
+                        if (hasConsult) {
+                            status = `<span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded font-bold">Consultation Booked</span>`;
+                            comm += 200;
+                            consults++;
+                        }
+                        
+                        // Add to total
+                        earnings += comm;
+
+                        tbody.innerHTML += `
+                            <tr class="bg-white border-b hover:bg-gray-50">
+                                <td class="px-6 py-4">${date}</td>
+                                <td class="px-6 py-4 font-bold text-gray-900">${p.name}<br><span class="text-xs text-gray-400">${p.mobile}</span></td>
+                                <td class="px-6 py-4">${status}</td>
+                                <td class="px-6 py-4 text-right font-bold text-green-600">₹${comm}</td>
+                            </tr>
+                        `;
+                    });
                 }
 
-                const { data: allFiles } = await supabaseClient.storage.from('medical-records').list();
-                let filesCount = 0;
-                let pendingCount = 0;
+                // Update Stats
+                document.getElementById('total-referrals').innerText = count;
+                document.getElementById('total-consults').innerText = consults;
+                document.getElementById('total-earnings').innerText = "₹" + earnings;
 
-                patients.forEach(patient => {
-                    const date = new Date(patient.created_at).toLocaleDateString();
-                    const hasFiles = allFiles ? allFiles.some(f => f.name.startsWith(patient.name)) : false;
-
-                    let statusBadge;
-                    if (hasFiles) {
-                        filesCount++;
-                        statusBadge = `<span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded"><i class="fas fa-check-circle"></i> Docs Received</span>`;
-                    } else {
-                        pendingCount++;
-                        statusBadge = `<span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded"><i class="fas fa-clock"></i> Pending Upload</span>`;
-                    }
-
-                    const row = `
-                        <tr class="bg-white border-b hover:bg-gray-50">
-                            <td class="px-6 py-4 text-gray-400">${date}</td>
-                            <td class="px-6 py-4 font-bold text-gray-900">${patient.name}</td>
-                            <td class="px-6 py-4">${patient.mobile}</td>
-                            <td class="px-6 py-4">${statusBadge}</td>
-                        </tr>`;
-                    tableBody.innerHTML += row;
-                });
-                document.getElementById('stat-files').innerText = filesCount;
-                document.getElementById('stat-pending').innerText = pendingCount;
             } catch (err) {
                 console.error(err);
-                alert("Error: " + err.message);
             }
         }
+
+        function copyLink() {
+            // Simple link generator
+            const link = window.location.origin + "/TreatInt/register-patient.html?ref=" + encodeURIComponent(currentUser);
+            navigator.clipboard.writeText(link);
+            alert("Referral Link Copied: " + link);
+        }
+
+        loadDashboard();
     </script>
 </body>
 </html>
