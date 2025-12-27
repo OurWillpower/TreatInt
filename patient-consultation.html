@@ -15,9 +15,9 @@
     <nav class="bg-blue-900 text-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
-                <a href="index.html" class="flex items-center hover:opacity-80 transition">
+                <a href="patient-home.html" class="flex items-center hover:opacity-80 transition">
                     <i class="fas fa-heartbeat text-2xl mr-2"></i>
-                    <span class="font-bold text-xl">TreatInt</span>
+                    <span class="font-bold text-xl">TreatInt Dashboard</span>
                 </a>
                 <div class="flex items-center space-x-6">
                     <a href="patient-home.html" class="hover:text-blue-200 transition flex items-center gap-2">
@@ -30,15 +30,13 @@
     </nav>
 
     <div class="max-w-5xl mx-auto px-4 py-8">
-        
-        <div class="text-sm text-gray-500 mb-6 flex items-center">
-            <a href="patient-home.html" class="hover:text-blue-800 hover:underline transition font-bold text-blue-900">
-                <i class="fas fa-arrow-left mr-1"></i> Back to Dashboard
+        <div class="mb-6 flex items-center">
+            <a href="patient-home.html" class="bg-white px-4 py-2 rounded-lg shadow text-blue-900 font-bold hover:bg-blue-50 transition flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i> Back to Dashboard
             </a> 
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            
             <div class="md:col-span-2">
                 <div class="flex justify-between items-end mb-6">
                     <h2 class="text-2xl font-bold text-gray-800">Select a Specialist</h2>
@@ -67,7 +65,6 @@
 
     <div id="bookModal" class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-center justify-center z-50">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 transform transition-all scale-100 overflow-hidden">
-            
             <div class="flex justify-between items-center mb-4 border-b pb-2">
                 <div>
                     <h3 class="text-lg font-bold text-gray-800">Secure Payment</h3>
@@ -76,212 +73,83 @@
                 <button onclick="closeModal()" class="text-gray-400 hover:text-red-500"><i class="fas fa-times"></i></button>
             </div>
             
-            <div class="bg-purple-50 p-3 rounded mb-4 flex justify-between items-center">
-                <div>
-                    <p class="text-xs text-gray-500 uppercase font-bold">Doctor</p>
-                    <p class="font-bold text-purple-900" id="modalDocName">Loading...</p>
-                </div>
-                <div class="text-right">
-                    <p class="text-xs text-gray-500 uppercase font-bold">Amount</p>
-                    <p class="font-bold text-green-600 text-xl">₹2,000</p>
-                </div>
-            </div>
-            
             <form id="bookingForm" class="space-y-4">
-                
+                <p class="font-bold text-purple-900 bg-purple-50 p-2 rounded text-center mb-2" id="modalDocName"></p>
                 <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Date</label>
-                        <input type="date" id="bookDate" class="w-full border p-2 rounded focus:ring-2 focus:ring-purple-500 outline-none" required>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Time (IST)</label>
-                        <select id="bookTime" class="w-full border p-2 rounded focus:ring-2 focus:ring-purple-500 outline-none">
-                            <option>10:00 AM</option>
-                            <option>11:00 AM</option>
-                            <option>12:00 PM</option>
-                            <option>02:00 PM</option>
-                            <option>04:00 PM</option>
-                        </select>
-                    </div>
+                    <input type="date" id="bookDate" class="w-full border p-2 rounded" required>
+                    <select id="bookTime" class="w-full border p-2 rounded">
+                        <option>10:00 AM</option><option>11:00 AM</option><option>12:00 PM</option><option>02:00 PM</option><option>04:00 PM</option>
+                    </select>
                 </div>
-
                 <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center bg-gray-50">
                     <p class="text-xs font-bold text-gray-600 mb-2">Scan to Pay ₹2000</p>
                     <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=your-upi-id@bank&pn=TreatInt&am=2000&cu=INR" class="mx-auto mb-2 border p-1 bg-white rounded shadow-sm h-32 w-32">
-                    <p class="text-[10px] text-gray-400">Accepts GPay, PhonePe, Paytm, UPI</p>
                 </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Enter Transaction ID / UTR</label>
-                    <input type="text" id="txnId" class="w-full border p-2 rounded bg-yellow-50 focus:ring-2 focus:ring-yellow-500 outline-none font-mono text-sm" placeholder="e.g. 1234567890" required>
-                    <p class="text-[10px] text-red-500 mt-1">* Mandatory for verification</p>
-                </div>
-
-                <button type="submit" id="confirmBtn" class="w-full py-3 bg-green-600 text-white font-bold rounded hover:bg-green-700 shadow text-sm transition">
-                    <i class="fas fa-lock mr-2"></i> Confirm Payment & Book
+                <input type="text" id="txnId" class="w-full border p-2 rounded bg-yellow-50 font-mono text-sm" placeholder="Enter Transaction ID" required>
+                <button type="submit" id="confirmBtn" class="w-full py-3 bg-green-600 text-white font-bold rounded hover:bg-green-700 shadow text-sm">
+                    Confirm Payment & Book
                 </button>
             </form>
         </div>
     </div>
 
     <script>
-        // --- CONFIGURATION ---
         const supabaseUrl = 'https://atsdebykxuhtruuwcmlx.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-
         const currentUser = localStorage.getItem('currentUser');
         if (!currentUser) window.location.href = 'login.html';
-
+        
         let selectedDoc = null;
+        function logout() { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; }
 
-        function logout() { 
-            localStorage.removeItem('currentUser'); 
-            window.location.href = 'index.html'; 
-        }
-
-        // 1. LOAD DOCTORS
         async function loadDoctors() {
             const container = document.getElementById('doctorsGrid');
-            try {
-                const { data, error } = await supabaseClient
-                    .from('doctors')
-                    .select('*')
-                    .order('name', { ascending: true });
-
-                if (error) throw error;
-                container.innerHTML = "";
-                if (data.length === 0) {
-                    container.innerHTML = `<p class="text-gray-500 text-center bg-white p-8 rounded-xl">No doctors available.</p>`;
-                    return;
-                }
-                data.forEach(doc => {
-                    const card = `
-                        <div class="bg-white p-6 rounded-xl shadow flex justify-between items-center hover:shadow-lg transition border border-gray-100">
-                            <div class="flex items-center space-x-4">
-                                <div class="bg-purple-100 h-12 w-12 flex items-center justify-center rounded-full text-purple-600">
-                                    <i class="fas fa-user-md text-xl"></i>
-                                </div>
-                                <div>
-                                    <h3 class="font-bold text-gray-800 text-lg">${doc.name}</h3>
-                                    <p class="text-sm text-purple-600 font-medium">${doc.specialty}</p>
-                                </div>
-                            </div>
-                            <button onclick="openBookModal('${doc.name}')" class="bg-purple-600 text-white px-5 py-2 rounded-lg font-bold text-sm hover:bg-purple-700 shadow transition transform hover:-translate-y-0.5">
-                                Pay & Book
-                            </button>
-                        </div>
-                    `;
-                    container.innerHTML += card;
-                });
-            } catch (err) { console.error(err); }
+            const { data } = await supabaseClient.from('doctors').select('*');
+            container.innerHTML = "";
+            if(!data || data.length === 0) { container.innerHTML = "<p class='text-center text-gray-400'>No doctors available.</p>"; return; }
+            data.forEach(doc => {
+                container.innerHTML += `
+                    <div class="bg-white p-6 rounded-xl shadow flex justify-between items-center">
+                        <div><h3 class="font-bold text-gray-800">${doc.name}</h3><p class="text-sm text-purple-600">${doc.specialty}</p></div>
+                        <button onclick="openBookModal('${doc.name}')" class="bg-purple-600 text-white px-4 py-2 rounded text-sm font-bold">Book</button>
+                    </div>`;
+            });
         }
 
-        // 2. LOAD MY APPOINTMENTS
         async function loadAppointments() {
             const container = document.getElementById('myAppointments');
-            try {
-                const { data, error } = await supabaseClient
-                    .from('appointments')
-                    .select('*')
-                    .eq('patient_name', currentUser)
-                    .order('date', { ascending: true });
-
-                if (error) throw error;
-                container.innerHTML = "";
-                if (data.length === 0) {
-                    container.innerHTML = `<p class="text-sm text-gray-400 text-center py-4">No upcoming visits.</p>`;
-                    return;
-                }
-
-                data.forEach(apt => {
-                    const dateStr = new Date(apt.date).toLocaleDateString();
-                    // Payment Status Check
-                    const isPaid = apt.meet_link && apt.meet_link.length > 5;
-                    
-                    let statusBadge;
-                    if (isPaid) {
-                        statusBadge = `<a href="${apt.meet_link}" target="_blank" class="block w-full text-center bg-green-600 text-white text-xs font-bold py-2 rounded hover:bg-green-700 transition shadow mt-2"><i class="fas fa-video mr-1"></i> Join Meeting</a>`;
-                    } else {
-                        statusBadge = `
-                            <div class="mt-2 bg-yellow-50 border border-yellow-200 rounded p-2 text-center">
-                                <p class="text-xs font-bold text-yellow-700">Payment Verification Pending</p>
-                                <p class="text-[10px] text-gray-500">Txn: ${apt.transaction_id || 'N/A'}</p>
-                            </div>`;
-                    }
-
-                    const item = `
-                        <div class="bg-gray-50 p-4 rounded-lg border-l-4 ${isPaid ? 'border-green-500' : 'border-yellow-400'} shadow-sm mb-3">
-                            <div class="mb-1">
-                                <p class="font-bold text-sm text-gray-800">${apt.doctor_name}</p>
-                                <p class="text-xs text-gray-500">${dateStr} @ ${apt.time}</p>
-                            </div>
-                            ${statusBadge}
-                        </div>
-                    `;
-                    container.innerHTML += item;
-                });
-            } catch (err) { console.error(err); }
+            const { data } = await supabaseClient.from('appointments').select('*').eq('patient_name', currentUser).order('date');
+            container.innerHTML = "";
+            if(!data || data.length===0) { container.innerHTML = "<p class='text-sm text-gray-400 text-center'>No appointments.</p>"; return; }
+            data.forEach(apt => {
+                const isPaid = apt.meet_link && apt.meet_link.length > 5;
+                const badge = isPaid ? `<a href="${apt.meet_link}" target="_blank" class="block w-full text-center bg-green-600 text-white text-xs font-bold py-2 rounded mt-2">Join Meeting</a>` : `<div class="mt-2 bg-yellow-50 text-yellow-700 text-xs font-bold p-2 rounded text-center">Pending Verification</div>`;
+                container.innerHTML += `<div class="bg-gray-50 p-4 rounded-lg border-l-4 ${isPaid?'border-green-500':'border-yellow-400'} mb-2"><p class="font-bold text-sm">${apt.doctor_name}</p><p class="text-xs text-gray-500">${apt.date} @ ${apt.time}</p>${badge}</div>`;
+            });
         }
 
-        // 3. BOOKING LOGIC
-        function openBookModal(name) {
-            selectedDoc = name;
-            document.getElementById('modalDocName').innerText = name;
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('bookDate').setAttribute('min', today);
-            document.getElementById('bookModal').classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('bookModal').classList.add('hidden');
-        }
+        function openBookModal(name) { selectedDoc = name; document.getElementById('modalDocName').innerText = name; document.getElementById('bookModal').classList.remove('hidden'); }
+        function closeModal() { document.getElementById('bookModal').classList.add('hidden'); }
 
         document.getElementById('bookingForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('confirmBtn');
             const txnId = document.getElementById('txnId').value;
+            if(txnId.length < 4) return alert("Invalid Transaction ID");
+            const btn = document.getElementById('confirmBtn'); btn.disabled=true; btn.innerText="Verifying...";
             
-            if(txnId.length < 4) { alert("Please enter a valid Transaction ID"); return; }
-
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
-
-            const date = document.getElementById('bookDate').value;
-            const time = document.getElementById('bookTime').value;
-
             try {
-                const { error } = await supabaseClient
-                    .from('appointments')
-                    .insert([{ 
-                        patient_name: currentUser,
-                        doctor_name: selectedDoc,
-                        date: date,
-                        time: time,
-                        meet_link: "", // Empty until verified
-                        transaction_id: txnId, // SAVE TXN ID
-                        amount: "2000",
-                        status: "Pending Verification"
-                    }]);
-
-                if (error) throw error;
-
-                alert("Payment Submitted! Please wait for admin verification.");
-                closeModal();
-                loadAppointments(); 
-
-            } catch (err) {
-                alert("Error: " + err.message);
-            } finally {
-                btn.disabled = false;
-                btn.innerText = "Confirm Payment & Book";
-            }
+                await supabaseClient.from('appointments').insert([{ 
+                    patient_name: currentUser, doctor_name: selectedDoc, 
+                    date: document.getElementById('bookDate').value, time: document.getElementById('bookTime').value,
+                    transaction_id: txnId, amount: "2000", status: "Pending Verification", meet_link: ""
+                }]);
+                alert("Booking Sent! Wait for Admin Verification."); closeModal(); loadAppointments();
+            } catch(err) { alert("Error: "+err.message); }
+            finally { btn.disabled=false; btn.innerText="Confirm Payment & Book"; }
         });
 
-        // Initialize
-        loadDoctors();
-        loadAppointments();
+        loadDoctors(); loadAppointments();
     </script>
 </body>
 </html>
