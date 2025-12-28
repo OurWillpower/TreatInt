@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TreatInt | Leaders in Medical Tourism India</title>
     <link rel="manifest" href="manifest.json">
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -144,17 +148,17 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-gray-600 mb-1">Preferred Time to Discuss (BST)</label>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">Preferred Time (BST)</label>
                     <select id="wa-time" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none bg-white">
-                        <option value="10:00 AM - 1:00 PM">Morning (10 AM - 1 PM)</option>
-                        <option value="2:00 PM - 5:00 PM">Afternoon (2 PM - 5 PM)</option>
-                        <option value="6:00 PM - 9:00 PM">Evening (6 PM - 9 PM)</option>
+                        <option value="Morning (10am - 1pm BST)">Morning (10am - 1pm BST)</option>
+                        <option value="Afternoon (2pm - 5pm BST)">Afternoon (2pm - 5pm BST)</option>
+                        <option value="Evening (6pm - 9pm BST)">Evening (6pm - 9pm BST)</option>
                         <option value="Anytime">Anytime</option>
                     </select>
                 </div>
 
-                <button onclick="startWhatsAppChat()" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 text-sm transition shadow mt-2 flex items-center justify-center">
-                    <i class="fab fa-whatsapp mr-2 text-lg"></i> Start Chat on WhatsApp
+                <button onclick="saveAndStartChat()" id="wa-btn" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 text-sm transition shadow mt-2 flex items-center justify-center">
+                    <i class="fab fa-whatsapp mr-2 text-lg"></i> Start Chat
                 </button>
             </div>
         </div>
@@ -165,6 +169,11 @@
     </div>
 
     <script>
+        // --- 1. SUPABASE CONFIGURATION (REPLACE THESE!) ---
+        const SUPABASE_URL = 'https://atsdebykxuhtruuwcmlx.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_etJNM1T20jsFHB1V_qaTsQ_Q-ctaBjh';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
         // SLIDER
         let currentSlide = 0; const slides = document.querySelectorAll('.slide'); const dots = document.querySelectorAll('.dot');
         function showSlide(index) {
@@ -176,30 +185,56 @@
         // WHATSAPP WIDGET LOGIC
         function toggleWA() { document.getElementById('wa-form').classList.toggle('hidden'); }
         
-        function startWhatsAppChat() {
+        async function saveAndStartChat() {
+            const btn = document.getElementById('wa-btn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Connecting...'; // Loading State
+            btn.disabled = true;
+
             // Get Values
             const name = document.getElementById('wa-name').value.trim();
             const phone = document.getElementById('wa-phone').value.trim();
             const currentLoc = document.getElementById('wa-current-loc').value.trim();
             const treatment = document.getElementById('wa-treatment').value.trim();
-            const prefLoc = document.getElementById('wa-pref-loc').value; // Dropdown value
-            const time = document.getElementById('wa-time').value; // Dropdown value
+            const prefLoc = document.getElementById('wa-pref-loc').value; 
+            const time = document.getElementById('wa-time').value;
 
-            if(!name) { alert("Please enter your Name."); return; }
-            if(!phone) { alert("Please enter your Phone Number."); return; }
-            if(!treatment) { alert("Please specify the Treatment needed."); return; }
+            // Simple Validation
+            if(!name || !phone || !treatment) { 
+                alert("Please fill in Name, Phone, and Treatment."); 
+                btn.innerHTML = '<i class="fab fa-whatsapp mr-2 text-lg"></i> Start Chat';
+                btn.disabled = false;
+                return; 
+            }
 
-            // Construct Message
-            const text = `*New Medical Enquiry* %0a---------------------------%0a👤 *Name:* ${name}%0a📞 *Phone:* ${phone}%0a📍 *From:* ${currentLoc}%0a🏥 *Treatment:* ${treatment}%0a🏙️ *Pref. City:* ${prefLoc}%0a⏰ *Call Time (BST):* ${time}%0a---------------------------%0aPlease guide me further.`;
+            // 1. SAVE TO SUPABASE (Async)
+            // We assume the table 'enquiries' exists
+            try {
+                const { error } = await supabase.from('enquiries').insert({
+                    name: name,
+                    phone: phone,
+                    location: currentLoc,
+                    treatment: treatment,
+                    preferred_city: prefLoc,
+                    preferred_time: time
+                });
+                if (error) console.error('Error saving lead:', error);
+            } catch (err) {
+                console.error('Supabase connection failed:', err);
+            }
 
-            // Open WhatsApp (Using Anchor Tag Trick to Force Tab Reuse)
+            // 2. OPEN WHATSAPP (Using Anchor Tag to reuse Tab)
+            const text = `*New Enquiry from ${currentLoc}* %0a---------------------------%0a👤 *Name:* ${name}%0a📞 *Phone:* ${phone}%0a🏥 *Treatment:* ${treatment}%0a🏙️ *Pref. City:* ${prefLoc}%0a⏰ *Call Time:* ${time}%0a---------------------------%0aPlease guide me.`;
+            
             const link = document.createElement('a');
             link.href = `https://wa.me/917039196489?text=${text}`;
-            link.target = 'TreatIntChat'; // Force consistent Tab Name
+            link.target = 'TreatIntChat'; // Force single tab
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             
+            // Reset Button & Close
+            btn.innerHTML = '<i class="fab fa-whatsapp mr-2 text-lg"></i> Start Chat';
+            btn.disabled = false;
             toggleWA();
         }
     </script>
