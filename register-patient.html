@@ -3,118 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Registration | TreatInt</title>
+    <title>TreatInt | Patient Registration</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style> body { font-family: 'Poppins', sans-serif; } </style>
 </head>
-<body class="bg-blue-50 h-screen flex items-center justify-center">
+<body class="bg-blue-50 min-h-screen py-10">
 
-    <div class="bg-white p-8 rounded-xl shadow-lg max-w-md w-full">
-        <div class="text-center mb-6">
-            <h1 class="text-2xl font-bold text-blue-900">Create Health Locker</h1>
-            <p class="text-gray-500 text-sm">Securely store your medical records</p>
+    <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+        
+        <div class="bg-blue-900 py-6 px-8 text-white flex justify-between items-center">
+            <div>
+                <h2 class="text-2xl font-bold">New Patient Registration</h2>
+                <p class="text-blue-200 text-sm">Tell us about your medical needs</p>
+            </div>
+            <a href="index.html" class="text-blue-200 hover:text-white transition">
+                <i class="fas fa-times text-xl"></i>
+            </a>
         </div>
 
-        <form id="patientForm">
-            <div class="space-y-4">
+        <form action="patient-home.html" class="p-8">
+            
+            <h3 class="text-blue-900 font-bold border-b border-gray-200 pb-2 mb-6 uppercase text-sm tracking-wide">
+                <i class="fas fa-user-circle mr-2"></i> Personal Details
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
-                    <label class="block text-sm font-bold text-gray-700">Full Name</label>
-                    <input type="text" id="pName" class="w-full border p-2 rounded" required placeholder="Name as on Passport">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Full Name</label>
+                    <input type="text" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600" placeholder="Patient Name">
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-gray-700">Mobile Number</label>
-                    <input type="text" id="pMobile" class="w-full border p-2 rounded" required placeholder="+91...">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Country of Residence</label>
+                    <input type="text" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600" placeholder="e.g. Bangladesh, Oman">
                 </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700">Create Password</label>
-                    <input type="password" id="pPassword" class="w-full border p-2 rounded" required>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-bold text-gray-700">Did someone refer you? (Optional)</label>
-                    <select id="referralType" class="w-full border p-2 rounded mb-2" onchange="toggleReferralField()">
-                        <option value="Direct">No, I came directly</option>
-                        <option value="Partner">Partner Agency</option>
-                        <option value="Hospital">Hospital</option>
-                        <option value="Individual">Individual Person</option>
-                    </select>
-                    <input type="text" id="referralName" class="w-full border p-2 rounded hidden" placeholder="Enter Name of Person/Agency">
-                </div>
-
-                <button type="submit" id="submitBtn" class="w-full bg-blue-900 text-white font-bold py-3 rounded hover:bg-blue-800 transition">
-                    Sign Up
-                </button>
             </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2">WhatsApp Number</label>
+                    <input type="text" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600" placeholder="+91 ...">
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Email Address</label>
+                    <input type="email" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600" placeholder="email@example.com">
+                </div>
+            </div>
+
+            <h3 class="text-blue-900 font-bold border-b border-gray-200 pb-2 mb-6 uppercase text-sm tracking-wide">
+                <i class="fas fa-notes-medical mr-2"></i> Treatment Requirement
+            </h3>
+
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Select Specialty</label>
+                <select class="w-full border border-gray-300 rounded-lg p-3 bg-white focus:outline-none focus:border-blue-600">
+                    <option>Oncology (Cancer Care)</option>
+                    <option>Cardiology (Heart)</option>
+                    <option>Orthopedics (Bone & Joint)</option>
+                    <option>Transplant (Liver/Kidney)</option>
+                    <option>Cosmetic Surgery</option>
+                    <option>Other</option>
+                </select>
+            </div>
+
+            <div class="mb-8">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Brief Medical History / Issue</label>
+                <textarea class="w-full border border-gray-300 rounded-lg p-3 h-32 focus:outline-none focus:border-blue-600" placeholder="Describe the current condition..."></textarea>
+            </div>
+
+            <div class="bg-blue-50 p-6 rounded-xl border border-blue-100 mb-8 flex items-start">
+                <i class="fas fa-file-upload text-blue-500 text-xl mt-1 mr-4"></i>
+                <div>
+                    <h4 class="font-bold text-blue-900">Upload Reports (Optional)</h4>
+                    <p class="text-sm text-blue-700 mb-3">Attach latest medical reports for a free doctor opinion.</p>
+                    <input type="file" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200"/>
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-900 text-white font-bold py-4 rounded-lg shadow-lg hover:bg-blue-800 transition transform hover:-translate-y-0.5">
+                Create Patient Profile
+            </button>
+            
+            <p class="text-center text-gray-500 text-sm mt-4">
+                Already registered? <a href="login.html" class="text-blue-600 font-bold hover:underline">Login here</a>
+            </p>
+
         </form>
-        <p class="text-center text-sm mt-4">
-            Already have an account? <a href="login.html" class="text-blue-600 font-bold">Login</a>
-        </p>
     </div>
 
-    <script>
-        // --- CONFIGURATION ---
-        const supabaseUrl = 'https://atsdebykxuhtruuwcmlx.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
-        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-        // SHOW/HIDE INPUT FIELD
-        function toggleReferralField() {
-            const type = document.getElementById('referralType').value;
-            const input = document.getElementById('referralName');
-            if (type === 'Direct') {
-                input.classList.add('hidden');
-                input.value = ""; // Clear if hidden
-            } else {
-                input.classList.remove('hidden');
-                input.required = true; // Make mandatory if selected
-            }
-        }
-
-        const form = document.getElementById('patientForm');
-        const btn = document.getElementById('submitBtn');
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            btn.disabled = true;
-            btn.innerHTML = "Processing...";
-            
-            const name = document.getElementById('pName').value;
-            const mobile = document.getElementById('pMobile').value;
-            const password = document.getElementById('pPassword').value;
-            
-            // LOGIC: Combine Type + Name (e.g., "Partner: ABC Agency")
-            const refType = document.getElementById('referralType').value;
-            const refName = document.getElementById('referralName').value;
-            let finalReferral = "Direct Website";
-
-            if (refType !== 'Direct' && refName) {
-                finalReferral = refType + ": " + refName;
-            }
-
-            try {
-                // Save to Supabase
-                const { data, error } = await _supabase
-                    .from('patients') 
-                    .insert([{ 
-                        name: name, 
-                        mobile: mobile, 
-                        password: password,
-                        referred_by: finalReferral // SAVES THE SOURCE
-                    }]);
-
-                if (error) throw error;
-
-                localStorage.setItem('currentUser', name);
-                window.location.href = 'dashboard-patient.html';
-                
-            } catch (err) {
-                alert("Error: " + err.message);
-                btn.disabled = false;
-                btn.innerHTML = "Sign Up";
-            }
-        });
-    </script>
 </body>
 </html>
