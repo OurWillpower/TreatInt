@@ -35,8 +35,8 @@
         .dot { transition: all 0.3s ease; }
         .active-dot { background-color: white; opacity: 1; transform: scale(1.2); }
 
-        /* CHATBOT ANIMATIONS */
-        .chat-slide-up { animation: slideUp 0.3s ease-out forwards; }
+        /* WIDGET ANIMATIONS */
+        .widget-slide-up { animation: slideUp 0.3s ease-out forwards; }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
@@ -281,9 +281,27 @@
         </div>
     </footer>
 
-    <a href="https://wa.me/917039196489" target="_blank" class="fixed bottom-6 left-6 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition z-40 flex items-center justify-center animate-bounce">
-        <i class="fab fa-whatsapp text-3xl"></i>
-    </a>
+    <div id="wa-widget" class="fixed bottom-6 left-6 z-50 flex flex-col items-start">
+        
+        <div id="wa-form" class="hidden bg-white w-72 rounded-xl shadow-2xl border border-green-100 flex flex-col mb-4 overflow-hidden widget-slide-up">
+            <div class="bg-green-500 text-white p-3 flex justify-between items-center">
+                <span class="font-bold text-sm"><i class="fab fa-whatsapp mr-2"></i> Quick Enquiry</span>
+                <button onclick="toggleWA()" class="text-white hover:text-green-100"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-4 space-y-3">
+                <p class="text-xs text-gray-500">Hi! Fill this form to start a WhatsApp chat with our medical expert.</p>
+                <input type="text" id="wa-name" placeholder="Your Name" class="w-full border rounded p-2 text-xs focus:ring-1 focus:ring-green-500 outline-none">
+                <textarea id="wa-msg" rows="2" placeholder="How can we help?" class="w-full border rounded p-2 text-xs focus:ring-1 focus:ring-green-500 outline-none"></textarea>
+                <button onclick="startWhatsAppChat()" class="w-full bg-green-600 text-white font-bold py-2 rounded hover:bg-green-700 text-sm transition">
+                    <i class="fas fa-paper-plane mr-1"></i> Start Chat
+                </button>
+            </div>
+        </div>
+
+        <button onclick="toggleWA()" class="bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition transform hover:scale-105 animate-bounce">
+            <i class="fab fa-whatsapp text-3xl"></i>
+        </button>
+    </div>
 
     <div id="chat-widget" class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
         
@@ -295,7 +313,6 @@
                 </div>
                 <button onclick="toggleChat()" class="text-white hover:text-gray-300"><i class="fas fa-times"></i></button>
             </div>
-            
             <div id="chat-messages" class="flex-1 p-4 overflow-y-auto bg-gray-50 space-y-3">
                 <div class="flex justify-start">
                     <div class="bg-white border border-gray-200 text-gray-700 p-3 rounded-lg rounded-tl-none text-xs shadow-sm max-w-[80%]">
@@ -303,7 +320,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="p-3 border-t bg-white flex">
                 <input type="text" id="chat-input" placeholder="Type a question..." class="flex-1 border rounded-l-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500" onkeypress="handleEnter(event)">
                 <button onclick="sendMessage()" class="bg-blue-900 text-white px-4 py-2 rounded-r-lg hover:bg-blue-800"><i class="fas fa-paper-plane"></i></button>
@@ -342,10 +358,32 @@
         function goToSlide(n) { showSlide(n); }
         setInterval(nextSlide, 5000); 
 
-        // --- CHATBOT LOGIC ---
+        // --- WHATSAPP WIDGET LOGIC ---
+        function toggleWA() {
+            document.getElementById('wa-form').classList.toggle('hidden');
+        }
+
+        function startWhatsAppChat() {
+            const name = document.getElementById('wa-name').value.trim();
+            const msg = document.getElementById('wa-msg').value.trim();
+            
+            if(!name) { alert("Please enter your name."); return; }
+
+            // Construct Message
+            const text = `Hello TreatInt, my name is ${name}. ${msg ? 'My query: ' + msg : 'I would like to know more about medical treatments.'}`;
+            
+            // Open WhatsApp with Pre-filled Text
+            // Uses your number: 7039196489
+            const url = `https://wa.me/917039196489?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+            
+            // Close form after sending
+            toggleWA();
+        }
+
+        // --- AI CHATBOT LOGIC ---
         function toggleChat() {
-            const win = document.getElementById('chat-window');
-            win.classList.toggle('hidden');
+            document.getElementById('chat-window').classList.toggle('hidden');
         }
 
         function handleEnter(e) {
@@ -357,11 +395,9 @@
             const msg = input.value.trim();
             if (!msg) return;
 
-            // Add User Message
             addMessage(msg, 'user');
             input.value = '';
 
-            // Simulate AI Thinking
             setTimeout(() => {
                 const response = getBotResponse(msg.toLowerCase());
                 addMessage(response, 'bot');
@@ -378,13 +414,12 @@
                 ? "bg-blue-900 text-white p-3 rounded-lg rounded-tr-none text-xs shadow-sm max-w-[80%]" 
                 : "bg-white border border-gray-200 text-gray-700 p-3 rounded-lg rounded-tl-none text-xs shadow-sm max-w-[80%]";
             
-            bubble.innerHTML = text; // Allow HTML in response
+            bubble.innerHTML = text; 
             div.appendChild(bubble);
             container.appendChild(div);
             container.scrollTop = container.scrollHeight;
         }
 
-        // SMART KNOWLEDGE BASE
         function getBotResponse(input) {
             if (input.includes('visa') || input.includes('invitation')) {
                 return "We provide an <strong>Official Medical Visa Invitation Letter</strong> immediately after your first consultation. This helps speed up your embassy process.";
