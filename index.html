@@ -419,21 +419,33 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        // SMARTER KNOWLEDGE BASE
+        // ULTRA-SMART KNOWLEDGE BASE
         function getBotResponse(input) {
             input = input.toLowerCase();
 
-            // 1. COMPLEX QUERIES (Combinations)
+            // 1. DETECT CURRENCY PREFERENCE
+            const wantsINR = input.includes('inr') || input.includes('rupee') || input.includes('indian currency') || input.includes('india');
+            
+            // 2. COMPLEX QUERIES (Combinations)
             
             // Visa + Cost
             if ((input.includes('visa') && input.includes('cost')) || (input.includes('visa') && input.includes('price')) || (input.includes('visa') && input.includes('fee'))) {
-                return "The <strong>Medical Visa Invitation Letter</strong> from our side is included in our service fee (Free). However, the <strong>Government Visa Fee</strong> (paid to the Indian Embassy) varies by country (usually $80-$100 USD for Bangladesh/International patients).";
+                
+                if (wantsINR) {
+                    return "The Medical Visa Invitation Letter is <strong>Free</strong>. The Government Visa Fee (paid to Embassy) is approx <strong>₹6,500 - ₹8,500 INR</strong> depending on your country.";
+                } else {
+                    return "The Medical Visa Invitation Letter is <strong>Free</strong>. The Government Visa Fee (paid to Embassy) is approx <strong>$80 - $100 USD</strong>.";
+                }
             }
 
             // Transplant + Cost
             if (input.includes('kidney') || input.includes('liver') || input.includes('transplant')) {
                 if (input.includes('cost') || input.includes('price')) {
-                    return "<strong>Transplant Costs (Approx):</strong><br>• Kidney: $10,000 - $12,000<br>• Liver: $22,000 - $28,000<br><em>(Vs $200,000+ in USA).</em> <a href='contact.html' class='underline font-bold text-blue-600'>Get a Quote</a>";
+                    if (wantsINR) {
+                         return "<strong>Transplant Costs (Approx):</strong><br>• Kidney: ₹8 - ₹10 Lakhs<br>• Liver: ₹18 - ₹22 Lakhs<br><em>(Much lower than US/UK).</em> <a href='contact.html' class='underline font-bold text-blue-600'>Get Exact Quote</a>";
+                    } else {
+                        return "<strong>Transplant Costs (Approx):</strong><br>• Kidney: $10,000 - $12,000<br>• Liver: $22,000 - $28,000<br><em>(Vs $200,000+ in USA).</em> <a href='contact.html' class='underline font-bold text-blue-600'>Get Exact Quote</a>";
+                    }
                 }
                 return "For transplants, you need a <strong>donor from your immediate family</strong> (as per Indian Law). We assist with the Legal Authorization Committee paperwork.";
             }
@@ -441,50 +453,57 @@
             // Heart + Cost
             if (input.includes('heart') || input.includes('cardiac') || input.includes('bypass')) {
                 if (input.includes('cost') || input.includes('price')) {
-                    return "<strong>Cardiac Costs (Approx):</strong><br>• Angioplasty: $3,500<br>• Bypass (CABG): $5,500 - $7,000.<br>Top JCI Hospitals included.";
+                    if (wantsINR) {
+                        return "<strong>Cardiac Costs (Approx):</strong><br>• Angioplasty: ₹2.5 - ₹3 Lakhs<br>• Bypass (CABG): ₹4.5 - ₹6 Lakhs.<br>Top JCI Hospitals included.";
+                    } else {
+                        return "<strong>Cardiac Costs (Approx):</strong><br>• Angioplasty: $3,500<br>• Bypass (CABG): $5,500 - $7,000.<br>Top JCI Hospitals included.";
+                    }
                 }
                 return "We partner with India's top heart centers (Narayana, Apollo, Fortis) offering success rates above 99%.";
             }
 
-            // 2. SIMPLE QUERIES (Single Keywords)
+            // 3. SIMPLE QUERIES
             
             if (input.includes('visa') || input.includes('invitation')) {
                 return "We provide an <strong>Official Medical Visa Invitation Letter</strong> immediately after your first consultation. This helps speed up your embassy process.";
             }
             
-            if (input.includes('cost') || input.includes('price') || input.includes('money') || input.includes('expensive')) {
-                return "Treatments in India are <strong>60-70% cheaper</strong> than Western countries. <br>• Heart Bypass: ~$5,500<br>• Knee Replacement: ~$4,000<br>What specific treatment are you looking for?";
+            if (input.includes('cost') || input.includes('price') || input.includes('money')) {
+                if (wantsINR) {
+                     return "Treatments in India are very affordable. <br>• Heart Bypass: ~₹4.5 Lakhs<br>• Knee Replacement: ~₹3 Lakhs<br>What treatment do you need?";
+                }
+                return "Treatments in India are <strong>60-70% cheaper</strong> than Western countries. <br>• Heart Bypass: ~$5,500<br>• Knee Replacement: ~$4,000<br>What treatment do you need?";
             }
             
-            if (input.includes('food') || input.includes('diet') || input.includes('halal') || input.includes('eat')) {
+            if (input.includes('food') || input.includes('diet') || input.includes('halal')) {
                 return "We understand family needs! We arrange <strong>Halal food, vegetarian options</strong>, and customized diet plans for patients and families.";
             }
             
-            if (input.includes('stay') || input.includes('hotel') || input.includes('accommodation') || input.includes('live')) {
+            if (input.includes('stay') || input.includes('hotel') || input.includes('accommodation')) {
                 return "We have verified <strong>Guest Houses and Hotels</strong> within walking distance of the hospital. Prices range from budget ($20/night) to luxury.";
             }
             
             if (input.includes('bangladesh') || input.includes('dhaka')) {
-                return "We welcome many patients from Bangladesh! We can help with currency exchange, border logistics, and specialized Bengali-speaking guides.";
+                return "We welcome our friends from Bangladesh! We help with <strong>Border logistics, currency exchange</strong>, and provide Bengali-speaking guides.";
             }
 
             if (input.includes('safety') || input.includes('safe')) {
                 return "Your safety is our priority. We provide <strong>Airport Pickup</strong>, a dedicated 24/7 care manager, and secure SIM cards upon arrival.";
             }
             
-            if (input.includes('appointment') || input.includes('book') || input.includes('consult') || input.includes('doctor')) {
+            if (input.includes('appointment') || input.includes('book') || input.includes('consult')) {
                 return "You can book a consultation instantly! <a href='patient-consultation.html' class='underline font-bold text-blue-600'>Click here to book a doctor</a>.";
             }
             
-            if (input.includes('contact') || input.includes('call') || input.includes('human') || input.includes('number')) {
+            if (input.includes('contact') || input.includes('call') || input.includes('human')) {
                 return "You can reach our human team at <strong>+91 7039196489</strong> or email support@treatint.com.";
             }
             
-            if (input.includes('hi') || input.includes('hello') || input.includes('hey')) {
-                return "Hello! Welcome to TreatInt. I can answer questions about <strong>Visa, Costs, Food, or Doctors</strong>. How can I help?";
+            if (input.includes('hi') || input.includes('hello')) {
+                return "Hello! I can answer questions about <strong>Visa, Costs (in USD or INR), Food, or Doctors</strong>. How can I help?";
             }
 
-            // 3. FALLBACK (If nothing matches)
+            // 4. FALLBACK
             return "I am learning! Please ask about 'Visa Fees', 'Heart Surgery Cost', 'Hotels', or <a href='contact.html' class='underline font-bold text-blue-600'>Contact Us</a> directly.";
         }
     </script>
