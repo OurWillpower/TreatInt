@@ -25,16 +25,19 @@
         }
         .slide.active { opacity: 1; z-index: 10; }
         
-        /* Dark Gradient Overlay for text readability */
+        /* Dark Gradient Overlay */
         .overlay { 
             background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.3)); 
-            position: absolute; 
-            inset: 0; 
+            position: absolute; inset: 0; 
         }
         
         /* DOTS NAVIGATION */
         .dot { transition: all 0.3s ease; }
         .active-dot { background-color: white; opacity: 1; transform: scale(1.2); }
+
+        /* CHATBOT ANIMATIONS */
+        .chat-slide-up { animation: slideUp 0.3s ease-out forwards; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body class="bg-white">
@@ -278,11 +281,42 @@
         </div>
     </footer>
 
-    <a href="https://wa.me/917039196489" target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition z-50 flex items-center justify-center animate-bounce">
+    <a href="https://wa.me/917039196489" target="_blank" class="fixed bottom-6 left-6 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition z-40 flex items-center justify-center animate-bounce">
         <i class="fab fa-whatsapp text-3xl"></i>
     </a>
 
+    <div id="chat-widget" class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        
+        <div id="chat-window" class="hidden bg-white w-80 h-96 rounded-xl shadow-2xl border border-gray-200 flex flex-col mb-4 overflow-hidden chat-slide-up">
+            <div class="bg-blue-900 text-white p-4 flex justify-between items-center">
+                <div class="flex items-center">
+                    <div class="bg-white text-blue-900 p-1 rounded-full mr-2"><i class="fas fa-robot"></i></div>
+                    <span class="font-bold text-sm">TreatInt AI Assistant</span>
+                </div>
+                <button onclick="toggleChat()" class="text-white hover:text-gray-300"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto bg-gray-50 space-y-3">
+                <div class="flex justify-start">
+                    <div class="bg-white border border-gray-200 text-gray-700 p-3 rounded-lg rounded-tl-none text-xs shadow-sm max-w-[80%]">
+                        Hello! I am your AI assistant. Ask me about Visa, Costs, Food, or Safety!
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-3 border-t bg-white flex">
+                <input type="text" id="chat-input" placeholder="Type a question..." class="flex-1 border rounded-l-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500" onkeypress="handleEnter(event)">
+                <button onclick="sendMessage()" class="bg-blue-900 text-white px-4 py-2 rounded-r-lg hover:bg-blue-800"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+
+        <button onclick="toggleChat()" class="bg-blue-900 text-white p-4 rounded-full shadow-2xl hover:bg-blue-800 transition transform hover:scale-105">
+            <i class="fas fa-comment-dots text-2xl"></i>
+        </button>
+    </div>
+
     <script>
+        // --- SLIDER LOGIC ---
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
         const dots = document.querySelectorAll('.dot');
@@ -307,6 +341,77 @@
         function nextSlide() { showSlide(currentSlide + 1); }
         function goToSlide(n) { showSlide(n); }
         setInterval(nextSlide, 5000); 
+
+        // --- CHATBOT LOGIC ---
+        function toggleChat() {
+            const win = document.getElementById('chat-window');
+            win.classList.toggle('hidden');
+        }
+
+        function handleEnter(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            // Add User Message
+            addMessage(msg, 'user');
+            input.value = '';
+
+            // Simulate AI Thinking
+            setTimeout(() => {
+                const response = getBotResponse(msg.toLowerCase());
+                addMessage(response, 'bot');
+            }, 600);
+        }
+
+        function addMessage(text, sender) {
+            const container = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = sender === 'user' ? "flex justify-end" : "flex justify-start";
+            
+            const bubble = document.createElement('div');
+            bubble.className = sender === 'user' 
+                ? "bg-blue-900 text-white p-3 rounded-lg rounded-tr-none text-xs shadow-sm max-w-[80%]" 
+                : "bg-white border border-gray-200 text-gray-700 p-3 rounded-lg rounded-tl-none text-xs shadow-sm max-w-[80%]";
+            
+            bubble.innerHTML = text; // Allow HTML in response
+            div.appendChild(bubble);
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // SMART KNOWLEDGE BASE
+        function getBotResponse(input) {
+            if (input.includes('visa') || input.includes('invitation')) {
+                return "We provide an <strong>Official Medical Visa Invitation Letter</strong> immediately after your first consultation. This helps speed up your embassy process.";
+            }
+            if (input.includes('cost') || input.includes('price') || input.includes('money')) {
+                return "Treatments in India are <strong>60-70% cheaper</strong> than the US/UK. For example, Heart Bypass is ~$4000 here vs $100,000 in the US. Specific prices depend on the hospital.";
+            }
+            if (input.includes('food') || input.includes('diet') || input.includes('halal')) {
+                return "We understand family needs! We arrange <strong>Halal food, vegetarian options</strong>, and customized diet plans for patients and families.";
+            }
+            if (input.includes('stay') || input.includes('hotel') || input.includes('accommodation')) {
+                return "We have verified <strong>Guest Houses and Hotels</strong> within walking distance of the hospital. Prices range from budget ($20/night) to luxury.";
+            }
+            if (input.includes('safety') || input.includes('safe')) {
+                return "Your safety is our priority. We provide <strong>Airport Pickup</strong>, a dedicated 24/7 care manager, and secure SIM cards upon arrival.";
+            }
+            if (input.includes('appointment') || input.includes('book') || input.includes('consult')) {
+                return "You can book a consultation instantly! <a href='patient-consultation.html' class='underline font-bold'>Click here to book a doctor</a>.";
+            }
+            if (input.includes('contact') || input.includes('call') || input.includes('human')) {
+                return "You can reach our human team at <strong>+91 7039196489</strong> or email support@treatint.com.";
+            }
+            if (input.includes('hi') || input.includes('hello')) {
+                return "Hello! Welcome to TreatInt. How can I help you and your family today?";
+            }
+            return "I am not sure about that, but our team can help! Please <a href='contact.html' class='underline font-bold'>Contact Us</a> or ask about Visa, Costs, or Stay.";
+        }
     </script>
 </body>
 </html>
