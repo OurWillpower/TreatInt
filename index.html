@@ -12,13 +12,12 @@
         /* Smooth Fade Animation for Slider */
         .fade {
             animation-name: fade;
-            animation-duration: 1.5s;
+            animation-duration: 2.0s; /* Slower fade for 5s slide duration */
         }
         @keyframes fade {
             from {opacity: .4} 
             to {opacity: 1}
         }
-        /* We removed the 'display:none' from here to prevent the blank screen error */
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans flex flex-col min-h-screen">
@@ -43,11 +42,11 @@
     <header class="relative w-full h-[600px] overflow-hidden mt-16">
         
         <div class="mySlides fade w-full h-full relative" style="display: block;">
-            <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" class="w-full h-full object-cover">
+            <img src="https://images.unsplash.com/photo-1638202993928-7267aad84c31?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
                 <div class="text-center text-white px-4 max-w-4xl mx-auto">
                     <h1 class="text-4xl md:text-6xl font-bold mb-6">India's #1 Medical Partner</h1>
-                    <p class="text-xl md:text-2xl mb-8">We Don't Just Treat Patients. We Care for Families.</p>
+                    <p class="text-xl md:text-2xl mb-8">Expert Doctors. World-Class Care. Affordable Prices.</p>
                     <button onclick="toggleWA()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full text-lg transition">
                         Get Free Consultation
                     </button>
@@ -56,11 +55,11 @@
         </div>
 
         <div class="mySlides fade w-full h-full relative" style="display: none;">
-            <img src="https://images.unsplash.com/photo-1538108149393-fbbd8189718c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" class="w-full h-full object-cover">
+            <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
                 <div class="text-center text-white px-4 max-w-4xl mx-auto">
-                    <h1 class="text-4xl md:text-6xl font-bold mb-6">World-Class Healthcare</h1>
-                    <p class="text-xl md:text-2xl mb-8">Access India's Top JCI Accredited Hospitals at 1/10th the cost.</p>
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6">JCI Accredited Hospitals</h1>
+                    <p class="text-xl md:text-2xl mb-8">Access the most advanced medical technology in Asia.</p>
                     <button onclick="toggleWA()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full text-lg transition">
                         View Hospitals
                     </button>
@@ -69,14 +68,31 @@
         </div>
 
         <div class="mySlides fade w-full h-full relative" style="display: none;">
-            <img src="https://images.unsplash.com/photo-1516574187841-6930022118db?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" class="w-full h-full object-cover">
+            <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
                 <div class="text-center text-white px-4 max-w-4xl mx-auto">
-                    <h1 class="text-4xl md:text-6xl font-bold mb-6">Complete Peace of Mind</h1>
-                    <p class="text-xl md:text-2xl mb-8">Visa. Flights. Stay. Food. Consider it Done.</p>
-                    <button onclick="toggleWA()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full text-lg transition">
-                        Talk to an Expert
-                    </button>
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6">Zero Stress Travel</h1>
+                    <p class="text-xl md:text-2xl mb-8">Visa Assistance, Flights, and Luxury Accommodation handled by us.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mySlides fade w-full h-full relative" style="display: none;">
+            <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
+                <div class="text-center text-white px-4 max-w-4xl mx-auto">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6">Save up to 80%</h1>
+                    <p class="text-xl md:text-2xl mb-8">Premium healthcare at a fraction of the cost in the US or UK.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mySlides fade w-full h-full relative" style="display: none;">
+            <img src="https://images.unsplash.com/photo-1584515933487-9dca72569f9c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
+                <div class="text-center text-white px-4 max-w-4xl mx-auto">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6">Heal with Dignity</h1>
+                    <p class="text-xl md:text-2xl mb-8">Personalized post-op care and holistic recovery plans.</p>
                 </div>
             </div>
         </div>
@@ -95,7 +111,7 @@
                         <i class="fas fa-home text-2xl text-green-600"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-3 text-gray-800">Accommodation</h3>
-                    <p class="text-gray-600">Comfortable stays near the hospital for the whole family.</p>
+                    <p class="text-gray-600">Comfortable stays near the hospital.</p>
                 </div>
                 <div class="p-8 bg-white border border-gray-100 rounded-xl text-center shadow-sm hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
                     <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -109,14 +125,14 @@
                         <i class="fas fa-language text-2xl text-green-600"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-3 text-gray-800">Language Support</h3>
-                    <p class="text-gray-600">Translators to help you communicate freely with doctors.</p>
+                    <p class="text-gray-600">Translators to help you communicate freely.</p>
                 </div>
                 <div class="p-8 bg-white border border-gray-100 rounded-xl text-center shadow-sm hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
                     <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                         <i class="fas fa-car text-2xl text-green-600"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-3 text-gray-800">Local Logistics</h3>
-                    <p class="text-gray-600">Airport transfers and daily travel sorted by us.</p>
+                    <p class="text-gray-600">Airport transfers and daily travel sorted.</p>
                 </div>
             </div>
         </div>
@@ -232,10 +248,10 @@
         }
 
         // --- 2. BANNER SLIDESHOW LOGIC ---
-        let slideIndex = 1; // Start at 1 because we manually displayed the first one in HTML
+        let slideIndex = 1; 
         
-        // Start slideshow after a short delay
-        setTimeout(showSlides, 3000);
+        // Start slideshow after 5 seconds
+        setTimeout(showSlides, 5000);
 
         function showSlides() {
             let i;
@@ -252,8 +268,8 @@
             // Show current slide
             slides[slideIndex-1].style.display = "block";  
             
-            // Repeat
-            setTimeout(showSlides, 4000); 
+            // Repeat every 5 seconds
+            setTimeout(showSlides, 5000); 
         }
 
         // --- 3. WHATSAPP & DB LOGIC ---
@@ -272,7 +288,7 @@
                 return;
             }
 
-            // Always prepare the WhatsApp link first so the user is never blocked
+            // Always prepare the WhatsApp link first
             const businessNumber = "917039196489";
             const text = `Hello TreatInt, I am ${name} from ${location}. I need help with medical treatment.`;
             const whatsappUrl = `https://wa.me/${businessNumber}?text=${encodeURIComponent(text)}`;
