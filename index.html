@@ -154,8 +154,13 @@
             // Construct Message
             const text = `*New Medical Enquiry* %0a---------------------------%0a👤 *Name:* ${name}%0a📍 *From:* ${currentLoc}%0a🏥 *Treatment:* ${treatment}%0a🏙️ *Pref. City:* ${prefLoc}%0a⏰ *Call Time:* ${time}%0a---------------------------%0aPlease guide me further.`;
 
-            // Open WhatsApp (Single Tab Fix: uses 'TreatIntChat' window name)
-            window.open(`https://wa.me/917039196489?text=${text}`, 'TreatIntChat');
+            // Open WhatsApp (Reusing Anchor Tag Trick for Tab Control)
+            const link = document.createElement('a');
+            link.href = `https://wa.me/917039196489?text=${text}`;
+            link.target = 'TreatIntChat'; // Forces reuse of same named tab
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
             
             toggleWA();
         }
