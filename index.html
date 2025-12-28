@@ -317,7 +317,8 @@
             <div id="chat-messages" class="flex-1 p-4 overflow-y-auto bg-gray-50 space-y-3">
                 <div class="flex justify-start">
                     <div class="bg-white border border-gray-200 text-gray-700 p-3 rounded-lg rounded-tl-none text-xs shadow-sm max-w-[80%]">
-                        Hello! I am your AI assistant. Ask me about Visa, Costs, Food, or Safety!
+                        Hello! I am your AI assistant. Ask me about Visa, Costs, or Services. 
+                        <br><em>(Default prices in USDT. Ask for 'Rupees' or 'Taka' to convert!)</em>
                     </div>
                 </div>
             </div>
@@ -338,12 +339,10 @@
         const slides = document.querySelectorAll('.slide');
         const dots = document.querySelectorAll('.dot');
         const totalSlides = slides.length;
-
         function showSlide(index) {
             if (index >= totalSlides) currentSlide = 0;
             else if (index < 0) currentSlide = totalSlides - 1;
             else currentSlide = index;
-
             slides.forEach((slide, i) => {
                 slide.classList.remove('active');
                 dots[i].classList.remove('active-dot', 'opacity-100');
@@ -360,7 +359,6 @@
 
         // --- WHATSAPP WIDGET LOGIC ---
         function toggleWA() { document.getElementById('wa-form').classList.toggle('hidden'); }
-
         function startWhatsAppChat() {
             const name = document.getElementById('wa-name').value.trim();
             const msg = document.getElementById('wa-msg').value.trim();
@@ -371,16 +369,17 @@
             toggleWA();
         }
 
-        // --- AI CHATBOT LOGIC (MULTI-CURRENCY) ---
+        // --- AI CHATBOT UI LOGIC ---
         function toggleChat() { document.getElementById('chat-window').classList.toggle('hidden'); }
         function handleEnter(e) { if (e.key === 'Enter') sendMessage(); }
-
+        
         function sendMessage() {
             const input = document.getElementById('chat-input');
             const msg = input.value.trim();
             if (!msg) return;
             addMessage(msg, 'user');
             input.value = '';
+            // Simulate Delay
             setTimeout(() => { const response = getBotResponse(msg); addMessage(response, 'bot'); }, 600);
         }
 
@@ -389,75 +388,107 @@
             const div = document.createElement('div');
             div.className = sender === 'user' ? "flex justify-end" : "flex justify-start";
             const bubble = document.createElement('div');
-            bubble.className = sender === 'user' ? "bg-blue-900 text-white p-3 rounded-lg rounded-tr-none text-xs shadow-sm max-w-[80%]" : "bg-white border border-gray-200 text-gray-700 p-3 rounded-lg rounded-tl-none text-xs shadow-sm max-w-[80%]";
+            bubble.className = sender === 'user' 
+                ? "bg-blue-900 text-white p-3 rounded-lg rounded-tr-none text-xs shadow-sm max-w-[80%]" 
+                : "bg-white border border-gray-200 text-gray-700 p-3 rounded-lg rounded-tl-none text-xs shadow-sm max-w-[80%]";
             bubble.innerHTML = text; 
             div.appendChild(bubble);
             container.appendChild(div);
             container.scrollTop = container.scrollHeight;
         }
 
-        // --- CURRENCY CONVERTER ENGINE ---
-        function getCurrency(input) {
-            input = input.toLowerCase();
-            if (input.includes('rupee') || input.includes('inr') || input.includes('india')) return { code: 'INR', symbol: '₹', rate: 1 };
-            if (input.includes('taka') || input.includes('bdt') || input.includes('bangladesh')) return { code: 'BDT', symbol: '৳', rate: 1.45 };
-            if (input.includes('dollar') || input.includes('usd') || input.includes('usdt')) return { code: 'USD', symbol: '$', rate: 0.012 };
-            if (input.includes('euro') || input.includes('eur')) return { code: 'EUR', symbol: '€', rate: 0.011 };
-            if (input.includes('pound') || input.includes('gbp')) return { code: 'GBP', symbol: '£', rate: 0.0095 };
+        // ==========================================
+        //  CURRENCY CALCULATOR ENGINE (THE BRAIN)
+        // ==========================================
+        
+        function getCurrencyDetails(inputText) {
+            const text = inputText.toLowerCase();
             
-            return { code: 'USD', symbol: '$', rate: 0.012 }; // DEFAULT TO USD
+            // 1. Check for specific currencies
+            if (text.includes('rupee') || text.includes('inr') || text.includes('india') || text.includes('indian')) {
+                return { code: 'INR', rate: 85, symbol: '₹' };
+            }
+            if (text.includes('taka') || text.includes('bdt') || text.includes('bangladesh') || text.includes('bengali')) {
+                return { code: 'BDT', rate: 120, symbol: '৳' };
+            }
+            if (text.includes('euro') || text.includes('eur')) {
+                return { code: 'EUR', rate: 0.92, symbol: '€' };
+            }
+            
+            // 2. Default to USDT / USD
+            return { code: 'USDT', rate: 1, symbol: '₮' };
         }
 
-        function formatPrice(amountInLakhsINR, currency) {
-            // Base amount is in Lakhs INR. (e.g., 5.5 means 5,50,000 INR)
-            const baseAmount = amountInLakhsINR * 100000;
-            const finalAmount = Math.round(baseAmount * currency.rate);
-            return `${currency.symbol}${finalAmount.toLocaleString()}`;
+        function calculate(baseUSDT, currency) {
+            // Converts base USDT price to target currency
+            const finalPrice = Math.round(baseUSDT * currency.rate);
+            return `${currency.symbol}${finalPrice.toLocaleString()}`; 
         }
 
         function getBotResponse(input) {
-            const rawInput = input;
-            input = input.toLowerCase();
-            const curr = getCurrency(input); // Detect Currency
+            const text = input.toLowerCase();
+            const curr = getCurrencyDetails(text); // Detect requested currency
 
-            // COST QUERIES
-            if (input.includes('cost') || input.includes('price') || input.includes('fee') || input.includes('charge')) {
+            // --- TOPIC: COSTS / PRICES ---
+            if (text.includes('cost') || text.includes('price') || text.includes('fee') || text.includes('charge') || text.includes('how much')) {
                 
-                if (input.includes('visa')) {
-                     if(curr.code === 'INR') return `Government Visa Fee: <strong>${curr.symbol}6,500 - 8,500</strong> approx.`;
-                     if(curr.code === 'BDT') return `Government Visa Fee: <strong>${curr.symbol}8,500 - 10,000</strong> approx.`;
-                     return `Government Visa Fee: <strong>${curr.symbol}80 - 100</strong> approx.`;
+                // 1. VISA COST
+                if (text.includes('visa')) {
+                    // Base Price in USDT: ~80 to 100
+                    const low = calculate(80, curr);
+                    const high = calculate(100, curr);
+                    return `<strong>Visa Fees (${curr.code}):</strong><br>• Invitation Letter: <strong>FREE</strong> (from us).<br>• Govt Fee: <strong>${low} - ${high}</strong> (paid to Embassy).`;
                 }
 
-                if (input.includes('kidney') || input.includes('transplant')) {
-                    return `<strong>Kidney Transplant (${curr.code}):</strong><br>• ${formatPrice(8, curr)} - ${formatPrice(12, curr)}<br><em>(Includes Surgery & Stay)</em>`;
+                // 2. KIDNEY / TRANSPLANT
+                if (text.includes('kidney') || text.includes('transplant')) {
+                    // Base: ~12,000 USDT
+                    return `<strong>Kidney Transplant (${curr.code}):</strong><br>• Approx: <strong>${calculate(12000, curr)}</strong>.<br><em>(Includes Surgery & Hospital Stay).</em>`;
                 }
 
-                if (input.includes('liver')) {
-                    return `<strong>Liver Transplant (${curr.code}):</strong><br>• ${formatPrice(18, curr)} - ${formatPrice(22, curr)}<br><em>(Success rate 95%+)</em>`;
+                // 3. LIVER
+                if (text.includes('liver')) {
+                    // Base: ~25,000 USDT
+                    return `<strong>Liver Transplant (${curr.code}):</strong><br>• Approx: <strong>${calculate(25000, curr)}</strong>.<br><em>(Success Rate 95%+).</em>`;
                 }
 
-                if (input.includes('heart') || input.includes('bypass') || input.includes('cabg')) {
-                    return `<strong>Heart Bypass (${curr.code}):</strong><br>• ${formatPrice(4.5, curr)} - ${formatPrice(6.5, curr)}<br><em>(Top JCI Hospitals)</em>`;
-                }
-
-                if (input.includes('knee') || input.includes('joint')) {
-                    return `<strong>Knee Replacement (${curr.code}):</strong><br>• ${formatPrice(2.5, curr)} - ${formatPrice(3.5, curr)}<br><em>(Per Knee)</em>`;
+                // 4. HEART / BYPASS
+                if (text.includes('heart') || text.includes('bypass') || text.includes('cabg')) {
+                    // Base: ~5,500 USDT
+                    return `<strong>Heart Bypass (${curr.code}):</strong><br>• Approx: <strong>${calculate(5500, curr)}</strong>.<br><em>(Top JCI Hospitals).</em>`;
                 }
                 
-                // Generic Cost Answer
-                return `Prices in India are very affordable! <br>• Heart Bypass: <strong>${formatPrice(5, curr)}</strong><br>• Kidney Transplant: <strong>${formatPrice(10, curr)}</strong><br>What treatment do you need?`;
+                // 5. GENERIC COST
+                return `<strong>Treatment Costs (${curr.code}):</strong><br>• Angioplasty: <strong>${calculate(3500, curr)}</strong><br>• Knee Replacement: <strong>${calculate(4000, curr)}</strong><br><em>(60% cheaper than West).</em>`;
             }
 
-            // NON-COST QUERIES
-            if (input.includes('visa') || input.includes('invitation')) return "We provide an <strong>Official Medical Visa Invitation Letter</strong> for FREE after your first consultation.";
-            if (input.includes('food') || input.includes('diet') || input.includes('halal')) return "We arrange <strong>Halal food, vegetarian options</strong>, and customized diet plans for patients and families.";
-            if (input.includes('stay') || input.includes('hotel')) return "We have verified <strong>Guest Houses</strong> near the hospital. Budget starts from $20/night.";
-            if (input.includes('bangladesh')) return "We welcome patients from Bangladesh! We help with <strong>Border logistics, currency exchange</strong>, and Bengali guides.";
-            if (input.includes('contact') || input.includes('call')) return "Call/WhatsApp us at <strong>+91 7039196489</strong>.";
-            if (input.includes('hi') || input.includes('hello')) return "Hello! I can check costs in <strong>USD, INR, Taka, or Euro</strong>. Try asking: <em>'Cost of Heart Surgery in Taka'</em>";
+            // --- TOPIC: SIMPLE CONVERSION (e.g. "1 USDT to BDT") ---
+            if (text.includes('usdt') && (text.includes('bdt') || text.includes('taka') || text.includes('bangladesh'))) {
+                return `<strong>Currency Rate:</strong><br>1 USDT ≈ <strong>120 BDT</strong> (approx).`;
+            }
 
-            return "I am learning! Ask about 'Visa', 'Heart Cost in Taka', 'Kidney Cost in USD', or <a href='contact.html' class='underline font-bold text-blue-600'>Contact Us</a>.";
+            // --- TOPIC: GENERAL INFO (No calculation needed) ---
+            if (text.includes('visa') || text.includes('invitation')) {
+                return "We provide an <strong>Official Medical Visa Invitation Letter</strong> for FREE. You need this to apply at the Indian Embassy.";
+            }
+            if (text.includes('bangladesh')) {
+                return "We welcome patients from Bangladesh! We assist with <strong>Border logistics, Currency exchange (BDT to INR), and Bengali guides</strong>.";
+            }
+            if (text.includes('food') || text.includes('diet') || text.includes('halal')) {
+                return "We arrange <strong>Halal food</strong> and customized diet plans for patients and families.";
+            }
+            if (text.includes('stay') || text.includes('hotel')) {
+                return "We have verified <strong>Guest Houses</strong> near hospitals starting from $20/night.";
+            }
+            if (text.includes('contact') || text.includes('call')) {
+                return "Call or WhatsApp us at <strong>+91 7039196489</strong>.";
+            }
+            if (text.includes('hi') || text.includes('hello')) {
+                return "Hello! I can calculate costs in <strong>USDT, Rupees, or Taka</strong>. <br>Try asking: <em>'Kidney transplant cost in Taka'</em>.";
+            }
+
+            // --- FALLBACK ---
+            return "I am learning! Try asking about 'Visa Fees', 'Heart Surgery Cost', 'Hotels', or <a href='contact.html' class='underline font-bold text-blue-600'>Contact Us</a>.";
         }
     </script>
 </body>
