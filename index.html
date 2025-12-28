@@ -356,157 +356,108 @@
             });
         }
         function nextSlide() { showSlide(currentSlide + 1); }
-        function goToSlide(n) { showSlide(n); }
         setInterval(nextSlide, 5000); 
 
         // --- WHATSAPP WIDGET LOGIC ---
-        function toggleWA() {
-            document.getElementById('wa-form').classList.toggle('hidden');
-        }
+        function toggleWA() { document.getElementById('wa-form').classList.toggle('hidden'); }
 
         function startWhatsAppChat() {
             const name = document.getElementById('wa-name').value.trim();
             const msg = document.getElementById('wa-msg').value.trim();
-            
             if(!name) { alert("Please enter your name."); return; }
-
-            // Construct Message
             const text = `Hello TreatInt, my name is ${name}. ${msg ? 'My query: ' + msg : 'I would like to know more about medical treatments.'}`;
-            
-            // Open WhatsApp with Pre-filled Text
             const url = `https://wa.me/917039196489?text=${encodeURIComponent(text)}`;
             window.open(url, '_blank');
-            
             toggleWA();
         }
 
-        // --- AI CHATBOT LOGIC ---
-        function toggleChat() {
-            document.getElementById('chat-window').classList.toggle('hidden');
-        }
-
-        function handleEnter(e) {
-            if (e.key === 'Enter') sendMessage();
-        }
+        // --- AI CHATBOT LOGIC (MULTI-CURRENCY) ---
+        function toggleChat() { document.getElementById('chat-window').classList.toggle('hidden'); }
+        function handleEnter(e) { if (e.key === 'Enter') sendMessage(); }
 
         function sendMessage() {
             const input = document.getElementById('chat-input');
             const msg = input.value.trim();
             if (!msg) return;
-
             addMessage(msg, 'user');
             input.value = '';
-
-            setTimeout(() => {
-                const response = getBotResponse(msg);
-                addMessage(response, 'bot');
-            }, 600);
+            setTimeout(() => { const response = getBotResponse(msg); addMessage(response, 'bot'); }, 600);
         }
 
         function addMessage(text, sender) {
             const container = document.getElementById('chat-messages');
             const div = document.createElement('div');
             div.className = sender === 'user' ? "flex justify-end" : "flex justify-start";
-            
             const bubble = document.createElement('div');
-            bubble.className = sender === 'user' 
-                ? "bg-blue-900 text-white p-3 rounded-lg rounded-tr-none text-xs shadow-sm max-w-[80%]" 
-                : "bg-white border border-gray-200 text-gray-700 p-3 rounded-lg rounded-tl-none text-xs shadow-sm max-w-[80%]";
-            
+            bubble.className = sender === 'user' ? "bg-blue-900 text-white p-3 rounded-lg rounded-tr-none text-xs shadow-sm max-w-[80%]" : "bg-white border border-gray-200 text-gray-700 p-3 rounded-lg rounded-tl-none text-xs shadow-sm max-w-[80%]";
             bubble.innerHTML = text; 
             div.appendChild(bubble);
             container.appendChild(div);
             container.scrollTop = container.scrollHeight;
         }
 
-        // ULTRA-SMART KNOWLEDGE BASE
-        function getBotResponse(input) {
+        // --- CURRENCY CONVERTER ENGINE ---
+        function getCurrency(input) {
             input = input.toLowerCase();
+            if (input.includes('rupee') || input.includes('inr') || input.includes('india')) return { code: 'INR', symbol: '₹', rate: 1 };
+            if (input.includes('taka') || input.includes('bdt') || input.includes('bangladesh')) return { code: 'BDT', symbol: '৳', rate: 1.45 };
+            if (input.includes('dollar') || input.includes('usd') || input.includes('usdt')) return { code: 'USD', symbol: '$', rate: 0.012 };
+            if (input.includes('euro') || input.includes('eur')) return { code: 'EUR', symbol: '€', rate: 0.011 };
+            if (input.includes('pound') || input.includes('gbp')) return { code: 'GBP', symbol: '£', rate: 0.0095 };
+            
+            return { code: 'USD', symbol: '$', rate: 0.012 }; // DEFAULT TO USD
+        }
 
-            // 1. FORCE CURRENCY DETECTION
-            // This is the updated, strict logic
-            const currencyKeywords = ['inr', 'rupee', 'rs.', 'indian currency', 'indian money', 'india'];
-            const wantsINR = currencyKeywords.some(keyword => input.includes(keyword));
-            
-            // 2. COMPLEX QUERIES (Combinations)
-            
-            // Visa + Cost/Fee/Charges
-            if ((input.includes('visa') && (input.includes('cost') || input.includes('price') || input.includes('fee') || input.includes('charge')))) {
+        function formatPrice(amountInLakhsINR, currency) {
+            // Base amount is in Lakhs INR. (e.g., 5.5 means 5,50,000 INR)
+            const baseAmount = amountInLakhsINR * 100000;
+            const finalAmount = Math.round(baseAmount * currency.rate);
+            return `${currency.symbol}${finalAmount.toLocaleString()}`;
+        }
+
+        function getBotResponse(input) {
+            const rawInput = input;
+            input = input.toLowerCase();
+            const curr = getCurrency(input); // Detect Currency
+
+            // COST QUERIES
+            if (input.includes('cost') || input.includes('price') || input.includes('fee') || input.includes('charge')) {
                 
-                if (wantsINR) {
-                    return "The Medical Visa Invitation Letter is <strong>Free</strong>. The Government Visa Fee is approx <strong>₹6,500 - ₹8,500 INR</strong> depending on your country.";
-                } else {
-                    return "The Medical Visa Invitation Letter is <strong>Free</strong>. The Government Visa Fee is approx <strong>$80 - $100 USD</strong>.";
+                if (input.includes('visa')) {
+                     if(curr.code === 'INR') return `Government Visa Fee: <strong>${curr.symbol}6,500 - 8,500</strong> approx.`;
+                     if(curr.code === 'BDT') return `Government Visa Fee: <strong>${curr.symbol}8,500 - 10,000</strong> approx.`;
+                     return `Government Visa Fee: <strong>${curr.symbol}80 - 100</strong> approx.`;
                 }
-            }
 
-            // Transplant + Cost
-            if (input.includes('kidney') || input.includes('liver') || input.includes('transplant')) {
-                if (input.includes('cost') || input.includes('price') || input.includes('charge')) {
-                    if (wantsINR) {
-                         return "<strong>Transplant Costs (Approx):</strong><br>• Kidney: ₹8 - ₹10 Lakhs<br>• Liver: ₹18 - ₹22 Lakhs<br><em>(Much lower than US/UK).</em> <a href='contact.html' class='underline font-bold text-blue-600'>Get Exact Quote</a>";
-                    } else {
-                        return "<strong>Transplant Costs (Approx):</strong><br>• Kidney: $10,000 - $12,000<br>• Liver: $22,000 - $28,000<br><em>(Vs $200,000+ in USA).</em> <a href='contact.html' class='underline font-bold text-blue-600'>Get Exact Quote</a>";
-                    }
+                if (input.includes('kidney') || input.includes('transplant')) {
+                    return `<strong>Kidney Transplant (${curr.code}):</strong><br>• ${formatPrice(8, curr)} - ${formatPrice(12, curr)}<br><em>(Includes Surgery & Stay)</em>`;
                 }
-                return "For transplants, you need a <strong>donor from your immediate family</strong> (as per Indian Law). We assist with the Legal Authorization Committee paperwork.";
-            }
 
-            // Heart + Cost
-            if (input.includes('heart') || input.includes('cardiac') || input.includes('bypass')) {
-                if (input.includes('cost') || input.includes('price') || input.includes('charge')) {
-                    if (wantsINR) {
-                        return "<strong>Cardiac Costs (Approx):</strong><br>• Angioplasty: ₹2.5 - ₹3 Lakhs<br>• Bypass (CABG): ₹4.5 - ₹6 Lakhs.<br>Top JCI Hospitals included.";
-                    } else {
-                        return "<strong>Cardiac Costs (Approx):</strong><br>• Angioplasty: $3,500<br>• Bypass (CABG): $5,500 - $7,000.<br>Top JCI Hospitals included.";
-                    }
+                if (input.includes('liver')) {
+                    return `<strong>Liver Transplant (${curr.code}):</strong><br>• ${formatPrice(18, curr)} - ${formatPrice(22, curr)}<br><em>(Success rate 95%+)</em>`;
                 }
-                return "We partner with India's top heart centers (Narayana, Apollo, Fortis) offering success rates above 99%.";
-            }
 
-            // 3. SIMPLE QUERIES
-            
-            if (input.includes('visa') || input.includes('invitation')) {
-                return "We provide an <strong>Official Medical Visa Invitation Letter</strong> immediately after your first consultation. This helps speed up your embassy process.";
-            }
-            
-            if (input.includes('cost') || input.includes('price') || input.includes('money')) {
-                if (wantsINR) {
-                     return "Treatments in India are very affordable. <br>• Heart Bypass: ~₹4.5 Lakhs<br>• Knee Replacement: ~₹3 Lakhs<br>What treatment do you need?";
+                if (input.includes('heart') || input.includes('bypass') || input.includes('cabg')) {
+                    return `<strong>Heart Bypass (${curr.code}):</strong><br>• ${formatPrice(4.5, curr)} - ${formatPrice(6.5, curr)}<br><em>(Top JCI Hospitals)</em>`;
                 }
-                return "Treatments in India are <strong>60-70% cheaper</strong> than Western countries. <br>• Heart Bypass: ~$5,500<br>• Knee Replacement: ~$4,000<br>What treatment do you need?";
-            }
-            
-            if (input.includes('food') || input.includes('diet') || input.includes('halal')) {
-                return "We understand family needs! We arrange <strong>Halal food, vegetarian options</strong>, and customized diet plans for patients and families.";
-            }
-            
-            if (input.includes('stay') || input.includes('hotel') || input.includes('accommodation')) {
-                return "We have verified <strong>Guest Houses and Hotels</strong> within walking distance of the hospital. Prices range from budget ($20/night) to luxury.";
-            }
-            
-            if (input.includes('bangladesh') || input.includes('dhaka')) {
-                return "We welcome our friends from Bangladesh! We help with <strong>Border logistics, currency exchange</strong>, and provide Bengali-speaking guides.";
+
+                if (input.includes('knee') || input.includes('joint')) {
+                    return `<strong>Knee Replacement (${curr.code}):</strong><br>• ${formatPrice(2.5, curr)} - ${formatPrice(3.5, curr)}<br><em>(Per Knee)</em>`;
+                }
+                
+                // Generic Cost Answer
+                return `Prices in India are very affordable! <br>• Heart Bypass: <strong>${formatPrice(5, curr)}</strong><br>• Kidney Transplant: <strong>${formatPrice(10, curr)}</strong><br>What treatment do you need?`;
             }
 
-            if (input.includes('safety') || input.includes('safe')) {
-                return "Your safety is our priority. We provide <strong>Airport Pickup</strong>, a dedicated 24/7 care manager, and secure SIM cards upon arrival.";
-            }
-            
-            if (input.includes('appointment') || input.includes('book') || input.includes('consult')) {
-                return "You can book a consultation instantly! <a href='patient-consultation.html' class='underline font-bold text-blue-600'>Click here to book a doctor</a>.";
-            }
-            
-            if (input.includes('contact') || input.includes('call') || input.includes('human')) {
-                return "You can reach our human team at <strong>+91 7039196489</strong> or email support@treatint.com.";
-            }
-            
-            if (input.includes('hi') || input.includes('hello')) {
-                return "Hello! I can answer questions about <strong>Visa, Costs (in USD or INR), Food, or Doctors</strong>. How can I help?";
-            }
+            // NON-COST QUERIES
+            if (input.includes('visa') || input.includes('invitation')) return "We provide an <strong>Official Medical Visa Invitation Letter</strong> for FREE after your first consultation.";
+            if (input.includes('food') || input.includes('diet') || input.includes('halal')) return "We arrange <strong>Halal food, vegetarian options</strong>, and customized diet plans for patients and families.";
+            if (input.includes('stay') || input.includes('hotel')) return "We have verified <strong>Guest Houses</strong> near the hospital. Budget starts from $20/night.";
+            if (input.includes('bangladesh')) return "We welcome patients from Bangladesh! We help with <strong>Border logistics, currency exchange</strong>, and Bengali guides.";
+            if (input.includes('contact') || input.includes('call')) return "Call/WhatsApp us at <strong>+91 7039196489</strong>.";
+            if (input.includes('hi') || input.includes('hello')) return "Hello! I can check costs in <strong>USD, INR, Taka, or Euro</strong>. Try asking: <em>'Cost of Heart Surgery in Taka'</em>";
 
-            // 4. FALLBACK
-            return "I am learning! Please ask about 'Visa Fees', 'Heart Surgery Cost', 'Hotels', or <a href='contact.html' class='underline font-bold text-blue-600'>Contact Us</a> directly.";
+            return "I am learning! Ask about 'Visa', 'Heart Cost in Taka', 'Kidney Cost in USD', or <a href='contact.html' class='underline font-bold text-blue-600'>Contact Us</a>.";
         }
     </script>
 </body>
