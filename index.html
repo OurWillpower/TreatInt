@@ -107,11 +107,48 @@
     </footer>
 
     <div id="wa-widget" class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-        <div id="wa-form" class="hidden bg-white w-72 rounded-xl shadow-2xl border border-green-100 flex flex-col mb-4 overflow-hidden widget-slide-up">
-            <div class="bg-green-500 text-white p-3 flex justify-between items-center"><span class="font-bold text-sm"><i class="fab fa-whatsapp mr-2"></i> Quick Enquiry</span><button onclick="toggleWA()" class="text-white hover:text-green-100"><i class="fas fa-times"></i></button></div>
-            <div class="p-4 space-y-3"><input type="text" id="wa-name" placeholder="Your Name" class="w-full border rounded p-2 text-xs"><textarea id="wa-msg" rows="2" placeholder="How can we help?" class="w-full border rounded p-2 text-xs"></textarea><button onclick="startWhatsAppChat()" class="w-full bg-green-600 text-white font-bold py-2 rounded text-sm">Start Chat</button></div>
+        
+        <div id="wa-form" class="hidden bg-white w-80 rounded-xl shadow-2xl border border-green-100 flex flex-col mb-4 overflow-hidden widget-slide-up">
+            <div class="bg-green-600 text-white p-4 flex justify-between items-center">
+                <span class="font-bold text-sm flex items-center"><i class="fab fa-whatsapp mr-2 text-lg"></i> Medical Enquiry</span>
+                <button onclick="toggleWA()" class="text-white hover:text-green-100"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-4 space-y-3 bg-gray-50">
+                
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">Your Name</label>
+                    <input type="text" id="wa-name" placeholder="John Doe" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">Current Location</label>
+                    <input type="text" id="wa-current-loc" placeholder="e.g. Dhaka, Bangladesh" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">Treatment Needed</label>
+                    <input type="text" id="wa-treatment" placeholder="e.g. Kidney Transplant" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">Preferred City (India)</label>
+                    <input type="text" id="wa-pref-loc" placeholder="e.g. Mumbai / Bangalore" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">Preferred Time to Discuss</label>
+                    <input type="text" id="wa-time" placeholder="e.g. After 6 PM today" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none">
+                </div>
+
+                <button onclick="startWhatsAppChat()" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 text-sm transition shadow mt-2 flex items-center justify-center">
+                    <i class="fab fa-whatsapp mr-2 text-lg"></i> Start Chat on WhatsApp
+                </button>
+            </div>
         </div>
-        <button onclick="toggleWA()" class="bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition transform hover:scale-105 animate-bounce"><i class="fab fa-whatsapp text-3xl"></i></button>
+
+        <button onclick="toggleWA()" class="bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition transform hover:scale-105 animate-bounce">
+            <i class="fab fa-whatsapp text-4xl"></i>
+        </button>
     </div>
 
     <script>
@@ -123,13 +160,29 @@
         }
         function nextSlide() { showSlide(currentSlide + 1); } setInterval(nextSlide, 5000); 
 
-        // WHATSAPP WIDGET
+        // WHATSAPP WIDGET LOGIC
         function toggleWA() { document.getElementById('wa-form').classList.toggle('hidden'); }
+        
         function startWhatsAppChat() {
-            const name = document.getElementById('wa-name').value.trim(); const msg = document.getElementById('wa-msg').value.trim();
-            if(!name) { alert("Please enter your name."); return; }
-            const text = `Hello TreatInt, my name is ${name}. ${msg ? 'My query: ' + msg : 'I would like to know more about medical treatments.'}`;
-            window.open(`https://wa.me/917039196489?text=${encodeURIComponent(text)}`, '_blank'); toggleWA();
+            // Get Values
+            const name = document.getElementById('wa-name').value.trim();
+            const currentLoc = document.getElementById('wa-current-loc').value.trim();
+            const treatment = document.getElementById('wa-treatment').value.trim();
+            const prefLoc = document.getElementById('wa-pref-loc').value.trim();
+            const time = document.getElementById('wa-time').value.trim();
+
+            // Validation
+            if(!name) { alert("Please enter your Name."); return; }
+            if(!treatment) { alert("Please specify the Treatment needed."); return; }
+
+            // Construct Message
+            const text = `*New Medical Enquiry* %0a---------------------------%0a👤 *Name:* ${name}%0a📍 *From:* ${currentLoc}%0a🏥 *Treatment:* ${treatment}%0a🏙️ *Pref. City:* ${prefLoc}%0a⏰ *Call Time:* ${time}%0a---------------------------%0aPlease guide me further.`;
+
+            // Open WhatsApp
+            window.open(`https://wa.me/917039196489?text=${text}`, '_blank');
+            
+            // Close form
+            toggleWA();
         }
     </script>
 </body>
