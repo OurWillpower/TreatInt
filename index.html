@@ -4,211 +4,156 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TreatInt | Leaders in Medical Tourism India</title>
-    <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <style>
-        body { font-family: 'Poppins', sans-serif; }
-        .slide { transition: opacity 1s ease-in-out; opacity: 0; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; }
-        .slide.active { opacity: 1; z-index: 10; }
-        .overlay { background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.3)); position: absolute; inset: 0; }
-        .dot { transition: all 0.3s ease; }
-        .active-dot { background-color: white; opacity: 1; transform: scale(1.2); }
-        .widget-slide-up { animation: slideUp 0.3s ease-out forwards; }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="bg-white">
+<body class="bg-gray-50 font-sans">
 
     <nav class="bg-white shadow-md fixed w-full z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
-                <a href="index.html" class="flex items-center hover:opacity-80 transition">
-                    <i class="fas fa-heartbeat text-blue-900 text-3xl mr-2"></i>
-                    <span class="font-bold text-2xl text-blue-900">TreatInt</span>
-                </a>
-                <div class="hidden md:flex space-x-8">
-                    <a href="index.html" class="text-blue-900 font-bold hover:text-blue-600 transition">Home</a>
-                    <a href="hospitals.html" class="text-gray-600 hover:text-blue-900 transition">Hospitals</a>
-                    <a href="treatments.html" class="text-gray-600 hover:text-blue-900 transition">Treatments</a>
-                    <a href="contact.html" class="text-gray-600 hover:text-blue-900 transition">Contact</a>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <a href="login.html" class="text-blue-900 font-bold hover:underline">Login</a>
-                    <a href="register-patient.html" class="bg-blue-900 text-white px-5 py-2 rounded-full font-bold hover:bg-blue-800 transition shadow-lg">Get Started</a>
-                </div>
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-green-600 flex items-center">
+                <i class="fas fa-heartbeat mr-2"></i> TreatInt
+            </a>
+            <div class="hidden md:flex space-x-6">
+                <a href="#home" class="text-gray-700 hover:text-green-600">Home</a>
+                <a href="#hospitals" class="text-gray-700 hover:text-green-600">Hospitals</a>
+                <a href="#process" class="text-gray-700 hover:text-green-600">Process</a>
             </div>
+            <button onclick="toggleWA()" class="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 transition">
+                Get Started
+            </button>
         </div>
     </nav>
 
-    <header class="relative h-screen overflow-hidden">
-        <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
-            <div class="overlay flex items-center px-4 md:px-20"><div class="max-w-3xl text-left"><div class="bg-blue-600 text-white text-xs font-bold px-3 py-1 inline-block rounded mb-4 uppercase tracking-wider">India's #1 Medical Partner</div><h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">We Don't Just Treat Patients. <br> <span class="text-blue-400">We Care for Families.</span></h1><p class="text-xl text-gray-200 mb-10 border-l-4 border-blue-500 pl-4">The trusted leader in Medical Tourism. From your doorstep to the hospital and back – we handle every detail.</p><a href="register-patient.html" class="bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-700 transition shadow-xl">Plan Your Journey</a></div></div>
+    <header id="home" class="relative pt-20 h-[600px] overflow-hidden">
+        
+        <div class="slide absolute inset-0 transition-opacity duration-1000 ease-in-out">
+            <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Hospital" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                <div class="text-center text-white px-4">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-4">India's #1 Medical Partner</h1>
+                    <p class="text-xl md:text-2xl mb-8">We Don't Just Treat Patients. We Care for Families.</p>
+                </div>
+            </div>
         </div>
-        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
-            <div class="overlay flex items-center px-4 md:px-20"><div class="max-w-3xl text-left"><div class="bg-yellow-500 text-white text-xs font-bold px-3 py-1 inline-block rounded mb-4 uppercase tracking-wider">Complete Peace of Mind</div><h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">Visa. Flights. Stay. Food. <br> <span class="text-yellow-400">Consider it Done.</span></h1><p class="text-xl text-gray-200 mb-10 border-l-4 border-yellow-500 pl-4">We provide an end-to-end concierge service so your family can focus solely on recovery.</p><a href="contact.html" class="bg-yellow-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-yellow-600 transition shadow-xl">Talk to a Consultant</a></div></div>
+
+        <div class="slide absolute inset-0 transition-opacity duration-1000 ease-in-out hidden">
+            <img src="https://images.unsplash.com/photo-1538108149393-fbbd8189718c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Doctor" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                <div class="text-center text-white px-4">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-4">World-Class Healthcare</h1>
+                    <p class="text-xl md:text-2xl mb-8">Access India's Top JCI Accredited Hospitals.</p>
+                </div>
+            </div>
         </div>
-        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1551076805-e1869033e561?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
-            <div class="overlay flex items-center px-4 md:px-20"><div class="max-w-3xl text-left"><div class="bg-red-600 text-white text-xs font-bold px-3 py-1 inline-block rounded mb-4 uppercase tracking-wider">World-Class Healthcare</div><h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">Access India's Top <br> <span class="text-red-400">JCI Accredited Hospitals</span></h1><p class="text-xl text-gray-200 mb-10 border-l-4 border-red-500 pl-4">Zero waiting time. Affordable costs. Direct access to the country's best surgeons.</p><a href="hospitals.html" class="bg-red-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-red-700 transition shadow-xl">Explore Hospitals</a></div></div>
+
+        <div class="slide absolute inset-0 transition-opacity duration-1000 ease-in-out hidden">
+            <img src="https://images.unsplash.com/photo-1516574187841-6930022118db?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Care" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                <div class="text-center text-white px-4">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-4">Complete Peace of Mind</h1>
+                    <p class="text-xl md:text-2xl mb-8">Visa. Flights. Stay. Food. Consider it Done.</p>
+                </div>
+            </div>
         </div>
-        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
-            <div class="overlay flex items-center px-4 md:px-20"><div class="max-w-3xl text-left"><div class="bg-green-600 text-white text-xs font-bold px-3 py-1 inline-block rounded mb-4 uppercase tracking-wider">Cutting-Edge Tech</div><h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">Precision Medicine <br> <span class="text-green-400">Advanced Oncology & Transplants</span></h1><p class="text-xl text-gray-200 mb-10 border-l-4 border-green-500 pl-4">Utilizing the latest robotic surgery and immunotherapy protocols.</p><a href="treatments.html" class="bg-green-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-green-700 transition shadow-xl">View Treatments</a></div></div>
-        </div>
-        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
-            <div class="overlay flex items-center px-4 md:px-20"><div class="max-w-3xl text-left"><div class="bg-purple-600 text-white text-xs font-bold px-3 py-1 inline-block rounded mb-4 uppercase tracking-wider">Global Network</div><h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">Partner with the Leader <br> <span class="text-purple-400">Join the TreatInt Family</span></h1><p class="text-xl text-gray-200 mb-10 border-l-4 border-purple-500 pl-4">We empower agents globally to help patients access life-saving care.</p><a href="register-partner.html" class="bg-purple-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-purple-700 transition shadow-xl">Become a Partner</a></div></div>
-        </div>
-        <div class="absolute bottom-10 left-0 right-0 flex justify-center space-x-3 z-20">
-            <button onclick="goToSlide(0)" class="w-3 h-3 rounded-full bg-white dot active-dot"></button>
-            <button onclick="goToSlide(1)" class="w-3 h-3 rounded-full bg-white opacity-50 dot"></button>
-            <button onclick="goToSlide(2)" class="w-3 h-3 rounded-full bg-white opacity-50 dot"></button>
-            <button onclick="goToSlide(3)" class="w-3 h-3 rounded-full bg-white opacity-50 dot"></button>
-            <button onclick="goToSlide(4)" class="w-3 h-3 rounded-full bg-white opacity-50 dot"></button>
-        </div>
+
     </header>
 
-    <section class="py-20 bg-blue-50">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="text-center mb-16"><span class="text-blue-600 font-bold uppercase tracking-widest text-sm">The TreatInt Difference</span><h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2">A Home Away From Home</h2><p class="text-gray-500 mt-4 max-w-2xl mx-auto">Our end-to-end solution ensures the family is comfortable, safe, and stress-free.</p></div>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="bg-white p-8 rounded-xl shadow text-center group"><div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-600 transition"><i class="fas fa-home text-2xl text-blue-600 group-hover:text-white"></i></div><h3 class="font-bold text-gray-800 text-lg">Accommodation</h3></div>
-                <div class="bg-white p-8 rounded-xl shadow text-center group"><div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-green-600 transition"><i class="fas fa-utensils text-2xl text-green-600 group-hover:text-white"></i></div><h3 class="font-bold text-gray-800 text-lg">Food & Diet</h3></div>
-                <div class="bg-white p-8 rounded-xl shadow text-center group"><div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-purple-600 transition"><i class="fas fa-language text-2xl text-purple-600 group-hover:text-white"></i></div><h3 class="font-bold text-gray-800 text-lg">Language Support</h3></div>
-                <div class="bg-white p-8 rounded-xl shadow text-center group"><div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-yellow-600 transition"><i class="fas fa-taxi text-2xl text-yellow-600 group-hover:text-white"></i></div><h3 class="font-bold text-gray-800 text-lg">Local Logistics</h3></div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <div><img src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Family Care" class="rounded-2xl shadow-2xl"></div>
-                <div><span class="text-blue-600 font-bold uppercase tracking-widest text-sm">Our Process</span><h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2 mb-6">We Are With You Every Step</h2><div class="space-y-6"><div class="flex"><div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">1</div><div class="ml-4"><h4 class="text-lg font-bold text-gray-800">Pre-Arrival Planning</h4><p class="text-gray-500 text-sm">Free tele-consultation, treatment plan estimation, and Visa Invitation Letter.</p></div></div><div class="flex"><div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">2</div><div class="ml-4"><h4 class="text-lg font-bold text-gray-800">Arrival & Comfort</h4><p class="text-gray-500 text-sm">VIP Airport pickup, SIM card handover, and check-in to pre-booked accommodation.</p></div></div><div class="flex"><div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">3</div><div class="ml-4"><h4 class="text-lg font-bold text-gray-800">Treatment & Support</h4><p class="text-gray-500 text-sm">Priority admission, 24/7 care manager, and daily updates to the family.</p></div></div><div class="flex"><div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">4</div><div class="ml-4"><h4 class="text-lg font-bold text-gray-800">Recovery & Departure</h4><p class="text-gray-500 text-sm">Post-op care, fit-to-fly certificate, and drop-off at the airport.</p></div></div></div></div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-gray-900 text-white py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div><div class="flex items-center mb-4"><i class="fas fa-heartbeat text-2xl mr-2"></i><span class="font-bold text-xl">TreatInt</span></div><p class="text-gray-400 text-sm">Your trusted partner for medical tourism in India.</p></div>
-                <div><h4 class="font-bold mb-4">Quick Links</h4><ul class="space-y-2 text-sm text-gray-400"><li><a href="index.html" class="hover:text-white">Home</a></li><li><a href="login.html" class="hover:text-white">Login</a></li></ul></div>
-                <div><h4 class="font-bold mb-4">Contact</h4><ul class="space-y-2 text-sm text-gray-400"><li>support@treatint.com</li><li>+91 7039196489</li></ul></div>
-                <div><h4 class="font-bold mb-4">Legal</h4><ul class="space-y-2 text-sm text-gray-400"><li><a href="privacy.html">Privacy</a></li><li><a href="terms.html">Terms</a></li></ul></div>
-            </div>
-            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-500">&copy; 2025 TreatInt. All rights reserved.</div>
-        </div>
-    </footer>
-
-    <div id="wa-widget" class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
         
-        <div id="wa-form" class="hidden bg-white w-80 rounded-xl shadow-2xl border border-green-100 flex flex-col mb-4 overflow-hidden widget-slide-up">
-            <div class="bg-green-600 text-white p-4 flex justify-between items-center">
-                <span class="font-bold text-sm flex items-center"><i class="fab fa-whatsapp mr-2 text-lg"></i> Medical Enquiry</span>
-                <button onclick="toggleWA()" class="text-white hover:text-green-100"><i class="fas fa-times"></i></button>
+        <div id="wa-form" class="hidden bg-white p-6 rounded-lg shadow-xl mb-4 w-80 border border-gray-200">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-gray-800">Medical Enquiry</h3>
+                <button onclick="toggleWA()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
             </div>
-            <div class="p-4 space-y-3 bg-gray-50">
+            
+            <div class="space-y-3">
+                <input type="text" id="name" placeholder="Your Name" class="w-full border rounded p-2 text-sm focus:outline-none focus:border-green-500">
+                <input type="text" id="phone" placeholder="WhatsApp Number" class="w-full border rounded p-2 text-sm focus:outline-none focus:border-green-500">
+                <input type="text" id="location" placeholder="Current Location" class="w-full border rounded p-2 text-sm focus:outline-none focus:border-green-500">
                 
-                <div><label class="block text-xs font-bold text-gray-600 mb-1">Your Name</label><input type="text" id="wa-name" placeholder="John Doe" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none" oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')"></div>
-                <div><label class="block text-xs font-bold text-gray-600 mb-1">WhatsApp Number</label><input type="tel" id="wa-phone" placeholder="e.g. 017xxxxxxxx" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none" oninput="this.value = this.value.replace(/[^0-9+]/g, '')"></div>
-                <div><label class="block text-xs font-bold text-gray-600 mb-1">Current Location</label><input type="text" id="wa-current-loc" placeholder="e.g. Dhaka, Bangladesh" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none"></div>
-                <div><label class="block text-xs font-bold text-gray-600 mb-1">Treatment Needed</label><input type="text" id="wa-treatment" placeholder="e.g. Kidney Transplant" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none"></div>
-                
-                <div>
-                    <label class="block text-xs font-bold text-gray-600 mb-1">Preferred City (India)</label>
-                    <select id="wa-pref-loc" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none bg-white">
-                        <option value="Mumbai">Mumbai</option>
-                        <option value="Kolkata">Kolkata</option>
-                        <option value="Delhi">Delhi</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-600 mb-1">Preferred Time (BST)</label>
-                    <select id="wa-time" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none bg-white">
-                        <option value="Morning (10am - 1pm BST)">Morning (10am - 1pm BST)</option>
-                        <option value="Afternoon (2pm - 5pm BST)">Afternoon (2pm - 5pm BST)</option>
-                        <option value="Evening (6pm - 9pm BST)">Evening (6pm - 9pm BST)</option>
-                        <option value="Anytime">Anytime</option>
-                    </select>
-                </div>
-
-                <button onclick="saveAndStartChat()" id="wa-btn" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 text-sm transition shadow mt-2 flex items-center justify-center">
-                    <i class="fab fa-whatsapp mr-2 text-lg"></i> Start Chat
+                <button onclick="saveAndStartChat()" class="w-full bg-green-600 text-white font-bold py-2 rounded hover:bg-green-700 transition flex items-center justify-center">
+                    <i class="fab fa-whatsapp mr-2"></i> Start Chat
                 </button>
             </div>
         </div>
 
-        <button onclick="toggleWA()" class="bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition transform hover:scale-105 animate-bounce">
+        <button onclick="toggleWA()" class="bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition transform hover:scale-110 animate-bounce">
             <i class="fab fa-whatsapp text-4xl"></i>
         </button>
     </div>
 
+
     <script>
-        // --- 1. SUPABASE CONFIGURATION (REPLACE THESE KEYS!) ---
+        // --- 1. SUPABASE CONFIGURATION ---
         const SUPABASE_URL = 'https://atsdebykxuhtruuwcmlx.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
+        
+        // IMPORTANT: PASTE YOUR KEY INSIDE THE QUOTES BELOW
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8'; 
+        
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // SLIDER
-        let currentSlide = 0; const slides = document.querySelectorAll('.slide'); const dots = document.querySelectorAll('.dot');
-        function showSlide(index) {
-            if (index >= slides.length) currentSlide = 0; else if (index < 0) currentSlide = slides.length - 1; else currentSlide = index;
-            slides.forEach((slide, i) => { slide.classList.remove('active'); dots[i].classList.remove('active-dot', 'opacity-100'); dots[i].classList.add('opacity-50'); if (i === currentSlide) { slide.classList.add('active'); dots[i].classList.add('active-dot', 'opacity-100'); dots[i].classList.remove('opacity-50'); } });
+        // --- 2. BANNER ROTATION LOGIC ---
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function showNextSlide() {
+            // Hide the current slide
+            slides[currentSlide].classList.add('hidden');
+            
+            // Calculate next slide index
+            currentSlide = (currentSlide + 1) % slides.length;
+            
+            // Show the next slide
+            slides[currentSlide].classList.remove('hidden');
         }
-        function nextSlide() { showSlide(currentSlide + 1); } setInterval(nextSlide, 5000); 
 
-        // WHATSAPP WIDGET LOGIC
-        function toggleWA() { document.getElementById('wa-form').classList.toggle('hidden'); }
-        
+        // Rotate every 3 seconds (3000ms)
+        setInterval(showNextSlide, 3000);
+
+
+        // --- 3. WHATSAPP FORM LOGIC ---
+        function toggleWA() {
+            const form = document.getElementById('wa-form');
+            form.classList.toggle('hidden');
+        }
+
         async function saveAndStartChat() {
-            const btn = document.getElementById('wa-btn');
-            
-            // 1. Get Data
-            const name = document.getElementById('wa-name').value.trim();
-            const phone = document.getElementById('wa-phone').value.trim();
-            const currentLoc = document.getElementById('wa-current-loc').value.trim();
-            const treatment = document.getElementById('wa-treatment').value.trim();
-            const prefLoc = document.getElementById('wa-pref-loc').value; 
-            const time = document.getElementById('wa-time').value;
+            // Get values
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const location = document.getElementById('location').value;
 
-            // 2. Validate
-            if(!name || !phone || !treatment) { 
-                alert("Please fill in Name, Phone, and Treatment."); return; 
+            // Simple validation
+            if (!name || !phone) {
+                alert("Please enter your name and number.");
+                return;
             }
 
-            // 3. Open WhatsApp IMMEDIATELY (To prevent pop-up blocker)
-            const text = `*New Enquiry from ${currentLoc}* %0a---------------------------%0a👤 *Name:* ${name}%0a📞 *Phone:* ${phone}%0a🏥 *Treatment:* ${treatment}%0a🏙️ *Pref. City:* ${prefLoc}%0a⏰ *Call Time:* ${time}%0a---------------------------%0aPlease guide me.`;
-            
-            // Anchor Tag Trick
-            const link = document.createElement('a');
-            link.href = `https://wa.me/917039196489?text=${text}`;
-            link.target = 'TreatIntChat'; 
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            console.log("Saving data...");
 
-            // 4. Save to DB (Background Process)
-            btn.innerHTML = '<i class="fas fa-check mr-2"></i> Sent!';
-            
-            if (SUPABASE_URL.includes('YOUR_SUPABASE')) {
-                console.log("Supabase Keys missing. Skipping DB save.");
-            } else {
-                try {
-                    await supabase.from('enquiries').insert({
-                        name: name, phone: phone, location: currentLoc,
-                        treatment: treatment, preferred_city: prefLoc, preferred_time: time
-                    });
-                } catch (err) { console.error('DB Error:', err); }
+            try {
+                // Try to save to Supabase
+                const { data, error } = await supabase
+                    .from('enquiries')
+                    .insert([{ name: name, phone: phone, location: location }]);
+
+                if (error) {
+                    console.warn("Database error (ignoring to open chat):", error);
+                } else {
+                    console.log("Data saved successfully!");
+                }
+            } catch (err) {
+                console.warn("Connection error (ignoring to open chat):", err);
+            } finally {
+                // ALWAYS Open WhatsApp - even if database fails
+                const businessNumber = "917039196489"; // Your Number
+                const text = `Hello TreatInt, I am ${name} from ${location}. I would like to enquire about medical treatment.`;
+                const url = `https://wa.me/${businessNumber}?text=${encodeURIComponent(text)}`;
+                
+                window.open(url, '_blank');
             }
-
-            // 5. Close
-            setTimeout(() => { 
-                toggleWA(); 
-                btn.innerHTML = '<i class="fab fa-whatsapp mr-2 text-lg"></i> Start Chat'; 
-            }, 2000);
         }
     </script>
 </body>
