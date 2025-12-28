@@ -18,13 +18,10 @@
             from {opacity: .4} 
             to {opacity: 1}
         }
-        /* Hide slides by default */
-        .mySlides {
-            display: none;
-        }
+        /* We removed the 'display:none' from here to prevent the blank screen error */
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans">
+<body class="bg-gray-50 text-gray-800 font-sans flex flex-col min-h-screen">
 
     <nav class="bg-white shadow-md fixed w-full z-50 top-0 left-0">
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
@@ -32,162 +29,191 @@
                 <i class="fas fa-heartbeat mr-2"></i> TreatInt
             </a>
             <div class="hidden md:flex space-x-6">
-                <a href="#" class="text-gray-700 hover:text-green-600">Home</a>
-                <a href="#hospitals" class="text-gray-700 hover:text-green-600">Hospitals</a>
-                <a href="#process" class="text-gray-700 hover:text-green-600">Process</a>
-                <a href="#contact" class="text-gray-700 hover:text-green-600">Contact</a>
+                <a href="#" class="text-gray-700 hover:text-green-600 font-medium">Home</a>
+                <a href="#hospitals" class="text-gray-700 hover:text-green-600 font-medium">Hospitals</a>
+                <a href="#process" class="text-gray-700 hover:text-green-600 font-medium">Process</a>
+                <a href="#contact" class="text-gray-700 hover:text-green-600 font-medium">Contact</a>
             </div>
-            <button onclick="toggleWA()" class="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 transition">
+            <button onclick="toggleWA()" class="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 transition font-bold shadow-lg">
                 Get Started
             </button>
         </div>
     </nav>
 
-    <header class="relative pt-16 h-[600px] overflow-hidden">
+    <header class="relative w-full h-[600px] overflow-hidden mt-16">
         
-        <div class="mySlides fade w-full h-full relative">
+        <div class="mySlides fade w-full h-full relative" style="display: block;">
             <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                <div class="text-center text-white px-4">
-                    <h1 class="text-4xl md:text-6xl font-bold mb-4">India's #1 Medical Partner</h1>
-                    <p class="text-xl md:text-2xl">We Don't Just Treat Patients. We Care for Families.</p>
+            <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
+                <div class="text-center text-white px-4 max-w-4xl mx-auto">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6">India's #1 Medical Partner</h1>
+                    <p class="text-xl md:text-2xl mb-8">We Don't Just Treat Patients. We Care for Families.</p>
+                    <button onclick="toggleWA()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full text-lg transition">
+                        Get Free Consultation
+                    </button>
                 </div>
             </div>
         </div>
 
-        <div class="mySlides fade w-full h-full relative">
+        <div class="mySlides fade w-full h-full relative" style="display: none;">
             <img src="https://images.unsplash.com/photo-1538108149393-fbbd8189718c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                <div class="text-center text-white px-4">
-                    <h1 class="text-4xl md:text-6xl font-bold mb-4">World-Class Healthcare</h1>
-                    <p class="text-xl md:text-2xl">Access India's Top JCI Accredited Hospitals.</p>
+            <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
+                <div class="text-center text-white px-4 max-w-4xl mx-auto">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6">World-Class Healthcare</h1>
+                    <p class="text-xl md:text-2xl mb-8">Access India's Top JCI Accredited Hospitals at 1/10th the cost.</p>
+                    <button onclick="toggleWA()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full text-lg transition">
+                        View Hospitals
+                    </button>
                 </div>
             </div>
         </div>
 
-        <div class="mySlides fade w-full h-full relative">
+        <div class="mySlides fade w-full h-full relative" style="display: none;">
             <img src="https://images.unsplash.com/photo-1516574187841-6930022118db?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                <div class="text-center text-white px-4">
-                    <h1 class="text-4xl md:text-6xl font-bold mb-4">Complete Peace of Mind</h1>
-                    <p class="text-xl md:text-2xl">Visa. Flights. Stay. Food. Consider it Done.</p>
+            <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
+                <div class="text-center text-white px-4 max-w-4xl mx-auto">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6">Complete Peace of Mind</h1>
+                    <p class="text-xl md:text-2xl mb-8">Visa. Flights. Stay. Food. Consider it Done.</p>
+                    <button onclick="toggleWA()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full text-lg transition">
+                        Talk to an Expert
+                    </button>
                 </div>
             </div>
         </div>
     </header>
 
-    <section id="difference" class="py-16 bg-white">
+    <section id="difference" class="py-20 bg-white">
         <div class="container mx-auto px-6">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-800">The TreatInt Difference</h2>
-                <p class="text-gray-600 mt-2">Our end-to-end solution ensures the family is comfortable, safe, and stress-free.</p>
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800">The TreatInt Difference</h2>
+                <div class="w-20 h-1 bg-green-500 mx-auto mt-4 mb-4"></div>
+                <p class="text-gray-600 text-lg">Our end-to-end solution ensures the family is comfortable, safe, and stress-free.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="p-6 bg-gray-50 rounded-lg text-center hover:shadow-lg transition">
-                    <i class="fas fa-home text-4xl text-green-600 mb-4"></i>
-                    <h3 class="text-xl font-bold mb-2">Accommodation</h3>
-                    <p class="text-gray-600">Comfortable stays near the hospital.</p>
+                <div class="p-8 bg-white border border-gray-100 rounded-xl text-center shadow-sm hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-home text-2xl text-green-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">Accommodation</h3>
+                    <p class="text-gray-600">Comfortable stays near the hospital for the whole family.</p>
                 </div>
-                <div class="p-6 bg-gray-50 rounded-lg text-center hover:shadow-lg transition">
-                    <i class="fas fa-utensils text-4xl text-green-600 mb-4"></i>
-                    <h3 class="text-xl font-bold mb-2">Food & Diet</h3>
-                    <p class="text-gray-600">Customized meals for patients & family.</p>
+                <div class="p-8 bg-white border border-gray-100 rounded-xl text-center shadow-sm hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-utensils text-2xl text-green-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">Food & Diet</h3>
+                    <p class="text-gray-600">Customized meals that taste like home.</p>
                 </div>
-                <div class="p-6 bg-gray-50 rounded-lg text-center hover:shadow-lg transition">
-                    <i class="fas fa-language text-4xl text-green-600 mb-4"></i>
-                    <h3 class="text-xl font-bold mb-2">Language Support</h3>
-                    <p class="text-gray-600">Translators to help you communicate freely.</p>
+                <div class="p-8 bg-white border border-gray-100 rounded-xl text-center shadow-sm hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-language text-2xl text-green-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">Language Support</h3>
+                    <p class="text-gray-600">Translators to help you communicate freely with doctors.</p>
                 </div>
-                <div class="p-6 bg-gray-50 rounded-lg text-center hover:shadow-lg transition">
-                    <i class="fas fa-car text-4xl text-green-600 mb-4"></i>
-                    <h3 class="text-xl font-bold mb-2">Local Logistics</h3>
-                    <p class="text-gray-600">Airport transfers and daily travel sorted.</p>
+                <div class="p-8 bg-white border border-gray-100 rounded-xl text-center shadow-sm hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-car text-2xl text-green-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">Local Logistics</h3>
+                    <p class="text-gray-600">Airport transfers and daily travel sorted by us.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="process" class="py-16 bg-green-50">
+    <section id="process" class="py-20 bg-green-50">
         <div class="container mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">We Are With You Every Step</h2>
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-16">We Are With You Every Step</h2>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="relative">
-                    <span class="text-5xl font-bold text-green-200 absolute -top-6 -left-2 z-0">01</span>
+                <div class="relative pl-4 border-l-4 border-green-200">
+                    <span class="text-6xl font-bold text-green-200 absolute -top-8 -left-4 z-0 opacity-50">01</span>
                     <div class="relative z-10">
-                        <h3 class="text-xl font-bold mb-2">Pre-Arrival Planning</h3>
-                        <p class="text-gray-600 text-sm">Free tele-consultation, treatment estimation, and Visa Invitation Letter.</p>
+                        <h3 class="text-xl font-bold mb-2 text-gray-900">Pre-Arrival</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">Free tele-consultation, treatment cost estimation, and Visa Invitation Letter.</p>
                     </div>
                 </div>
-                <div class="relative">
-                    <span class="text-5xl font-bold text-green-200 absolute -top-6 -left-2 z-0">02</span>
+                <div class="relative pl-4 border-l-4 border-green-200">
+                    <span class="text-6xl font-bold text-green-200 absolute -top-8 -left-4 z-0 opacity-50">02</span>
                     <div class="relative z-10">
-                        <h3 class="text-xl font-bold mb-2">Arrival & Comfort</h3>
-                        <p class="text-gray-600 text-sm">VIP Airport pickup, SIM card handover, and check-in assistance.</p>
+                        <h3 class="text-xl font-bold mb-2 text-gray-900">Arrival</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">VIP Airport pickup, local SIM card handover, and hotel check-in assistance.</p>
                     </div>
                 </div>
-                <div class="relative">
-                    <span class="text-5xl font-bold text-green-200 absolute -top-6 -left-2 z-0">03</span>
+                <div class="relative pl-4 border-l-4 border-green-200">
+                    <span class="text-6xl font-bold text-green-200 absolute -top-8 -left-4 z-0 opacity-50">03</span>
                     <div class="relative z-10">
-                        <h3 class="text-xl font-bold mb-2">Treatment & Support</h3>
-                        <p class="text-gray-600 text-sm">Priority admission, 24/7 care manager, and daily family updates.</p>
+                        <h3 class="text-xl font-bold mb-2 text-gray-900">Treatment</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">Priority admission, 24/7 dedicated care manager, and daily family updates.</p>
                     </div>
                 </div>
-                <div class="relative">
-                    <span class="text-5xl font-bold text-green-200 absolute -top-6 -left-2 z-0">04</span>
+                <div class="relative pl-4 border-l-4 border-green-200">
+                    <span class="text-6xl font-bold text-green-200 absolute -top-8 -left-4 z-0 opacity-50">04</span>
                     <div class="relative z-10">
-                        <h3 class="text-xl font-bold mb-2">Recovery & Departure</h3>
-                        <p class="text-gray-600 text-sm">Post-op care, fit-to-fly certificate, and airport drop-off.</p>
+                        <h3 class="text-xl font-bold mb-2 text-gray-900">Departure</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">Post-op care instructions, fit-to-fly certificate, and airport drop-off.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="bg-gray-800 text-white py-10">
-        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <footer class="bg-gray-900 text-white py-12 mt-auto">
+        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12">
             <div>
-                <h3 class="text-2xl font-bold mb-4">TreatInt</h3>
-                <p class="text-gray-400">Your trusted partner for medical tourism in India.</p>
+                <a href="#" class="text-2xl font-bold text-white flex items-center mb-4">
+                    <i class="fas fa-heartbeat mr-2 text-green-500"></i> TreatInt
+                </a>
+                <p class="text-gray-400 leading-relaxed">Your trusted partner for medical tourism in India. We bridge the gap between world-class healthcare and patients worldwide.</p>
             </div>
             <div>
-                <h4 class="text-lg font-bold mb-4">Contact</h4>
-                <p class="text-gray-400">support@treatint.com</p>
-                <p class="text-gray-400">+91 7039196489</p>
+                <h4 class="text-lg font-bold mb-4 border-b border-gray-700 pb-2 inline-block">Contact Us</h4>
+                <p class="text-gray-400 mb-2"><i class="fas fa-envelope mr-2 text-green-500"></i> support@treatint.com</p>
+                <p class="text-gray-400"><i class="fas fa-phone mr-2 text-green-500"></i> +91 7039196489</p>
             </div>
             <div>
-                <h4 class="text-lg font-bold mb-4">Legal</h4>
+                <h4 class="text-lg font-bold mb-4 border-b border-gray-700 pb-2 inline-block">Quick Links</h4>
                 <ul class="text-gray-400 space-y-2">
-                    <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
-                    <li><a href="#" class="hover:text-white">Terms of Service</a></li>
+                    <li><a href="#" class="hover:text-green-500 transition">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-green-500 transition">Terms of Service</a></li>
                 </ul>
             </div>
         </div>
-        <div class="text-center text-gray-500 mt-10 pt-4 border-t border-gray-700">
+        <div class="text-center text-gray-600 mt-12 pt-6 border-t border-gray-800 text-sm">
             &copy; 2025 TreatInt. All rights reserved.
         </div>
     </footer>
 
     <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
         
-        <div id="wa-form" class="hidden bg-white p-6 rounded-lg shadow-2xl mb-4 w-80 border border-gray-200">
+        <div id="wa-form" class="hidden bg-white p-6 rounded-2xl shadow-2xl mb-4 w-80 border border-gray-100 transform transition-all duration-300">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="font-bold text-gray-800">Medical Enquiry</h3>
-                <button onclick="toggleWA()" class="text-gray-400 hover:text-gray-600">
+                <h3 class="font-bold text-gray-800 text-lg">Medical Enquiry</h3>
+                <button onclick="toggleWA()" class="text-gray-400 hover:text-red-500 transition">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="space-y-3">
-                <input type="text" id="name" placeholder="Your Name" class="w-full border rounded p-2 text-sm focus:outline-none focus:border-green-500">
-                <input type="text" id="phone" placeholder="WhatsApp Number" class="w-full border rounded p-2 text-sm focus:outline-none focus:border-green-500">
-                <input type="text" id="location" placeholder="Current Location" class="w-full border rounded p-2 text-sm focus:outline-none focus:border-green-500">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Your Name</label>
+                    <input type="text" id="name" class="w-full border bg-gray-50 rounded p-2 text-sm focus:outline-none focus:border-green-500 focus:bg-white transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">WhatsApp Number</label>
+                    <input type="text" id="phone" class="w-full border bg-gray-50 rounded p-2 text-sm focus:outline-none focus:border-green-500 focus:bg-white transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Location</label>
+                    <input type="text" id="location" class="w-full border bg-gray-50 rounded p-2 text-sm focus:outline-none focus:border-green-500 focus:bg-white transition">
+                </div>
                 
-                <button onclick="saveAndStartChat()" class="w-full bg-green-600 text-white font-bold py-2 rounded hover:bg-green-700 transition flex items-center justify-center">
-                    <i class="fab fa-whatsapp mr-2"></i> Start Chat
+                <button onclick="saveAndStartChat()" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 transition flex items-center justify-center shadow-md">
+                    <i class="fab fa-whatsapp mr-2 text-xl"></i> Start Chat
                 </button>
             </div>
         </div>
 
-        <button onclick="toggleWA()" class="bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition transform hover:scale-105 animate-bounce">
+        <button onclick="toggleWA()" class="bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition transform hover:scale-110 active:scale-95 flex items-center justify-center w-16 h-16">
             <i class="fab fa-whatsapp text-4xl"></i>
         </button>
     </div>
@@ -195,30 +221,40 @@
     <script>
         // --- 1. SUPABASE CONFIGURATION ---
         const SUPABASE_URL = 'https://atsdebykxuhtruuwcmlx.supabase.co';
-        
-        // 🔴🔴 PASTE YOUR API KEY INSIDE THE QUOTES BELOW 🔴🔴
+        // Using your provided key
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8'; 
         
-        // Initialize Supabase
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
+        let supabase = null;
+        try {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        } catch (e) {
+            console.error("Supabase failed to init:", e);
+        }
 
         // --- 2. BANNER SLIDESHOW LOGIC ---
-        let slideIndex = 0;
-        showSlides();
+        let slideIndex = 1; // Start at 1 because we manually displayed the first one in HTML
+        
+        // Start slideshow after a short delay
+        setTimeout(showSlides, 3000);
 
         function showSlides() {
             let i;
             let slides = document.getElementsByClassName("mySlides");
+            
+            // Hide all slides
             for (i = 0; i < slides.length; i++) {
                 slides[i].style.display = "none";  
             }
+            
             slideIndex++;
             if (slideIndex > slides.length) {slideIndex = 1}    
+            
+            // Show current slide
             slides[slideIndex-1].style.display = "block";  
-            setTimeout(showSlides, 3000); // Change image every 3 seconds
+            
+            // Repeat
+            setTimeout(showSlides, 4000); 
         }
-
 
         // --- 3. WHATSAPP & DB LOGIC ---
         function toggleWA() {
@@ -236,26 +272,25 @@
                 return;
             }
 
-            // A. Attempt to save to Database
+            // Always prepare the WhatsApp link first so the user is never blocked
+            const businessNumber = "917039196489";
+            const text = `Hello TreatInt, I am ${name} from ${location}. I need help with medical treatment.`;
+            const whatsappUrl = `https://wa.me/${businessNumber}?text=${encodeURIComponent(text)}`;
+
+            // Attempt Database Save
             try {
-                console.log("Saving to Supabase...");
-                const { error } = await supabase
-                    .from('enquiries')
-                    .insert([{ name: name, phone: phone, location: location }]);
-                
-                if (error) throw error;
-                console.log("Data saved successfully.");
-                
+                if(supabase) {
+                    const { error } = await supabase
+                        .from('enquiries')
+                        .insert([{ name: name, phone: phone, location: location }]);
+                    if (error) console.error("DB Error:", error);
+                }
             } catch (err) {
-                console.warn("Database save failed (continuing to WhatsApp anyway):", err.message);
-            } finally {
-                // B. ALWAYS Open WhatsApp
-                const businessNumber = "917039196489";
-                const text = `Hello TreatInt, I am ${name} from ${location}. I need help with medical treatment.`;
-                const whatsappUrl = `https://wa.me/${businessNumber}?text=${encodeURIComponent(text)}`;
-                
-                window.open(whatsappUrl, '_blank');
+                console.warn("Save failed, proceeding to chat.");
             }
+            
+            // Open WhatsApp regardless of DB success/fail
+            window.open(whatsappUrl, '_blank');
         }
     </script>
 </body>
