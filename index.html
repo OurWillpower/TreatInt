@@ -5,23 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TreatInt | Leaders in Medical Tourism India</title>
     <link rel="manifest" href="manifest.json">
-    
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
         body { font-family: 'Poppins', sans-serif; }
-        /* SLIDER ANIMATIONS */
         .slide { transition: opacity 1s ease-in-out; opacity: 0; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; }
         .slide.active { opacity: 1; z-index: 10; }
         .overlay { background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.3)); position: absolute; inset: 0; }
         .dot { transition: all 0.3s ease; }
         .active-dot { background-color: white; opacity: 1; transform: scale(1.2); }
-        /* WIDGET ANIMATION */
         .widget-slide-up { animation: slideUp 0.3s ease-out forwards; }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
@@ -116,28 +111,11 @@
             </div>
             <div class="p-4 space-y-3 bg-gray-50">
                 
-                <div>
-                    <label class="block text-xs font-bold text-gray-600 mb-1">Your Name</label>
-                    <input type="text" id="wa-name" placeholder="John Doe" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none" 
-                    oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-600 mb-1">WhatsApp Number</label>
-                    <input type="tel" id="wa-phone" placeholder="e.g. 017xxxxxxxx" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none"
-                    oninput="this.value = this.value.replace(/[^0-9+]/g, '')">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-600 mb-1">Current Location</label>
-                    <input type="text" id="wa-current-loc" placeholder="e.g. Dhaka, Bangladesh" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-600 mb-1">Treatment Needed</label>
-                    <input type="text" id="wa-treatment" placeholder="e.g. Kidney Transplant" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none">
-                </div>
-
+                <div><label class="block text-xs font-bold text-gray-600 mb-1">Your Name</label><input type="text" id="wa-name" placeholder="John Doe" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none" oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')"></div>
+                <div><label class="block text-xs font-bold text-gray-600 mb-1">WhatsApp Number</label><input type="tel" id="wa-phone" placeholder="e.g. 017xxxxxxxx" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none" oninput="this.value = this.value.replace(/[^0-9+]/g, '')"></div>
+                <div><label class="block text-xs font-bold text-gray-600 mb-1">Current Location</label><input type="text" id="wa-current-loc" placeholder="e.g. Dhaka, Bangladesh" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none"></div>
+                <div><label class="block text-xs font-bold text-gray-600 mb-1">Treatment Needed</label><input type="text" id="wa-treatment" placeholder="e.g. Kidney Transplant" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none"></div>
+                
                 <div>
                     <label class="block text-xs font-bold text-gray-600 mb-1">Preferred City (India)</label>
                     <select id="wa-pref-loc" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none bg-white">
@@ -169,9 +147,9 @@
     </div>
 
     <script>
-        // --- 1. SUPABASE CONFIGURATION (REPLACE THESE!) ---
-        const SUPABASE_URL = 'YOUR_SUPABASE_URL_HERE';
-        const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
+        // --- 1. SUPABASE CONFIGURATION (REPLACE THESE KEYS!) ---
+        const SUPABASE_URL = 'https://atsdebykxuhtruuwcmlx.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_etJNM1T20jsFHB1V_qaTsQ_Q-ctaBjh';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // SLIDER
@@ -187,10 +165,8 @@
         
         async function saveAndStartChat() {
             const btn = document.getElementById('wa-btn');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Connecting...'; // Loading State
-            btn.disabled = true;
-
-            // Get Values
+            
+            // 1. Get Data
             const name = document.getElementById('wa-name').value.trim();
             const phone = document.getElementById('wa-phone').value.trim();
             const currentLoc = document.getElementById('wa-current-loc').value.trim();
@@ -198,44 +174,41 @@
             const prefLoc = document.getElementById('wa-pref-loc').value; 
             const time = document.getElementById('wa-time').value;
 
-            // Simple Validation
+            // 2. Validate
             if(!name || !phone || !treatment) { 
-                alert("Please fill in Name, Phone, and Treatment."); 
-                btn.innerHTML = '<i class="fab fa-whatsapp mr-2 text-lg"></i> Start Chat';
-                btn.disabled = false;
-                return; 
+                alert("Please fill in Name, Phone, and Treatment."); return; 
             }
 
-            // 1. SAVE TO SUPABASE (Async)
-            // We assume the table 'enquiries' exists
-            try {
-                const { error } = await supabase.from('enquiries').insert({
-                    name: name,
-                    phone: phone,
-                    location: currentLoc,
-                    treatment: treatment,
-                    preferred_city: prefLoc,
-                    preferred_time: time
-                });
-                if (error) console.error('Error saving lead:', error);
-            } catch (err) {
-                console.error('Supabase connection failed:', err);
-            }
-
-            // 2. OPEN WHATSAPP (Using Anchor Tag to reuse Tab)
+            // 3. Open WhatsApp IMMEDIATELY (To prevent pop-up blocker)
             const text = `*New Enquiry from ${currentLoc}* %0a---------------------------%0a👤 *Name:* ${name}%0a📞 *Phone:* ${phone}%0a🏥 *Treatment:* ${treatment}%0a🏙️ *Pref. City:* ${prefLoc}%0a⏰ *Call Time:* ${time}%0a---------------------------%0aPlease guide me.`;
             
+            // Anchor Tag Trick
             const link = document.createElement('a');
             link.href = `https://wa.me/917039196489?text=${text}`;
-            link.target = 'TreatIntChat'; // Force single tab
+            link.target = 'TreatIntChat'; 
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+
+            // 4. Save to DB (Background Process)
+            btn.innerHTML = '<i class="fas fa-check mr-2"></i> Sent!';
             
-            // Reset Button & Close
-            btn.innerHTML = '<i class="fab fa-whatsapp mr-2 text-lg"></i> Start Chat';
-            btn.disabled = false;
-            toggleWA();
+            if (SUPABASE_URL.includes('YOUR_SUPABASE')) {
+                console.log("Supabase Keys missing. Skipping DB save.");
+            } else {
+                try {
+                    await supabase.from('enquiries').insert({
+                        name: name, phone: phone, location: currentLoc,
+                        treatment: treatment, preferred_city: prefLoc, preferred_time: time
+                    });
+                } catch (err) { console.error('DB Error:', err); }
+            }
+
+            // 5. Close
+            setTimeout(() => { 
+                toggleWA(); 
+                btn.innerHTML = '<i class="fab fa-whatsapp mr-2 text-lg"></i> Start Chat'; 
+            }, 2000);
         }
     </script>
 </body>
