@@ -7,34 +7,45 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <style>
-        .slide { display: none; }
-        .slide.active { display: block; }
-        .slide.fade { animation: fade 1.5s; }
-        @keyframes fade { from {opacity: .4} to {opacity: 1} }
+        /* Smooth Fade Animation for Slider */
+        .fade {
+            animation-name: fade;
+            animation-duration: 1.5s;
+        }
+        @keyframes fade {
+            from {opacity: .4} 
+            to {opacity: 1}
+        }
+        /* Hide slides by default */
+        .mySlides {
+            display: none;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
 
-    <nav class="bg-white shadow-md fixed w-full z-50 top-0">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+    <nav class="bg-white shadow-md fixed w-full z-50 top-0 left-0">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
             <a href="#" class="text-2xl font-bold text-green-600 flex items-center">
                 <i class="fas fa-heartbeat mr-2"></i> TreatInt
             </a>
-            <div class="hidden md:flex space-x-8">
-                <a href="#home" class="text-gray-600 hover:text-green-600 font-medium">Home</a>
-                <a href="#hospitals" class="text-gray-600 hover:text-green-600 font-medium">Hospitals</a>
-                <a href="#process" class="text-gray-600 hover:text-green-600 font-medium">Process</a>
-                <a href="#difference" class="text-gray-600 hover:text-green-600 font-medium">Why Us</a>
+            <div class="hidden md:flex space-x-6">
+                <a href="#" class="text-gray-700 hover:text-green-600">Home</a>
+                <a href="#hospitals" class="text-gray-700 hover:text-green-600">Hospitals</a>
+                <a href="#process" class="text-gray-700 hover:text-green-600">Process</a>
+                <a href="#contact" class="text-gray-700 hover:text-green-600">Contact</a>
             </div>
-            <button onclick="toggleWA()" class="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-700 transition shadow-lg">
+            <button onclick="toggleWA()" class="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 transition">
                 Get Started
             </button>
         </div>
     </nav>
 
-    <header id="home" class="relative pt-20 h-[650px] overflow-hidden">
-        <div class="slide active fade w-full h-full relative">
+    <header class="relative pt-16 h-[600px] overflow-hidden">
+        
+        <div class="mySlides fade w-full h-full relative">
             <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                 <div class="text-center text-white px-4">
@@ -44,7 +55,7 @@
             </div>
         </div>
 
-        <div class="slide fade w-full h-full relative">
+        <div class="mySlides fade w-full h-full relative">
             <img src="https://images.unsplash.com/photo-1538108149393-fbbd8189718c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                 <div class="text-center text-white px-4">
@@ -54,7 +65,7 @@
             </div>
         </div>
 
-        <div class="slide fade w-full h-full relative">
+        <div class="mySlides fade w-full h-full relative">
             <img src="https://images.unsplash.com/photo-1516574187841-6930022118db?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                 <div class="text-center text-white px-4">
@@ -65,74 +76,74 @@
         </div>
     </header>
 
-    <section id="difference" class="py-20 bg-white">
+    <section id="difference" class="py-16 bg-white">
         <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">The TreatInt Difference</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">Our end-to-end solution ensures the family is comfortable, safe, and stress-free.</p>
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800">The TreatInt Difference</h2>
+                <p class="text-gray-600 mt-2">Our end-to-end solution ensures the family is comfortable, safe, and stress-free.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="p-6 bg-gray-50 rounded-xl hover:shadow-lg transition text-center">
-                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600 text-2xl">
-                        <i class="fas fa-home"></i>
-                    </div>
+                <div class="p-6 bg-gray-50 rounded-lg text-center hover:shadow-lg transition">
+                    <i class="fas fa-home text-4xl text-green-600 mb-4"></i>
                     <h3 class="text-xl font-bold mb-2">Accommodation</h3>
-                    <p class="text-gray-600 text-sm">Comfortable stays near the hospital.</p>
+                    <p class="text-gray-600">Comfortable stays near the hospital.</p>
                 </div>
-                <div class="p-6 bg-gray-50 rounded-xl hover:shadow-lg transition text-center">
-                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600 text-2xl">
-                        <i class="fas fa-utensils"></i>
-                    </div>
+                <div class="p-6 bg-gray-50 rounded-lg text-center hover:shadow-lg transition">
+                    <i class="fas fa-utensils text-4xl text-green-600 mb-4"></i>
                     <h3 class="text-xl font-bold mb-2">Food & Diet</h3>
-                    <p class="text-gray-600 text-sm">Customized meals for patients & family.</p>
+                    <p class="text-gray-600">Customized meals for patients & family.</p>
                 </div>
-                <div class="p-6 bg-gray-50 rounded-xl hover:shadow-lg transition text-center">
-                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600 text-2xl">
-                        <i class="fas fa-language"></i>
-                    </div>
+                <div class="p-6 bg-gray-50 rounded-lg text-center hover:shadow-lg transition">
+                    <i class="fas fa-language text-4xl text-green-600 mb-4"></i>
                     <h3 class="text-xl font-bold mb-2">Language Support</h3>
-                    <p class="text-gray-600 text-sm">Translators to help you communicate freely.</p>
+                    <p class="text-gray-600">Translators to help you communicate freely.</p>
                 </div>
-                <div class="p-6 bg-gray-50 rounded-xl hover:shadow-lg transition text-center">
-                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600 text-2xl">
-                        <i class="fas fa-car"></i>
-                    </div>
+                <div class="p-6 bg-gray-50 rounded-lg text-center hover:shadow-lg transition">
+                    <i class="fas fa-car text-4xl text-green-600 mb-4"></i>
                     <h3 class="text-xl font-bold mb-2">Local Logistics</h3>
-                    <p class="text-gray-600 text-sm">Airport transfers and daily travel sorted.</p>
+                    <p class="text-gray-600">Airport transfers and daily travel sorted.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="process" class="py-20 bg-green-50">
+    <section id="process" class="py-16 bg-green-50">
         <div class="container mx-auto px-6">
-            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-16">We Are With You Every Step</h2>
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">We Are With You Every Step</h2>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="relative pl-8 md:pl-0">
-                    <h4 class="text-4xl font-bold text-green-200 mb-2">01</h4>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">Pre-Arrival Planning</h3>
-                    <p class="text-gray-600 text-sm">Free tele-consultation, treatment estimation, and Visa Invitation Letter.</p>
+                <div class="relative">
+                    <span class="text-5xl font-bold text-green-200 absolute -top-6 -left-2 z-0">01</span>
+                    <div class="relative z-10">
+                        <h3 class="text-xl font-bold mb-2">Pre-Arrival Planning</h3>
+                        <p class="text-gray-600 text-sm">Free tele-consultation, treatment estimation, and Visa Invitation Letter.</p>
+                    </div>
                 </div>
-                <div class="relative pl-8 md:pl-0">
-                    <h4 class="text-4xl font-bold text-green-200 mb-2">02</h4>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">Arrival & Comfort</h3>
-                    <p class="text-gray-600 text-sm">VIP Airport pickup, SIM card handover, and check-in assistance.</p>
+                <div class="relative">
+                    <span class="text-5xl font-bold text-green-200 absolute -top-6 -left-2 z-0">02</span>
+                    <div class="relative z-10">
+                        <h3 class="text-xl font-bold mb-2">Arrival & Comfort</h3>
+                        <p class="text-gray-600 text-sm">VIP Airport pickup, SIM card handover, and check-in assistance.</p>
+                    </div>
                 </div>
-                <div class="relative pl-8 md:pl-0">
-                    <h4 class="text-4xl font-bold text-green-200 mb-2">03</h4>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">Treatment & Support</h3>
-                    <p class="text-gray-600 text-sm">Priority admission, 24/7 care manager, and daily family updates.</p>
+                <div class="relative">
+                    <span class="text-5xl font-bold text-green-200 absolute -top-6 -left-2 z-0">03</span>
+                    <div class="relative z-10">
+                        <h3 class="text-xl font-bold mb-2">Treatment & Support</h3>
+                        <p class="text-gray-600 text-sm">Priority admission, 24/7 care manager, and daily family updates.</p>
+                    </div>
                 </div>
-                <div class="relative pl-8 md:pl-0">
-                    <h4 class="text-4xl font-bold text-green-200 mb-2">04</h4>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">Recovery & Departure</h3>
-                    <p class="text-gray-600 text-sm">Post-op care, fit-to-fly certificate, and airport drop-off.</p>
+                <div class="relative">
+                    <span class="text-5xl font-bold text-green-200 absolute -top-6 -left-2 z-0">04</span>
+                    <div class="relative z-10">
+                        <h3 class="text-xl font-bold mb-2">Recovery & Departure</h3>
+                        <p class="text-gray-600 text-sm">Post-op care, fit-to-fly certificate, and airport drop-off.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="bg-gray-800 text-white py-12">
+    <footer class="bg-gray-800 text-white py-10">
         <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
                 <h3 class="text-2xl font-bold mb-4">TreatInt</h3>
@@ -140,28 +151,30 @@
             </div>
             <div>
                 <h4 class="text-lg font-bold mb-4">Contact</h4>
-                <p class="text-gray-400"><i class="fas fa-envelope mr-2"></i> support@treatint.com</p>
-                <p class="text-gray-400 mt-2"><i class="fas fa-phone mr-2"></i> +91 7039196489</p>
+                <p class="text-gray-400">support@treatint.com</p>
+                <p class="text-gray-400">+91 7039196489</p>
             </div>
             <div>
                 <h4 class="text-lg font-bold mb-4">Legal</h4>
-                <div class="flex space-x-4">
-                    <a href="#" class="text-gray-400 hover:text-white">Privacy</a>
-                    <a href="#" class="text-gray-400 hover:text-white">Terms</a>
-                </div>
+                <ul class="text-gray-400 space-y-2">
+                    <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-white">Terms of Service</a></li>
+                </ul>
             </div>
         </div>
-        <div class="text-center text-gray-500 mt-10 pt-6 border-t border-gray-700">
+        <div class="text-center text-gray-500 mt-10 pt-4 border-t border-gray-700">
             &copy; 2025 TreatInt. All rights reserved.
         </div>
     </footer>
 
     <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
         
-        <div id="wa-form" class="hidden bg-white p-6 rounded-lg shadow-xl mb-4 w-80 border border-gray-200">
+        <div id="wa-form" class="hidden bg-white p-6 rounded-lg shadow-2xl mb-4 w-80 border border-gray-200">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="font-bold text-gray-800">Medical Enquiry</h3>
-                <button onclick="toggleWA()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+                <button onclick="toggleWA()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             <div class="space-y-3">
                 <input type="text" id="name" placeholder="Your Name" class="w-full border rounded p-2 text-sm focus:outline-none focus:border-green-500">
@@ -183,39 +196,31 @@
         // --- 1. SUPABASE CONFIGURATION ---
         const SUPABASE_URL = 'https://atsdebykxuhtruuwcmlx.supabase.co';
         
-        // 🔴🔴 ACTION REQUIRED: PASTE YOUR KEY BELOW 🔴🔴
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8'; 
+        // 🔴🔴 PASTE YOUR API KEY INSIDE THE QUOTES BELOW 🔴🔴
+        const SUPABASE_KEY = 'PASTE_YOUR_LONG_ANON_KEY_HERE'; 
         
-        // Initialize
+        // Initialize Supabase
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 
-        // --- 2. BANNER ROTATION LOGIC ---
+        // --- 2. BANNER SLIDESHOW LOGIC ---
         let slideIndex = 0;
-        const slides = document.querySelectorAll(".slide");
+        showSlides();
 
         function showSlides() {
-            // Hide all slides
-            slides.forEach(slide => slide.classList.remove("active"));
-            
-            // Increment index
+            let i;
+            let slides = document.getElementsByClassName("mySlides");
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";  
+            }
             slideIndex++;
-            if (slideIndex > slides.length) { slideIndex = 1 }
-            
-            // Show new slide
-            slides[slideIndex - 1].classList.add("active");
-            
-            // Repeat every 3 seconds
-            setTimeout(showSlides, 3000); 
-        }
-
-        // Start the slideshow
-        if (slides.length > 0) {
-            showSlides();
+            if (slideIndex > slides.length) {slideIndex = 1}    
+            slides[slideIndex-1].style.display = "block";  
+            setTimeout(showSlides, 3000); // Change image every 3 seconds
         }
 
 
-        // --- 3. WHATSAPP LOGIC ---
+        // --- 3. WHATSAPP & DB LOGIC ---
         function toggleWA() {
             const form = document.getElementById('wa-form');
             form.classList.toggle('hidden');
@@ -226,25 +231,30 @@
             const phone = document.getElementById('phone').value;
             const location = document.getElementById('location').value;
 
-            if(!name || !phone) {
-                alert("Please enter Name and Phone number");
+            if (!name || !phone) {
+                alert("Please enter your name and phone number.");
                 return;
             }
 
-            // A. Try to save to Supabase
+            // A. Attempt to save to Database
             try {
-                console.log("Saving...");
-                await supabase.from('enquiries').insert([{ name, phone, location }]);
-                console.log("Saved!");
-            } catch (error) {
-                console.warn("Database skipped, proceeding to chat...");
+                console.log("Saving to Supabase...");
+                const { error } = await supabase
+                    .from('enquiries')
+                    .insert([{ name: name, phone: phone, location: location }]);
+                
+                if (error) throw error;
+                console.log("Data saved successfully.");
+                
+            } catch (err) {
+                console.warn("Database save failed (continuing to WhatsApp anyway):", err.message);
             } finally {
                 // B. ALWAYS Open WhatsApp
                 const businessNumber = "917039196489";
-                const text = `Hello TreatInt, I am ${name} from ${location}. I need help.`;
-                const url = `https://wa.me/${businessNumber}?text=${encodeURIComponent(text)}`;
+                const text = `Hello TreatInt, I am ${name} from ${location}. I need help with medical treatment.`;
+                const whatsappUrl = `https://wa.me/${businessNumber}?text=${encodeURIComponent(text)}`;
                 
-                window.open(url, '_blank');
+                window.open(whatsappUrl, '_blank');
             }
         }
     </script>
