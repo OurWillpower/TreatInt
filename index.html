@@ -11,6 +11,7 @@
     
     <style>
         body { font-family: 'Poppins', sans-serif; }
+        /* SLIDER */
         .slide {
             transition: opacity 1s ease-in-out; opacity: 0; position: absolute;
             top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center;
@@ -19,6 +20,7 @@
         .overlay { background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.3)); position: absolute; inset: 0; }
         .dot { transition: all 0.3s ease; }
         .active-dot { background-color: white; opacity: 1; transform: scale(1.2); }
+        /* ANIMATIONS */
         .widget-slide-up, .chat-slide-up { animation: slideUp 0.3s ease-out forwards; }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
@@ -106,119 +108,97 @@
     <div id="chat-widget" class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
         <div id="chat-window" class="hidden bg-white w-80 h-96 rounded-xl shadow-2xl border border-gray-200 flex flex-col mb-4 overflow-hidden chat-slide-up">
             <div class="bg-blue-900 text-white p-4 flex justify-between items-center"><span class="font-bold text-sm"><i class="fas fa-robot mr-2"></i> TreatInt AI</span><button onclick="toggleChat()" class="text-white"><i class="fas fa-times"></i></button></div>
-            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto bg-gray-50 space-y-3"><div class="flex justify-start"><div class="bg-white border text-gray-700 p-3 rounded-lg rounded-tl-none text-xs shadow-sm max-w-[80%]">Hello! I am your AI assistant. Ask me about Visa, Costs, or Services.</div></div></div>
-            <div class="p-3 border-t bg-white flex"><input type="text" id="chat-input" placeholder="Type..." class="flex-1 border rounded-l-lg px-3 py-2 text-sm" onkeypress="handleEnter(event)"><button onclick="sendMessage()" class="bg-blue-900 text-white px-4 py-2 rounded-r-lg"><i class="fas fa-paper-plane"></i></button></div>
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto bg-gray-50 space-y-3"><div class="flex justify-start"><div class="bg-white border text-gray-700 p-3 rounded-lg rounded-tl-none text-xs shadow-sm max-w-[80%]">Hello! Ask me about <strong>Visa, Costs, or Currency</strong>.<br>Ex: <em>'Kidney cost in Taka'</em> or <em>'100 USD to INR'</em></div></div></div>
+            <div class="p-3 border-t bg-white flex"><input type="text" id="chat-input" placeholder="Type a question..." class="flex-1 border rounded-l-lg px-3 py-2 text-sm" onkeypress="handleEnter(event)"><button onclick="sendMessage()" class="bg-blue-900 text-white px-4 py-2 rounded-r-lg"><i class="fas fa-paper-plane"></i></button></div>
         </div>
         <button onclick="toggleChat()" class="bg-blue-900 text-white p-4 rounded-full shadow-2xl hover:bg-blue-800 transition transform hover:scale-105"><i class="fas fa-comment-dots text-2xl"></i></button>
     </div>
 
     <script>
         // SLIDER
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide'); const dots = document.querySelectorAll('.dot');
-        function showSlide(index) {
-            if (index >= slides.length) currentSlide = 0; else if (index < 0) currentSlide = slides.length - 1; else currentSlide = index;
-            slides.forEach((slide, i) => { slide.classList.remove('active'); dots[i].classList.remove('active-dot', 'opacity-100'); dots[i].classList.add('opacity-50'); if (i === currentSlide) { slide.classList.add('active'); dots[i].classList.add('active-dot', 'opacity-100'); dots[i].classList.remove('opacity-50'); } });
-        }
+        let currentSlide = 0; const slides = document.querySelectorAll('.slide'); const dots = document.querySelectorAll('.dot');
+        function showSlide(index) { if (index >= slides.length) currentSlide = 0; else if (index < 0) currentSlide = slides.length - 1; else currentSlide = index; slides.forEach((slide, i) => { slide.classList.remove('active'); dots[i].classList.remove('active-dot', 'opacity-100'); dots[i].classList.add('opacity-50'); if (i === currentSlide) { slide.classList.add('active'); dots[i].classList.add('active-dot', 'opacity-100'); dots[i].classList.remove('opacity-50'); } }); }
         function nextSlide() { showSlide(currentSlide + 1); } setInterval(nextSlide, 5000); 
 
         // WHATSAPP
         function toggleWA() { document.getElementById('wa-form').classList.toggle('hidden'); }
-        function startWhatsAppChat() {
-            const name = document.getElementById('wa-name').value.trim(); const msg = document.getElementById('wa-msg').value.trim();
-            if(!name) { alert("Enter Name"); return; }
-            const text = `Hello TreatInt, my name is ${name}. ${msg}`;
-            window.open(`https://wa.me/917039196489?text=${encodeURIComponent(text)}`, '_blank'); toggleWA();
-        }
+        function startWhatsAppChat() { const name = document.getElementById('wa-name').value.trim(); const msg = document.getElementById('wa-msg').value.trim(); if(!name) { alert("Enter Name"); return; } const text = `Hello TreatInt, my name is ${name}. ${msg}`; window.open(`https://wa.me/917039196489?text=${encodeURIComponent(text)}`, '_blank'); toggleWA(); }
 
-        // CHATBOT ENGINE
+        // CHATBOT
         function toggleChat() { document.getElementById('chat-window').classList.toggle('hidden'); }
         function handleEnter(e) { if (e.key === 'Enter') sendMessage(); }
-        function sendMessage() {
-            const input = document.getElementById('chat-input'); const msg = input.value.trim();
-            if (!msg) return;
-            addMessage(msg, 'user'); input.value = '';
-            setTimeout(() => { const response = getSmartResponse(msg); addMessage(response, 'bot'); }, 500);
-        }
-        function addMessage(text, sender) {
-            const container = document.getElementById('chat-messages'); const div = document.createElement('div');
-            div.className = sender === 'user' ? "flex justify-end" : "flex justify-start";
-            const bubble = document.createElement('div');
-            bubble.className = sender === 'user' ? "bg-blue-900 text-white p-3 rounded-lg rounded-tr-none text-xs shadow-sm max-w-[80%]" : "bg-white border text-gray-700 p-3 rounded-lg rounded-tl-none text-xs shadow-sm max-w-[80%]";
-            bubble.innerHTML = text; div.appendChild(bubble); container.appendChild(div); container.scrollTop = container.scrollHeight;
+        function sendMessage() { const input = document.getElementById('chat-input'); const msg = input.value.trim(); if (!msg) return; addMessage(msg, 'user'); input.value = ''; setTimeout(() => { const response = getSmartResponse(msg); addMessage(response, 'bot'); }, 500); }
+        function addMessage(text, sender) { const container = document.getElementById('chat-messages'); const div = document.createElement('div'); div.className = sender === 'user' ? "flex justify-end" : "flex justify-start"; const bubble = document.createElement('div'); bubble.className = sender === 'user' ? "bg-blue-900 text-white p-3 rounded-lg rounded-tr-none text-xs shadow-sm max-w-[80%]" : "bg-white border text-gray-700 p-3 rounded-lg rounded-tl-none text-xs shadow-sm max-w-[80%]"; bubble.innerHTML = text; div.appendChild(bubble); container.appendChild(div); container.scrollTop = container.scrollHeight; }
+
+        // === UNIVERSAL CURRENCY ENGINE ===
+        const rates = { 
+            'USD': 1, 'USDT': 1, // BASE
+            'INR': 85, 'RUPEE': 85, 'RS': 85, 'INDIA': 85,
+            'BDT': 120, 'TAKA': 120, 'BANGLADESH': 120,
+            'EUR': 0.92, 'EURO': 0.92,
+            'GBP': 0.78, 'POUND': 0.78,
+            'AED': 3.67, 'DIRHAM': 3.67, 'SAR': 3.75, 'RIYAL': 3.75
+        };
+
+        // Helper: Convert Amount
+        function convert(amountUSDT, targetCode) {
+            const code = targetCode.toUpperCase();
+            const rate = rates[code] || 1; 
+            const final = Math.round(amountUSDT * rate).toLocaleString();
+            return `${final} ${code}`;
         }
 
-        // --- CONTEXT MEMORY ---
-        let lastTopic = ""; // Remembers 'visa', 'heart', 'kidney'
-
-        function formatPrice(usdt, rate, symbol) {
-            return `${symbol}${(usdt * rate).toLocaleString()}`;
+        // Helper: Detect Requested Currency
+        function detectCurrency(input) {
+            const words = input.toUpperCase().split(/[\s,.]+/);
+            for (let word of words) {
+                if (rates[word]) return word; // Found a valid currency key
+            }
+            return 'USD'; // Default
         }
 
         function getSmartResponse(input) {
             const text = input.toLowerCase();
+            const targetCurr = detectCurrency(input); // e.g., 'BDT', 'INR', 'USD'
 
-            // 1. UNIT CONVERSION (Specific "1 USDT to BDT" query)
-            if (text.includes('usdt') && (text.includes('to') || text.includes('in')) && (text.includes('bdt') || text.includes('taka') || text.includes('bangladeshi'))) {
-                 return "<strong>Exchange Rate:</strong><br>1 USDT = approx <strong>120 Bangladeshi Taka (৳)</strong>.";
+            // 1. DIRECT CURRENCY CONVERSION (e.g., "100 USD to BDT")
+            // Logic: Checks for a number followed by a currency
+            const numMatch = text.match(/(\d+)/);
+            if (numMatch && (text.includes('to') || text.includes('in'))) {
+                const amount = parseInt(numMatch[0]);
+                // Assume input was USD for simplicity in MVP, or try to detect source
+                // For MVP: Treat input number as USD unless specified otherwise
+                return `<strong>Conversion:</strong><br>${amount} USD = <strong>${convert(amount, targetCurr)}</strong>`;
             }
 
-            // 2. DETECT ALL REQUESTED CURRENCIES (Flags)
-            let showINR = text.includes('inr') || text.includes('rupee') || text.includes('indian');
-            let showBDT = text.includes('bdt') || text.includes('taka') || text.includes('bangladeshi');
-            // If user asks for "Indian as well as Taka"
-            if ((text.includes('india') && text.includes('taka')) || (text.includes('inr') && text.includes('bdt'))) {
-                showINR = true; showBDT = true;
+            // 2. COST QUERIES (Prioritized)
+            if (text.includes('cost') || text.includes('price') || text.includes('charge') || text.includes('fee') || text.includes('rate')) {
+                
+                if (text.includes('visa')) {
+                    // Visa is ~80 USD
+                    return `<strong>Medical Visa Fee:</strong><br>Govt Fee: <strong>${convert(85, targetCurr)}</strong> (approx).<br>Invitation Letter: <strong>FREE</strong>.`;
+                }
+                if (text.includes('kidney') || text.includes('transplant')) {
+                    // Kidney is ~12,000 USD
+                    return `<strong>Kidney Transplant:</strong><br>Approx: <strong>${convert(12000, targetCurr)}</strong>.<br><em>(Includes Surgery & Stay)</em>`;
+                }
+                if (text.includes('heart') || text.includes('bypass') || text.includes('cabg')) {
+                    // Heart is ~5,500 USD
+                    return `<strong>Heart Bypass:</strong><br>Approx: <strong>${convert(5500, targetCurr)}</strong>.<br><em>(Top JCI Hospitals)</em>`;
+                }
+                // Generic
+                return `<strong>Treatment Costs:</strong><br>Heart: <strong>${convert(5500, targetCurr)}</strong><br>Knee: <strong>${convert(4000, targetCurr)}</strong>`;
             }
-            // If no currency specified, check context or default to USD
-            let showUSD = !showINR && !showBDT; 
 
-            // RATES
-            const rateINR = 85; const rateBDT = 120;
-
-            // 3. IDENTIFY TOPIC (Update Memory)
-            let topic = lastTopic;
-            if (text.includes('visa')) topic = 'visa';
-            else if (text.includes('kidney') || text.includes('transplant')) topic = 'kidney';
-            else if (text.includes('heart') || text.includes('bypass') || text.includes('surgery')) topic = 'heart';
+            // 3. GENERAL QUERIES (Lowest Priority)
+            if (text.includes('visa')) return "We provide the <strong>Visa Invitation Letter</strong> for free. You apply at the embassy.";
+            if (text.includes('food') || text.includes('halal')) return "We arrange <strong>Halal food</strong> and customized diets for patients.";
+            if (text.includes('stay') || text.includes('hotel')) return "Guest houses available near the hospital starting at $20/night.";
+            // Only trigger Bangladesh welcome if NO price/cost was asked
+            if (text.includes('bangladesh')) return "We help Bangladeshi patients with <strong>Border logistics, Currency exchange (BDT to INR)</strong>, and Bengali guides.";
+            if (text.includes('contact') || text.includes('call')) return "Call/WhatsApp: <strong>+91 7039196489</strong>";
             
-            lastTopic = topic; // Save for next turn
-
-            // 4. GENERATE ANSWER BASED ON TOPIC + CURRENCY FLAGS
-            
-            // --- VISA COST ---
-            if (topic === 'visa' && (text.includes('cost') || text.includes('fee') || text.includes('charge') || text.includes('price') || showINR || showBDT)) {
-                let msg = "<strong>Visa Fees:</strong><br>Invitation Letter: <strong>FREE</strong>.<br>Govt Fee: ";
-                if (showUSD) msg += "$80 - $100 USD.";
-                if (showINR) msg += ` <br>₹${(80*rateINR).toLocaleString()} - ₹${(100*rateINR).toLocaleString()} INR.`;
-                if (showBDT) msg += ` <br>৳${(80*rateBDT).toLocaleString()} - ৳${(100*rateBDT).toLocaleString()} BDT.`;
-                return msg;
-            }
-
-            // --- KIDNEY COST ---
-            if (topic === 'kidney' && (text.includes('cost') || text.includes('price') || showINR || showBDT)) {
-                let msg = "<strong>Kidney Transplant:</strong><br>";
-                if (showUSD) msg += "$10,000 - $12,000 USD.";
-                if (showINR) msg += ` <br>₹${(10000*rateINR).toLocaleString()} - ₹${(12000*rateINR).toLocaleString()} INR.`;
-                if (showBDT) msg += ` <br>৳${(10000*rateBDT).toLocaleString()} - ৳${(12000*rateBDT).toLocaleString()} BDT.`;
-                return msg;
-            }
-
-            // --- HEART COST ---
-            if (topic === 'heart' && (text.includes('cost') || text.includes('price') || showINR || showBDT)) {
-                let msg = "<strong>Heart Bypass (CABG):</strong><br>";
-                if (showUSD) msg += "$5,500 - $7,000 USD.";
-                if (showINR) msg += ` <br>₹${(5500*rateINR).toLocaleString()} - ₹${(7000*rateINR).toLocaleString()} INR.`;
-                if (showBDT) msg += ` <br>৳${(5500*rateBDT).toLocaleString()} - ৳${(7000*rateBDT).toLocaleString()} BDT.`;
-                return msg;
-            }
-
-            // 5. GENERIC / FALLBACK RESPONSES
-            if (text.includes('bangladesh')) return "We help Bangladeshi patients with Border Logistics, Currency Exchange, and Language Support.";
-            if (text.includes('contact')) return "Call/WhatsApp: +91 7039196489.";
-            if (text.includes('hi') || text.includes('hello')) return "Hello! Ask me about 'Visa Cost', 'Heart Surgery Price', or '1 USDT to Taka'.";
-
-            return "I am learning! Ask specifically: 'Visa cost in Taka', 'Heart Surgery cost', or <a href='contact.html' class='underline font-bold text-blue-600'>Contact Us</a>.";
+            return "I am learning! Try asking: 'Visa Cost in Taka' or 'Heart Surgery Price in INR'.";
         }
     </script>
 </body>
