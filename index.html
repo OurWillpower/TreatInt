@@ -423,24 +423,26 @@
         function getBotResponse(input) {
             input = input.toLowerCase();
 
-            // 1. DETECT CURRENCY PREFERENCE
-            const wantsINR = input.includes('inr') || input.includes('rupee') || input.includes('indian currency') || input.includes('india');
+            // 1. FORCE CURRENCY DETECTION
+            // This is the updated, strict logic
+            const currencyKeywords = ['inr', 'rupee', 'rs.', 'indian currency', 'indian money', 'india'];
+            const wantsINR = currencyKeywords.some(keyword => input.includes(keyword));
             
             // 2. COMPLEX QUERIES (Combinations)
             
-            // Visa + Cost
-            if ((input.includes('visa') && input.includes('cost')) || (input.includes('visa') && input.includes('price')) || (input.includes('visa') && input.includes('fee'))) {
+            // Visa + Cost/Fee/Charges
+            if ((input.includes('visa') && (input.includes('cost') || input.includes('price') || input.includes('fee') || input.includes('charge')))) {
                 
                 if (wantsINR) {
-                    return "The Medical Visa Invitation Letter is <strong>Free</strong>. The Government Visa Fee (paid to Embassy) is approx <strong>₹6,500 - ₹8,500 INR</strong> depending on your country.";
+                    return "The Medical Visa Invitation Letter is <strong>Free</strong>. The Government Visa Fee is approx <strong>₹6,500 - ₹8,500 INR</strong> depending on your country.";
                 } else {
-                    return "The Medical Visa Invitation Letter is <strong>Free</strong>. The Government Visa Fee (paid to Embassy) is approx <strong>$80 - $100 USD</strong>.";
+                    return "The Medical Visa Invitation Letter is <strong>Free</strong>. The Government Visa Fee is approx <strong>$80 - $100 USD</strong>.";
                 }
             }
 
             // Transplant + Cost
             if (input.includes('kidney') || input.includes('liver') || input.includes('transplant')) {
-                if (input.includes('cost') || input.includes('price')) {
+                if (input.includes('cost') || input.includes('price') || input.includes('charge')) {
                     if (wantsINR) {
                          return "<strong>Transplant Costs (Approx):</strong><br>• Kidney: ₹8 - ₹10 Lakhs<br>• Liver: ₹18 - ₹22 Lakhs<br><em>(Much lower than US/UK).</em> <a href='contact.html' class='underline font-bold text-blue-600'>Get Exact Quote</a>";
                     } else {
@@ -452,7 +454,7 @@
 
             // Heart + Cost
             if (input.includes('heart') || input.includes('cardiac') || input.includes('bypass')) {
-                if (input.includes('cost') || input.includes('price')) {
+                if (input.includes('cost') || input.includes('price') || input.includes('charge')) {
                     if (wantsINR) {
                         return "<strong>Cardiac Costs (Approx):</strong><br>• Angioplasty: ₹2.5 - ₹3 Lakhs<br>• Bypass (CABG): ₹4.5 - ₹6 Lakhs.<br>Top JCI Hospitals included.";
                     } else {
