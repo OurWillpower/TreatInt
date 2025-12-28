@@ -12,10 +12,7 @@
     <style>
         body { font-family: 'Poppins', sans-serif; }
         /* SLIDER ANIMATIONS */
-        .slide {
-            transition: opacity 1s ease-in-out; opacity: 0; position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center;
-        }
+        .slide { transition: opacity 1s ease-in-out; opacity: 0; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; }
         .slide.active { opacity: 1; z-index: 10; }
         .overlay { background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.3)); position: absolute; inset: 0; }
         .dot { transition: all 0.3s ease; }
@@ -114,12 +111,51 @@
                 <button onclick="toggleWA()" class="text-white hover:text-green-100"><i class="fas fa-times"></i></button>
             </div>
             <div class="p-4 space-y-3 bg-gray-50">
-                <div><label class="block text-xs font-bold text-gray-600 mb-1">Your Name</label><input type="text" id="wa-name" placeholder="John Doe" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none"></div>
-                <div><label class="block text-xs font-bold text-gray-600 mb-1">Current Location</label><input type="text" id="wa-current-loc" placeholder="e.g. Dhaka, Bangladesh" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none"></div>
-                <div><label class="block text-xs font-bold text-gray-600 mb-1">Treatment Needed</label><input type="text" id="wa-treatment" placeholder="e.g. Kidney Transplant" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none"></div>
-                <div><label class="block text-xs font-bold text-gray-600 mb-1">Preferred City (India)</label><input type="text" id="wa-pref-loc" placeholder="e.g. Mumbai / Bangalore" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none"></div>
-                <div><label class="block text-xs font-bold text-gray-600 mb-1">Preferred Time to Discuss</label><input type="text" id="wa-time" placeholder="e.g. After 6 PM today" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none"></div>
-                <button onclick="startWhatsAppChat()" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 text-sm transition shadow mt-2 flex items-center justify-center"><i class="fab fa-whatsapp mr-2 text-lg"></i> Start Chat on WhatsApp</button>
+                
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">Your Name</label>
+                    <input type="text" id="wa-name" placeholder="John Doe" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none" 
+                    oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">WhatsApp Number</label>
+                    <input type="tel" id="wa-phone" placeholder="e.g. 017xxxxxxxx" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none"
+                    oninput="this.value = this.value.replace(/[^0-9+]/g, '')">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">Current Location</label>
+                    <input type="text" id="wa-current-loc" placeholder="e.g. Dhaka, Bangladesh" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">Treatment Needed</label>
+                    <input type="text" id="wa-treatment" placeholder="e.g. Kidney Transplant" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">Preferred City (India)</label>
+                    <select id="wa-pref-loc" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none bg-white">
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Kolkata">Kolkata</option>
+                        <option value="Delhi">Delhi</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">Preferred Time to Discuss (BST)</label>
+                    <select id="wa-time" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none bg-white">
+                        <option value="10:00 AM - 1:00 PM">Morning (10 AM - 1 PM)</option>
+                        <option value="2:00 PM - 5:00 PM">Afternoon (2 PM - 5 PM)</option>
+                        <option value="6:00 PM - 9:00 PM">Evening (6 PM - 9 PM)</option>
+                        <option value="Anytime">Anytime</option>
+                    </select>
+                </div>
+
+                <button onclick="startWhatsAppChat()" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 text-sm transition shadow mt-2 flex items-center justify-center">
+                    <i class="fab fa-whatsapp mr-2 text-lg"></i> Start Chat on WhatsApp
+                </button>
             </div>
         </div>
 
@@ -143,21 +179,23 @@
         function startWhatsAppChat() {
             // Get Values
             const name = document.getElementById('wa-name').value.trim();
+            const phone = document.getElementById('wa-phone').value.trim();
             const currentLoc = document.getElementById('wa-current-loc').value.trim();
             const treatment = document.getElementById('wa-treatment').value.trim();
-            const prefLoc = document.getElementById('wa-pref-loc').value.trim();
-            const time = document.getElementById('wa-time').value.trim();
+            const prefLoc = document.getElementById('wa-pref-loc').value; // Dropdown value
+            const time = document.getElementById('wa-time').value; // Dropdown value
 
             if(!name) { alert("Please enter your Name."); return; }
+            if(!phone) { alert("Please enter your Phone Number."); return; }
             if(!treatment) { alert("Please specify the Treatment needed."); return; }
 
             // Construct Message
-            const text = `*New Medical Enquiry* %0a---------------------------%0a👤 *Name:* ${name}%0a📍 *From:* ${currentLoc}%0a🏥 *Treatment:* ${treatment}%0a🏙️ *Pref. City:* ${prefLoc}%0a⏰ *Call Time:* ${time}%0a---------------------------%0aPlease guide me further.`;
+            const text = `*New Medical Enquiry* %0a---------------------------%0a👤 *Name:* ${name}%0a📞 *Phone:* ${phone}%0a📍 *From:* ${currentLoc}%0a🏥 *Treatment:* ${treatment}%0a🏙️ *Pref. City:* ${prefLoc}%0a⏰ *Call Time (BST):* ${time}%0a---------------------------%0aPlease guide me further.`;
 
-            // Open WhatsApp (Reusing Anchor Tag Trick for Tab Control)
+            // Open WhatsApp (Using Anchor Tag Trick to Force Tab Reuse)
             const link = document.createElement('a');
             link.href = `https://wa.me/917039196489?text=${text}`;
-            link.target = 'TreatIntChat'; // Forces reuse of same named tab
+            link.target = 'TreatIntChat'; // Force consistent Tab Name
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
