@@ -4,186 +4,267 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TreatInt | Leaders in Medical Tourism India</title>
-    <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
         body { font-family: 'Poppins', sans-serif; }
+        
         /* SLIDER ANIMATIONS */
         .slide {
             transition: opacity 1s ease-in-out; opacity: 0; position: absolute;
             top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center;
         }
         .slide.active { opacity: 1; z-index: 10; }
-        .overlay { background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.3)); position: absolute; inset: 0; }
-        .dot { transition: all 0.3s ease; }
-        .active-dot { background-color: white; opacity: 1; transform: scale(1.2); }
-        /* WIDGET ANIMATION */
-        .widget-slide-up { animation: slideUp 0.3s ease-out forwards; }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .overlay { background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.2)); position: absolute; inset: 0; }
+        
+        /* CARD HOVER EFFECTS */
+        .feature-card { transition: all 0.3s ease; }
+        .feature-card:hover { transform: translateY(-10px); }
+        
+        /* GRADIENT TEXT */
+        .text-gradient {
+            background: linear-gradient(to right, #1e3a8a, #2563eb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
     </style>
 </head>
-<body class="bg-white">
+<body class="bg-gray-50">
 
-    <nav class="bg-white shadow-md fixed w-full z-50">
+    <nav class="bg-white/95 backdrop-blur-md shadow-sm fixed w-full z-50 top-0 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
-                <a href="index.html" class="flex items-center hover:opacity-80 transition">
-                    <i class="fas fa-heartbeat text-blue-900 text-3xl mr-2"></i>
-                    <span class="font-bold text-2xl text-blue-900">TreatInt</span>
+                <a href="index.html" class="flex items-center group">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white mr-3 shadow-lg group-hover:bg-blue-700 transition">
+                        <i class="fas fa-heartbeat text-xl"></i>
+                    </div>
+                    <span class="font-bold text-2xl text-gray-800 tracking-tight">Treat<span class="text-blue-600">Int</span></span>
                 </a>
-                <div class="hidden md:flex space-x-8">
-                    <a href="index.html" class="text-blue-900 font-bold hover:text-blue-600 transition">Home</a>
-                    <a href="hospitals.html" class="text-gray-600 hover:text-blue-900 transition">Hospitals</a>
-                    <a href="treatments.html" class="text-gray-600 hover:text-blue-900 transition">Treatments</a>
-                    <a href="contact.html" class="text-gray-600 hover:text-blue-900 transition">Contact</a>
+                
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="index.html" class="text-blue-600 font-bold">Home</a>
+                    <a href="hospitals.html" class="text-gray-600 hover:text-blue-600 font-medium transition">Hospitals</a>
+                    <a href="treatments.html" class="text-gray-600 hover:text-blue-600 font-medium transition">Treatments</a>
+                    <a href="contact.html" class="text-gray-600 hover:text-blue-600 font-medium transition">Contact</a>
                 </div>
+                
                 <div class="flex items-center space-x-4">
-                    <a href="login.html" class="text-blue-900 font-bold hover:underline">Login</a>
-                    <a href="register-patient.html" class="bg-blue-900 text-white px-5 py-2 rounded-full font-bold hover:bg-blue-800 transition shadow-lg">Get Started</a>
+                    <a href="login.html" class="text-gray-600 font-bold hover:text-blue-600 transition">Login</a>
+                    <a href="register-patient.html" class="bg-gradient-to-r from-blue-700 to-blue-500 text-white px-6 py-2.5 rounded-full font-bold hover:shadow-lg hover:scale-105 transition transform">Get Started</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <header class="relative h-screen overflow-hidden">
+    <header class="relative h-[650px] overflow-hidden mt-0">
         <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
-            <div class="overlay flex items-center px-4 md:px-20"><div class="max-w-3xl text-left"><div class="bg-blue-600 text-white text-xs font-bold px-3 py-1 inline-block rounded mb-4 uppercase tracking-wider">India's #1 Medical Partner</div><h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">We Don't Just Treat Patients. <br> <span class="text-blue-400">We Care for Families.</span></h1><p class="text-xl text-gray-200 mb-10 border-l-4 border-blue-500 pl-4">The trusted leader in Medical Tourism. From your doorstep to the hospital and back – we handle every detail.</p><a href="register-patient.html" class="bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-700 transition shadow-xl">Plan Your Journey</a></div></div>
+            <div class="overlay flex items-center px-4 md:px-20">
+                <div class="max-w-3xl text-left mt-16">
+                    <div class="inline-block px-4 py-1 bg-blue-600/20 border border-blue-400 backdrop-blur-sm rounded-full text-blue-100 text-sm font-bold mb-6 tracking-wide">
+                        <i class="fas fa-check-circle mr-2"></i> Trusted by 10,000+ Families
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight drop-shadow-lg">
+                        World-Class Care,<br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-white">Zero Compromise.</span>
+                    </h1>
+                    <p class="text-xl text-gray-200 mb-10 max-w-2xl leading-relaxed">
+                        From Visa to Recovery, we handle everything. Access India's top JCI accredited hospitals at a fraction of the cost.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="register-patient.html" class="bg-white text-blue-900 px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition shadow-xl">
+                            Plan My Trip
+                        </a>
+                        <a href="hospitals.html" class="border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white/20 transition backdrop-blur-sm">
+                            View Hospitals
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
-            <div class="overlay flex items-center px-4 md:px-20"><div class="max-w-3xl text-left"><div class="bg-yellow-500 text-white text-xs font-bold px-3 py-1 inline-block rounded mb-4 uppercase tracking-wider">Complete Peace of Mind</div><h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">Visa. Flights. Stay. Food. <br> <span class="text-yellow-400">Consider it Done.</span></h1><p class="text-xl text-gray-200 mb-10 border-l-4 border-yellow-500 pl-4">We provide an end-to-end concierge service so your family can focus solely on recovery.</p><a href="contact.html" class="bg-yellow-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-yellow-600 transition shadow-xl">Talk to a Consultant</a></div></div>
-        </div>
-        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1551076805-e1869033e561?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
-            <div class="overlay flex items-center px-4 md:px-20"><div class="max-w-3xl text-left"><div class="bg-red-600 text-white text-xs font-bold px-3 py-1 inline-block rounded mb-4 uppercase tracking-wider">World-Class Healthcare</div><h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">Access India's Top <br> <span class="text-red-400">JCI Accredited Hospitals</span></h1><p class="text-xl text-gray-200 mb-10 border-l-4 border-red-500 pl-4">Zero waiting time. Affordable costs. Direct access to the country's best surgeons.</p><a href="hospitals.html" class="bg-red-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-red-700 transition shadow-xl">Explore Hospitals</a></div></div>
-        </div>
-        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
-            <div class="overlay flex items-center px-4 md:px-20"><div class="max-w-3xl text-left"><div class="bg-green-600 text-white text-xs font-bold px-3 py-1 inline-block rounded mb-4 uppercase tracking-wider">Cutting-Edge Tech</div><h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">Precision Medicine <br> <span class="text-green-400">Advanced Oncology & Transplants</span></h1><p class="text-xl text-gray-200 mb-10 border-l-4 border-green-500 pl-4">Utilizing the latest robotic surgery and immunotherapy protocols.</p><a href="treatments.html" class="bg-green-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-green-700 transition shadow-xl">View Treatments</a></div></div>
-        </div>
-        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
-            <div class="overlay flex items-center px-4 md:px-20"><div class="max-w-3xl text-left"><div class="bg-purple-600 text-white text-xs font-bold px-3 py-1 inline-block rounded mb-4 uppercase tracking-wider">Global Network</div><h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">Partner with the Leader <br> <span class="text-purple-400">Join the TreatInt Family</span></h1><p class="text-xl text-gray-200 mb-10 border-l-4 border-purple-500 pl-4">We empower agents globally to help patients access life-saving care.</p><a href="register-partner.html" class="bg-purple-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-purple-700 transition shadow-xl">Become a Partner</a></div></div>
-        </div>
-        <div class="absolute bottom-10 left-0 right-0 flex justify-center space-x-3 z-20">
-            <button onclick="goToSlide(0)" class="w-3 h-3 rounded-full bg-white dot active-dot"></button>
-            <button onclick="goToSlide(1)" class="w-3 h-3 rounded-full bg-white opacity-50 dot"></button>
-            <button onclick="goToSlide(2)" class="w-3 h-3 rounded-full bg-white opacity-50 dot"></button>
-            <button onclick="goToSlide(3)" class="w-3 h-3 rounded-full bg-white opacity-50 dot"></button>
-            <button onclick="goToSlide(4)" class="w-3 h-3 rounded-full bg-white opacity-50 dot"></button>
-        </div>
-    </header>
+        </header>
 
-    <section class="py-20 bg-blue-50">
+    <section class="relative -mt-24 z-20 px-4">
+        <div class="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Treatment at <span class="text-blue-600">Your Choice</span> Hospital</h2>
+                <p class="text-gray-500 mt-2">Don't settle. Choose from India's Top 50+ Accredited Institutes.</p>
+            </div>
+            
+            <form action="hospitals.html" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Condition / Specialty</label>
+                    <div class="relative">
+                        <i class="fas fa-stethoscope absolute left-4 top-3.5 text-blue-600"></i>
+                        <select class="w-full bg-gray-50 border border-gray-200 text-gray-700 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium h-12">
+                            <option>Any Specialty</option>
+                            <option>Heart Surgery</option>
+                            <option>Cancer / Oncology</option>
+                            <option>Organ Transplant</option>
+                            <option>Orthopedics</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Preferred Hospital</label>
+                    <div class="relative">
+                        <i class="fas fa-hospital absolute left-4 top-3.5 text-blue-600"></i>
+                        <select class="w-full bg-gray-50 border border-gray-200 text-gray-700 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium h-12">
+                            <option>Any Hospital</option>
+                            <option>Apollo Group</option>
+                            <option>Fortis Healthcare</option>
+                            <option>Medanta</option>
+                            <option>Max Healthcare</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Preferred City</label>
+                    <div class="relative">
+                        <i class="fas fa-map-marker-alt absolute left-4 top-3.5 text-blue-600"></i>
+                        <select class="w-full bg-gray-50 border border-gray-200 text-gray-700 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium h-12">
+                            <option>Any City</option>
+                            <option>New Delhi</option>
+                            <option>Mumbai</option>
+                            <option>Bangalore</option>
+                            <option>Chennai</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <button type="submit" class="w-full bg-blue-600 text-white font-bold rounded-xl py-3 h-12 hover:bg-blue-700 shadow-lg hover:shadow-xl transition flex items-center justify-center">
+                        <i class="fas fa-search mr-2"></i> Find Doctors
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="text-center mb-16"><span class="text-blue-600 font-bold uppercase tracking-widest text-sm">The TreatInt Difference</span><h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2">A Home Away From Home</h2><p class="text-gray-500 mt-4 max-w-2xl mx-auto">Our end-to-end solution ensures the family is comfortable, safe, and stress-free.</p></div>
+            <div class="text-center mb-16">
+                <span class="bg-blue-50 text-blue-700 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border border-blue-100">
+                    Why Choose TreatInt?
+                </span>
+                <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 mt-4 mb-4">
+                    A Home Away <span class="text-blue-600">From Home</span>
+                </h2>
+                <p class="text-gray-500 text-lg max-w-2xl mx-auto leading-relaxed">
+                    We don't just book appointments. We manage your entire life in India so you can focus 100% on getting better.
+                </p>
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="bg-white p-8 rounded-xl shadow text-center group"><div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-600 transition"><i class="fas fa-home text-2xl text-blue-600 group-hover:text-white"></i></div><h3 class="font-bold text-gray-800 text-lg">Accommodation</h3></div>
-                <div class="bg-white p-8 rounded-xl shadow text-center group"><div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-green-600 transition"><i class="fas fa-utensils text-2xl text-green-600 group-hover:text-white"></i></div><h3 class="font-bold text-gray-800 text-lg">Food & Diet</h3></div>
-                <div class="bg-white p-8 rounded-xl shadow text-center group"><div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-purple-600 transition"><i class="fas fa-language text-2xl text-purple-600 group-hover:text-white"></i></div><h3 class="font-bold text-gray-800 text-lg">Language Support</h3></div>
-                <div class="bg-white p-8 rounded-xl shadow text-center group"><div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-yellow-600 transition"><i class="fas fa-taxi text-2xl text-yellow-600 group-hover:text-white"></i></div><h3 class="font-bold text-gray-800 text-lg">Local Logistics</h3></div>
+                <div class="feature-card bg-white p-8 rounded-3xl shadow-lg border border-gray-100 text-center relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-400 to-blue-600"></div>
+                    <div class="w-20 h-20 mx-auto bg-blue-50 rounded-2xl flex items-center justify-center mb-6 text-blue-600 group-hover:scale-110 transition duration-300">
+                        <i class="fas fa-home text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-800 text-xl mb-3">Accommodation</h3>
+                    <p class="text-gray-500 leading-relaxed text-sm">Premium guest houses near your hospital with kitchen facilities.</p>
+                </div>
+
+                <div class="feature-card bg-white p-8 rounded-3xl shadow-lg border border-gray-100 text-center relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-green-400 to-green-600"></div>
+                    <div class="w-20 h-20 mx-auto bg-green-50 rounded-2xl flex items-center justify-center mb-6 text-green-600 group-hover:scale-110 transition duration-300">
+                        <i class="fas fa-utensils text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-800 text-xl mb-3">Food & Diet</h3>
+                    <p class="text-gray-500 leading-relaxed text-sm">Customized meals that taste like home, approved by dieticians.</p>
+                </div>
+
+                <div class="feature-card bg-white p-8 rounded-3xl shadow-lg border border-gray-100 text-center relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-400 to-purple-600"></div>
+                    <div class="w-20 h-20 mx-auto bg-purple-50 rounded-2xl flex items-center justify-center mb-6 text-purple-600 group-hover:scale-110 transition duration-300">
+                        <i class="fas fa-language text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-800 text-xl mb-3">Language Support</h3>
+                    <p class="text-gray-500 leading-relaxed text-sm">24/7 Translators ensuring you understand every doctor's word.</p>
+                </div>
+
+                <div class="feature-card bg-white p-8 rounded-3xl shadow-lg border border-gray-100 text-center relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-yellow-400 to-yellow-600"></div>
+                    <div class="w-20 h-20 mx-auto bg-yellow-50 rounded-2xl flex items-center justify-center mb-6 text-yellow-600 group-hover:scale-110 transition duration-300">
+                        <i class="fas fa-car text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-800 text-xl mb-3">Local Logistics</h3>
+                    <p class="text-gray-500 leading-relaxed text-sm">Airport pickup, daily hospital transfers, and SIM cards provided.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <div><img src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Family Care" class="rounded-2xl shadow-2xl"></div>
-                <div><span class="text-blue-600 font-bold uppercase tracking-widest text-sm">Our Process</span><h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2 mb-6">We Are With You Every Step</h2><div class="space-y-6"><div class="flex"><div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">1</div><div class="ml-4"><h4 class="text-lg font-bold text-gray-800">Pre-Arrival Planning</h4><p class="text-gray-500 text-sm">Free tele-consultation, treatment plan estimation, and Visa Invitation Letter.</p></div></div><div class="flex"><div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">2</div><div class="ml-4"><h4 class="text-lg font-bold text-gray-800">Arrival & Comfort</h4><p class="text-gray-500 text-sm">VIP Airport pickup, SIM card handover, and check-in to pre-booked accommodation.</p></div></div><div class="flex"><div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">3</div><div class="ml-4"><h4 class="text-lg font-bold text-gray-800">Treatment & Support</h4><p class="text-gray-500 text-sm">Priority admission, 24/7 care manager, and daily updates to the family.</p></div></div><div class="flex"><div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">4</div><div class="ml-4"><h4 class="text-lg font-bold text-gray-800">Recovery & Departure</h4><p class="text-gray-500 text-sm">Post-op care, fit-to-fly certificate, and drop-off at the airport.</p></div></div></div></div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-gray-900 text-white py-12">
+    <footer class="bg-gray-900 text-white py-16 border-t border-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div><div class="flex items-center mb-4"><i class="fas fa-heartbeat text-2xl mr-2"></i><span class="font-bold text-xl">TreatInt</span></div><p class="text-gray-400 text-sm">Your trusted partner for medical tourism in India.</p></div>
-                <div><h4 class="font-bold mb-4">Quick Links</h4><ul class="space-y-2 text-sm text-gray-400"><li><a href="index.html" class="hover:text-white">Home</a></li><li><a href="login.html" class="hover:text-white">Login</a></li></ul></div>
-                <div><h4 class="font-bold mb-4">Contact</h4><ul class="space-y-2 text-sm text-gray-400"><li>support@treatint.com</li><li>+91 7039196489</li></ul></div>
-                <div><h4 class="font-bold mb-4">Legal</h4><ul class="space-y-2 text-sm text-gray-400"><li><a href="privacy.html">Privacy</a></li><li><a href="terms.html">Terms</a></li></ul></div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div class="col-span-1 md:col-span-1">
+                    <div class="flex items-center mb-6">
+                        <i class="fas fa-heartbeat text-blue-500 text-3xl mr-3"></i>
+                        <span class="font-bold text-2xl">TreatInt</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        Bridging borders for better health. We are India's most trusted medical tourism facilitator.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:bg-blue-600 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:bg-blue-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:bg-pink-600 hover:text-white transition"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-6">Quick Links</h4>
+                    <ul class="space-y-3 text-gray-400 text-sm">
+                        <li><a href="index.html" class="hover:text-blue-500 transition">Home</a></li>
+                        <li><a href="hospitals.html" class="hover:text-blue-500 transition">Top Hospitals</a></li>
+                        <li><a href="treatments.html" class="hover:text-blue-500 transition">Treatments</a></li>
+                        <li><a href="login.html" class="hover:text-blue-500 transition">Login</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-6">Treatments</h4>
+                    <ul class="space-y-3 text-gray-400 text-sm">
+                        <li><a href="#" class="hover:text-blue-500 transition">Cardiac Surgery</a></li>
+                        <li><a href="#" class="hover:text-blue-500 transition">Oncology</a></li>
+                        <li><a href="#" class="hover:text-blue-500 transition">Organ Transplants</a></li>
+                        <li><a href="#" class="hover:text-blue-500 transition">Orthopedics</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-6">Contact Us</h4>
+                    <ul class="space-y-4 text-gray-400 text-sm">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3 text-blue-500"></i>
+                            <span>Mumbai, India</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt mr-3 text-blue-500"></i>
+                            <span>+91 7039196489</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-3 text-blue-500"></i>
+                            <span>support@treatint.com</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-500">&copy; 2025 TreatInt. All rights reserved.</div>
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500 text-sm">
+                &copy; 2025 TreatInt. All rights reserved.
+            </div>
         </div>
     </footer>
 
     <div id="wa-widget" class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-        
-        <div id="wa-form" class="hidden bg-white w-80 rounded-xl shadow-2xl border border-green-100 flex flex-col mb-4 overflow-hidden widget-slide-up">
-            <div class="bg-green-600 text-white p-4 flex justify-between items-center">
-                <span class="font-bold text-sm flex items-center"><i class="fab fa-whatsapp mr-2 text-lg"></i> Medical Enquiry</span>
-                <button onclick="toggleWA()" class="text-white hover:text-green-100"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="p-4 space-y-3 bg-gray-50">
-                
-                <div>
-                    <label class="block text-xs font-bold text-gray-600 mb-1">Your Name</label>
-                    <input type="text" id="wa-name" placeholder="John Doe" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-600 mb-1">Current Location</label>
-                    <input type="text" id="wa-current-loc" placeholder="e.g. Dhaka, Bangladesh" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-600 mb-1">Treatment Needed</label>
-                    <input type="text" id="wa-treatment" placeholder="e.g. Kidney Transplant" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-600 mb-1">Preferred City (India)</label>
-                    <input type="text" id="wa-pref-loc" placeholder="e.g. Mumbai / Bangalore" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-600 mb-1">Preferred Time to Discuss</label>
-                    <input type="text" id="wa-time" placeholder="e.g. After 6 PM today" class="w-full border rounded p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none">
-                </div>
-
-                <button onclick="startWhatsAppChat()" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 text-sm transition shadow mt-2 flex items-center justify-center">
-                    <i class="fab fa-whatsapp mr-2 text-lg"></i> Start Chat on WhatsApp
-                </button>
-            </div>
-        </div>
-
-        <button onclick="toggleWA()" class="bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition transform hover:scale-105 animate-bounce">
+        <a href="https://wa.me/917039196489?text=Hi%20TreatInt,%20I%20need%20help." target="_blank" class="bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition transform hover:scale-105 animate-bounce flex items-center justify-center w-16 h-16">
             <i class="fab fa-whatsapp text-4xl"></i>
-        </button>
+        </a>
     </div>
 
-    <script>
-        // SLIDER
-        let currentSlide = 0; const slides = document.querySelectorAll('.slide'); const dots = document.querySelectorAll('.dot');
-        function showSlide(index) {
-            if (index >= slides.length) currentSlide = 0; else if (index < 0) currentSlide = slides.length - 1; else currentSlide = index;
-            slides.forEach((slide, i) => { slide.classList.remove('active'); dots[i].classList.remove('active-dot', 'opacity-100'); dots[i].classList.add('opacity-50'); if (i === currentSlide) { slide.classList.add('active'); dots[i].classList.add('active-dot', 'opacity-100'); dots[i].classList.remove('opacity-50'); } });
-        }
-        function nextSlide() { showSlide(currentSlide + 1); } setInterval(nextSlide, 5000); 
-
-        // WHATSAPP WIDGET LOGIC
-        function toggleWA() { document.getElementById('wa-form').classList.toggle('hidden'); }
-        
-        function startWhatsAppChat() {
-            // Get Values
-            const name = document.getElementById('wa-name').value.trim();
-            const currentLoc = document.getElementById('wa-current-loc').value.trim();
-            const treatment = document.getElementById('wa-treatment').value.trim();
-            const prefLoc = document.getElementById('wa-pref-loc').value.trim();
-            const time = document.getElementById('wa-time').value.trim();
-
-            // Validation
-            if(!name) { alert("Please enter your Name."); return; }
-            if(!treatment) { alert("Please specify the Treatment needed."); return; }
-
-            // Construct Message
-            const text = `*New Medical Enquiry* %0a---------------------------%0a👤 *Name:* ${name}%0a📍 *From:* ${currentLoc}%0a🏥 *Treatment:* ${treatment}%0a🏙️ *Pref. City:* ${prefLoc}%0a⏰ *Call Time:* ${time}%0a---------------------------%0aPlease guide me further.`;
-
-            // Open WhatsApp
-            window.open(`https://wa.me/917039196489?text=${text}`, '_blank');
-            
-            // Close form
-            toggleWA();
-        }
-    </script>
 </body>
 </html>
