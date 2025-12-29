@@ -10,10 +10,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* English Font */
+        /* Default font for English */
         body { font-family: 'Poppins', sans-serif; }
         
-        /* Bangla Font */
+        /* Font for Bangla */
         body.bangla-active { font-family: 'Hind Siliguri', sans-serif; }
 
         /* SLIDER ANIMATIONS */
@@ -49,6 +49,7 @@
                 </div>
                 
                 <div class="flex items-center space-x-4">
+                    
                     <button onclick="toggleLanguage()" class="flex items-center border border-gray-300 rounded-full px-3 py-1 text-sm font-bold text-gray-600 hover:border-blue-500 hover:text-blue-600 transition">
                         <i class="fas fa-globe mr-2"></i>
                         <span id="lang-label">EN</span>
@@ -300,15 +301,23 @@
 
     <footer class="bg-gray-900 text-white py-16 border-t border-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
-                <div class="col-span-1 md:col-span-1">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                
+                <div class="col-span-1">
                     <div class="flex items-center mb-6">
                         <i class="fas fa-heartbeat text-blue-500 text-3xl mr-3"></i>
                         <span class="font-bold text-2xl">TreatInt</span>
                     </div>
-                    <p class="text-gray-400 text-sm leading-relaxed mb-6" data-en="Bridging borders for better health. We are India's most trusted medical tourism facilitator." data-bn="সুস্বাস্থ্যের জন্য সীমান্তের বাধা পেরিয়ে। আমরা ভারতের সবচেয়ে বিশ্বস্ত মেডিকেল ট্যুরিজম পার্টনার।">
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6" 
+                       data-en="Bridging borders for better health. We are India's most trusted medical tourism facilitator." 
+                       data-bn="সুস্বাস্থ্যের জন্য সীমান্তের বাধা পেরিয়ে। আমরা ভারতের সবচেয়ে বিশ্বস্ত মেডিকেল ট্যুরিজম পার্টনার।">
                         Bridging borders for better health. We are India's most trusted medical tourism facilitator.
                     </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:bg-blue-600 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:bg-blue-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:bg-pink-600 hover:text-white transition"><i class="fab fa-instagram"></i></a>
+                    </div>
                 </div>
                 
                 <div>
@@ -316,6 +325,7 @@
                     <ul class="space-y-3 text-gray-400 text-sm">
                         <li><a href="index.html" class="hover:text-blue-500 transition" data-en="Home" data-bn="হোম">Home</a></li>
                         <li><a href="hospitals.html" class="hover:text-blue-500 transition" data-en="Top Hospitals" data-bn="সেরা হাসপাতাল">Top Hospitals</a></li>
+                        <li><a href="treatments.html" class="hover:text-blue-500 transition" data-en="Treatments" data-bn="চিকিৎসা">Treatments</a></li>
                         <li><a href="login.html" class="hover:text-blue-500 transition" data-en="Login" data-bn="লগইন">Login</a></li>
                     </ul>
                 </div>
@@ -337,9 +347,26 @@
                         </li>
                     </ul>
                 </div>
+
+                <div>
+                    <h4 class="font-bold text-lg mb-6" data-en="Legal" data-bn="আইনি তথ্য">Legal</h4>
+                    <ul class="space-y-3 text-gray-400 text-sm">
+                        <li><a href="privacy.html" class="hover:text-blue-500 transition" data-en="Privacy Policy" data-bn="গোপনীয়তা নীতি">Privacy Policy</a></li>
+                        <li><a href="terms.html" class="hover:text-blue-500 transition" data-en="Terms of Service" data-bn="শর্তাবলী">Terms of Service</a></li>
+                        <li><a href="disclaimer.html" class="hover:text-blue-500 transition" data-en="Medical Disclaimer" data-bn="মেডিকেল ডিসক্লেইমার">Medical Disclaimer</a></li>
+                        <li><a href="refunds.html" class="hover:text-blue-500 transition" data-en="Refund Policy" data-bn="রিফান্ড পলিসি">Refund Policy</a></li>
+                    </ul>
+                </div>
+
             </div>
-            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500 text-sm">
-                &copy; 2025 TreatInt. All rights reserved.
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm">
+                <p>&copy; 2025 TreatInt. All rights reserved.</p>
+                <div class="mt-4 md:mt-0 space-x-4">
+                    <i class="fab fa-cc-visa text-2xl"></i>
+                    <i class="fab fa-cc-mastercard text-2xl"></i>
+                    <i class="fab fa-cc-paypal text-2xl"></i>
+                </div>
             </div>
         </div>
     </footer>
