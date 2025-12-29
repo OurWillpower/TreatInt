@@ -1,153 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TreatInt | Patient Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style> body { font-family: 'Poppins', sans-serif; } </style>
-</head>
-<body class="bg-gray-50">
-
-    <nav class="bg-blue-900 text-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center">
-                    <i class="fas fa-heartbeat text-2xl mr-2 text-blue-300"></i>
-                    <span class="font-bold text-xl tracking-wide">TreatInt <span class="text-blue-300 font-normal text-sm">| Patient Portal</span></span>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <div class="hidden md:flex flex-col text-right mr-2">
-                        <span id="navName" class="text-sm font-bold">Guest User</span>
-                        <span class="text-xs text-blue-300">Patient ID: #TI-2025</span>
-                    </div>
-                    <div class="h-10 w-10 rounded-full bg-blue-700 flex items-center justify-center border-2 border-blue-400">
-                        <i class="fas fa-user text-lg"></i>
-                    </div>
-                    <a href="index.html" class="text-blue-200 hover:text-white transition ml-4"><i class="fas fa-sign-out-alt"></i></a>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <main class="max-w-7xl mx-auto px-4 py-8">
-        
-        <div class="bg-white rounded-2xl shadow-sm p-8 mb-8 border-l-4 border-blue-600 flex justify-between items-center relative overflow-hidden">
-            <div class="relative z-10">
-                <h1 id="welcomeHeading" class="text-2xl font-bold text-gray-800">Welcome back! 👋</h1>
-                <p class="text-gray-500 mt-2">Current Status: <span class="font-bold text-orange-500">Doctor Review in Progress</span></p>
-                <div class="mt-4">
-                    <button class="bg-blue-600 text-white px-6 py-2 rounded-full text-sm font-bold hover:bg-blue-700 transition shadow-md">
-                        <i class="fas fa-phone-alt mr-2"></i> Contact Care Manager
-                    </button>
-                </div>
-            </div>
-            <i class="fas fa-user-md text-9xl text-gray-50 absolute -right-6 -bottom-6 z-0"></i>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            
-            <div class="md:col-span-2 space-y-8">
-                
-                <div class="bg-white rounded-xl shadow-sm p-6">
-                    <h3 class="font-bold text-gray-800 mb-6 flex items-center">
-                        <i class="fas fa-stream text-blue-600 mr-2"></i> Your Journey
-                    </h3>
-                    <div class="relative border-l-2 border-gray-200 ml-3 space-y-8">
-                        
-                        <div class="mb-8 ml-6">
-                            <span class="absolute -left-2.5 mt-1 h-5 w-5 rounded-full bg-green-500 border-4 border-white shadow"></span>
-                            <h4 class="font-bold text-gray-800">Registration Complete</h4>
-                            <p class="text-sm text-gray-500 mt-1">You created your profile today.</p>
-                        </div>
-
-                        <div class="mb-8 ml-6">
-                            <span class="absolute -left-2.5 mt-1 h-5 w-5 rounded-full bg-blue-600 border-4 border-white shadow animate-pulse"></span>
-                            <h4 class="font-bold text-blue-700">Medical Review</h4>
-                            <p class="text-sm text-gray-600 mt-1">Our specialists are currently reviewing your uploaded reports. Expected response: 24 Hours.</p>
-                            <div class="mt-3 bg-blue-50 p-3 rounded-lg border border-blue-100 text-sm text-blue-800">
-                                <i class="fas fa-info-circle mr-1"></i> Dr. Sharma (Cardiology) has been assigned to your case.
-                            </div>
-                        </div>
-
-                        <div class="mb-8 ml-6 opacity-50">
-                            <span class="absolute -left-2.5 mt-1 h-5 w-5 rounded-full bg-gray-300 border-4 border-white"></span>
-                            <h4 class="font-bold text-gray-500">Treatment Plan Proposal</h4>
-                            <p class="text-sm text-gray-500 mt-1">Waiting for doctor's approval.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-sm p-6">
-                    <h3 class="font-bold text-gray-800 mb-4">Suggested Hospitals</h3>
-                    <div class="flex space-x-4 overflow-x-auto pb-2">
-                        <div class="min-w-[200px] border rounded-lg p-3 hover:shadow-md transition cursor-pointer">
-                            <img src="https://images.unsplash.com/photo-1587351021759-3e566b9af9ef?w=400" class="h-24 w-full object-cover rounded mb-2">
-                            <h5 class="font-bold text-sm">Apollo Indraprastha</h5>
-                            <p class="text-xs text-gray-500">New Delhi</p>
-                        </div>
-                        <div class="min-w-[200px] border rounded-lg p-3 hover:shadow-md transition cursor-pointer">
-                            <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400" class="h-24 w-full object-cover rounded mb-2">
-                            <h5 class="font-bold text-sm">Fortis Memorial</h5>
-                            <p class="text-xs text-gray-500">Gurgaon</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="space-y-8">
-                
-                <div class="bg-white rounded-xl shadow-sm p-6">
-                    <h3 class="font-bold text-gray-800 mb-4">Quick Actions</h3>
-                    <div class="space-y-3">
-                        <button class="w-full flex items-center justify-between p-3 rounded-lg bg-gray-50 hover:bg-blue-50 hover:text-blue-700 transition border border-transparent hover:border-blue-200 group">
-                            <span class="font-medium text-sm"><i class="fas fa-file-upload mr-2 text-gray-400 group-hover:text-blue-600"></i> Upload New Report</span>
-                            <i class="fas fa-chevron-right text-xs"></i>
-                        </button>
-                        <button class="w-full flex items-center justify-between p-3 rounded-lg bg-gray-50 hover:bg-blue-50 hover:text-blue-700 transition border border-transparent hover:border-blue-200 group">
-                            <span class="font-medium text-sm"><i class="fas fa-passport mr-2 text-gray-400 group-hover:text-blue-600"></i> Request Visa Letter</span>
-                            <i class="fas fa-chevron-right text-xs"></i>
-                        </button>
-                        <button class="w-full flex items-center justify-between p-3 rounded-lg bg-gray-50 hover:bg-blue-50 hover:text-blue-700 transition border border-transparent hover:border-blue-200 group">
-                            <span class="font-medium text-sm"><i class="fas fa-edit mr-2 text-gray-400 group-hover:text-blue-600"></i> Edit Profile</span>
-                            <i class="fas fa-chevron-right text-xs"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="bg-blue-600 rounded-xl shadow-lg p-6 text-white text-center">
-                    <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <i class="fab fa-whatsapp text-2xl"></i>
-                    </div>
-                    <h3 class="font-bold mb-1">Need Help?</h3>
-                    <p class="text-blue-100 text-xs mb-4">Our care managers are online 24/7.</p>
-                    <a href="https://wa.me/917039196489" target="_blank" class="block w-full bg-white text-blue-900 font-bold py-2 rounded-lg text-sm hover:bg-blue-50 transition">
-                        Chat Now
-                    </a>
-                </div>
-
-            </div>
-        </div>
-    </main>
-
-    <script>
-        // Run this when the page loads
+<script>
         window.onload = function() {
-            // 1. Get the name from LocalStorage (Memory)
+            // 1. Get data from memory
             const savedName = localStorage.getItem('patientName');
+            const isNewUser = localStorage.getItem('isNewUser'); // Check for the flag
 
-            // 2. If a name exists, update the HTML elements
+            const heading = document.getElementById('welcomeHeading');
+            const navName = document.getElementById('navName');
+
             if (savedName) {
-                document.getElementById('welcomeHeading').innerText = "Welcome back, " + savedName + "! 👋";
-                document.getElementById('navName').innerText = savedName;
+                // Update the small name in top right corner
+                navName.innerText = savedName;
+
+                // 2. DECIDE WHICH GREETING TO SHOW
+                if (isNewUser === 'true') {
+                    // It is a NEW registration
+                    heading.innerText = "Welcome to the Family, " + savedName + "! 🎉";
+                    
+                    // IMPORTANT: Remove the flag so next time they login, it says "Welcome Back"
+                    localStorage.removeItem('isNewUser'); 
+                } else {
+                    // It is a RETURNING login
+                    heading.innerText = "Welcome back, " + savedName + "! 👋";
+                }
             } else {
-                // Fallback if they didn't register just now
-                document.getElementById('welcomeHeading').innerText = "Welcome back! 👋";
-                document.getElementById('navName').innerText = "Guest User";
+                // Fallback for guest
+                heading.innerText = "Welcome to TreatInt! 👋";
+                navName.innerText = "Guest User";
             }
         }
     </script>
-</body>
-</html>
