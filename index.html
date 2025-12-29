@@ -6,6 +6,7 @@
     <title>TreatInt | Medical Tourism</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         /* --- RESET & BASIC SETUP --- */
@@ -15,6 +16,9 @@
             box-sizing: border-box;
             font-family: 'Inter', sans-serif;
         }
+
+        /* Bangla Font Class */
+        body.bangla-active, body.bangla-active * { font-family: 'Hind Siliguri', sans-serif !important; }
 
         body {
             background-color: #f8f9fa;
@@ -76,6 +80,9 @@
             font-size: 0.9rem;
             cursor: pointer;
             background: transparent;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .btn-primary {
@@ -89,17 +96,41 @@
 
         .btn-primary:hover { background: #1d4ed8; }
 
-        /* --- HERO SECTION --- */
+        /* --- HERO SECTION (FIXED FOR SLIDER) --- */
         .hero {
-            /* Placeholder for the airplane image you had */
-            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2074&auto=format&fit=crop'); 
+            height: 450px;
+            position: relative;
+            overflow: hidden; /* Important for slider */
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background-size: cover;
             background-position: center;
-            height: 450px; /* Reduced height so search bar floats nicely */
-            position: relative;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+            z-index: 1;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.3); /* Dark overlay */
         }
 
         /* --- SEARCH SECTION (The Floating Card) --- */
@@ -177,9 +208,9 @@
             height: 46px; /* Match input height */
         }
 
-        /* --- WORKFLOW SECTION (Re-added to fix spacing) --- */
+        /* --- WORKFLOW SECTION --- */
         .workflow-section {
-            padding: 140px 5% 80px 5%; /* Top padding ensures space below the floating search bar */
+            padding: 140px 5% 80px 5%;
             text-align: center;
         }
 
@@ -238,7 +269,7 @@
             font-size: 0.95rem;
         }
 
-        /* --- FOOTER (Dark Blue) --- */
+        /* --- FOOTER --- */
         .footer {
             background: #0f172a;
             color: white;
@@ -307,14 +338,18 @@
             justify-content: center;
             font-size: 30px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            z-index: 1000;
+            z-index: 9999;
+            transition: transform 0.3s;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.1);
         }
 
         /* Responsive Fixes */
         @media (max-width: 768px) {
             .search-form { grid-template-columns: 1fr; }
             .nav-links { display: none; }
-            .workflow-section { padding-top: 250px; } /* More space needed on mobile due to stacked search inputs */
+            .workflow-section { padding-top: 250px; } 
         }
     </style>
 </head>
@@ -325,60 +360,69 @@
             <i class="fas fa-heartbeat"></i> TreatInt
         </div>
         <div class="nav-links">
-            <a href="#" class="active">Home</a>
-            <a href="#">Hospitals</a>
-            <a href="#">Contact</a>
+            <a href="#" class="active" data-en="Home" data-bn="হোম">Home</a>
+            <a href="#" data-en="Hospitals" data-bn="হাসপাতাল">Hospitals</a>
+            <a href="#" data-en="Contact" data-bn="যোগাযোগ">Contact</a>
         </div>
         <div class="nav-actions">
-            <button class="lang-btn"><i class="fas fa-globe"></i> EN</button>
-            <a href="#" style="font-weight: 600; font-size: 0.95rem;">Login</a>
-            <a href="#" class="btn-primary">Get Started</a>
+            <button class="lang-btn" onclick="toggleLanguage()">
+                <i class="fas fa-globe"></i> <span id="lang-label">EN</span>
+            </button>
+            <a href="#" style="font-weight: 600; font-size: 0.95rem;" data-en="Login" data-bn="লগইন">Login</a>
+            <a href="#" class="btn-primary" data-en="Get Started" data-bn="শুরু করুন">Get Started</a>
         </div>
     </nav>
 
     <section class="hero">
-        </section>
+        <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2074&auto=format&fit=crop');"></div>
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');"></div>
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1551076805-e1869033e561?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');"></div>
+    </section>
 
     <div class="search-container">
         <div class="search-card">
-            <h1>Treatment at <span class="highlight-text">Your Choice</span> Hospital</h1>
+            <h1>
+                <span data-en="Treatment at" data-bn="চিকিৎসা নিন">Treatment at</span> 
+                <span class="highlight-text" data-en="Your Choice" data-bn="আপনার পছন্দের">Your Choice</span> 
+                <span data-en="Hospital" data-bn="হাসপাতালে">Hospital</span>
+            </h1>
             
             <form class="search-form">
                 <div class="input-group">
-                    <label>Specialty</label>
+                    <label data-en="Specialty" data-bn="বিশেষজ্ঞ">Specialty</label>
                     <div class="input-wrapper">
                         <select>
-                            <option>Any Specialty</option>
-                            <option>Cardiology</option>
-                            <option>Orthopedics</option>
+                            <option data-en="Any Specialty" data-bn="যেকোনো বিভাগ">Any Specialty</option>
+                            <option data-en="Cardiology" data-bn="কার্ডিওলজি">Cardiology</option>
+                            <option data-en="Orthopedics" data-bn="অর্থোপেডিক্স">Orthopedics</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="input-group">
-                    <label>Hospital</label>
+                    <label data-en="Hospital" data-bn="হাসপাতাল">Hospital</label>
                     <div class="input-wrapper">
                         <select>
-                            <option>Any Hospital</option>
-                            <option>Apollo Hospital</option>
-                            <option>Fortis Healthcare</option>
+                            <option data-en="Any Hospital" data-bn="যেকোনো হাসপাতাল">Any Hospital</option>
+                            <option data-en="Apollo Hospital" data-bn="অ্যাপোলো হাসপাতাল">Apollo Hospital</option>
+                            <option data-en="Fortis Healthcare" data-bn="ফোর্টিস হেলথকেয়ার">Fortis Healthcare</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="input-group">
-                    <label>City</label>
+                    <label data-en="City" data-bn="শহর">City</label>
                     <div class="input-wrapper">
                         <select>
-                            <option>Any City</option>
-                            <option>Mumbai</option>
-                            <option>Delhi</option>
+                            <option data-en="Any City" data-bn="যেকোনো শহর">Any City</option>
+                            <option data-en="Mumbai" data-bn="মুম্বাই">Mumbai</option>
+                            <option data-en="Delhi" data-bn="দিল্লি">Delhi</option>
                         </select>
                     </div>
                 </div>
 
                 <button type="button" class="search-btn">
-                    <i class="fas fa-search"></i> Find Doctors
+                    <i class="fas fa-search"></i> <span data-en="Find Doctors" data-bn="ডাক্তার খুঁজুন">Find Doctors</span>
                 </button>
             </form>
         </div>
@@ -386,8 +430,8 @@
 
     <section class="workflow-section">
         <div class="section-header">
-            <h2>How It Works</h2>
-            <p>Your journey to better health in 3 simple steps</p>
+            <h2 data-en="How It Works" data-bn="কিভাবে কাজ করে">How It Works</h2>
+            <p data-en="Your journey to better health in 3 simple steps" data-bn="আপনার সুস্বাস্থ্যের যাত্রা মাত্র ৩টি সহজ ধাপে">Your journey to better health in 3 simple steps</p>
         </div>
 
         <div class="workflow-grid">
@@ -395,24 +439,24 @@
                 <div class="icon-box">
                     <i class="fas fa-search"></i>
                 </div>
-                <h3>1. Search</h3>
-                <p>Find the best hospitals and specialists for your specific condition based on your needs.</p>
+                <h3 data-en="1. Search" data-bn="১. অনুসন্ধান">1. Search</h3>
+                <p data-en="Find the best hospitals and specialists for your specific condition based on your needs." data-bn="আপনার প্রয়োজন অনুযায়ী সেরা হাসপাতাল এবং বিশেষজ্ঞ ডাক্তার খুঁজুন।">Find the best hospitals and specialists for your specific condition based on your needs.</p>
             </div>
 
             <div class="workflow-card">
                 <div class="icon-box">
                     <i class="fas fa-file-medical"></i>
                 </div>
-                <h3>2. Compare</h3>
-                <p>Review treatment costs, doctor profiles, and hospital facilities transparently.</p>
+                <h3 data-en="2. Compare" data-bn="২. তুলনা করুন">2. Compare</h3>
+                <p data-en="Review treatment costs, doctor profiles, and hospital facilities transparently." data-bn="চিকিৎসার খরচ, ডাক্তারের প্রোফাইল এবং হাসপাতালের সুবিধাগুলি যাচাই করুন।">Review treatment costs, doctor profiles, and hospital facilities transparently.</p>
             </div>
 
             <div class="workflow-card">
                 <div class="icon-box">
                     <i class="fas fa-plane-departure"></i>
                 </div>
-                <h3>3. Travel</h3>
-                <p>Book your appointment and travel with our full assistance for a hassle-free experience.</p>
+                <h3 data-en="3. Travel" data-bn="৩. ভ্রমণ">3. Travel</h3>
+                <p data-en="Book your appointment and travel with our full assistance for a hassle-free experience." data-bn="অ্যাপয়েন্টমেন্ট বুক করুন এবং আমাদের সম্পূর্ণ সহায়তায় নিশ্চিন্তে ভ্রমণ করুন।">Book your appointment and travel with our full assistance for a hassle-free experience.</p>
             </div>
         </div>
     </section>
@@ -421,22 +465,22 @@
         <div class="footer-content">
             <div class="footer-brand">
                 <h2><i class="fas fa-heartbeat"></i> TreatInt</h2>
-                <p>Bridging borders for better health. Connecting you with world-class medical care at affordable prices.</p>
+                <p data-en="Bridging borders for better health. Connecting you with world-class medical care at affordable prices." data-bn="সুস্বাস্থ্যের জন্য সীমান্তের বাধা পেরিয়ে। সাশ্রয়ী মূল্যে বিশ্বমানের চিকিৎসাসেবা প্রদান করাই আমাদের লক্ষ্য।">Bridging borders for better health. Connecting you with world-class medical care at affordable prices.</p>
             </div>
             <div class="footer-links">
-                <h4>Company</h4>
+                <h4 data-en="Company" data-bn="কোম্পানি">Company</h4>
                 <ul>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Careers</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="#" data-en="About Us" data-bn="আমাদের সম্পর্কে">About Us</a></li>
+                    <li><a href="#" data-en="Careers" data-bn="ক্যারিয়ার">Careers</a></li>
+                    <li><a href="#" data-en="Contact" data-bn="যোগাযোগ">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-links">
-                <h4>Legal</h4>
+                <h4 data-en="Legal" data-bn="আইনি তথ্য">Legal</h4>
                 <ul>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms of Service</a></li>
-                    <li><a href="#">Cookie Policy</a></li>
+                    <li><a href="#" data-en="Privacy Policy" data-bn="গোপনীয়তা নীতি">Privacy Policy</a></li>
+                    <li><a href="#" data-en="Terms of Service" data-bn="শর্তাবলী">Terms of Service</a></li>
+                    <li><a href="#" data-en="Cookie Policy" data-bn="কুকি পলিসি">Cookie Policy</a></li>
                 </ul>
             </div>
         </div>
@@ -445,9 +489,95 @@
         </div>
     </footer>
 
-    <a href="#" class="whatsapp-float">
+    <a href="https://wa.me/917039196489?text=Hello%20TreatInt" target="_blank" class="whatsapp-float">
         <i class="fab fa-whatsapp"></i>
     </a>
+
+    <script>
+        // --- 1. SLIDER LOGIC ---
+        let slideIndex = 0;
+        const slides = document.getElementsByClassName("slide");
+        
+        // Only run slider if slides exist
+        if(slides.length > 0) {
+            setInterval(showNextSlide, 4000); // 4 seconds
+        }
+
+        function showNextSlide() {
+            slides[slideIndex].classList.remove("active");
+            slideIndex++;
+            if (slideIndex >= slides.length) { slideIndex = 0; }
+            slides[slideIndex].classList.add("active");
+        }
+
+        // --- 2. LANGUAGE SWITCHER LOGIC ---
+        let currentLang = localStorage.getItem('treatIntLang') || 'en';
+        updateLanguageDisplay();
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'bn' : 'en';
+            localStorage.setItem('treatIntLang', currentLang);
+            updateLanguageDisplay();
+        }
+
+        function updateLanguageDisplay() {
+            const body = document.body;
+            const langLabel = document.getElementById('lang-label');
+            const elements = document.querySelectorAll('[data-en]');
+
+            if (currentLang === 'bn') {
+                body.classList.add('bangla-active');
+                if(langLabel) langLabel.innerText = "বাংলা";
+                
+                elements.forEach(el => {
+                    const bnText = el.getAttribute('data-bn');
+                    if(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.placeholder = bnText;
+                    } else if (el.tagName === 'OPTION') {
+                        el.innerText = bnText;
+                    } else {
+                        // Safe text replacement
+                        if(el.children.length === 0) {
+                             el.innerText = bnText;
+                        } else {
+                            // Careful replacement for buttons with icons
+                            Array.from(el.childNodes).forEach(node => {
+                                if(node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '') {
+                                    node.textContent = bnText; 
+                                } else if (node.tagName === 'SPAN' && !node.children.length) {
+                                    node.innerText = bnText;
+                                }
+                            });
+                        }
+                    }
+                });
+            } else {
+                body.classList.remove('bangla-active');
+                if(langLabel) langLabel.innerText = "EN";
+                
+                elements.forEach(el => {
+                     const enText = el.getAttribute('data-en');
+                     if(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                         el.placeholder = enText;
+                     } else if (el.tagName === 'OPTION') {
+                        el.innerText = enText;
+                     } else {
+                        if(el.children.length === 0) {
+                            el.innerText = enText;
+                        } else {
+                             Array.from(el.childNodes).forEach(node => {
+                                if(node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '') {
+                                    node.textContent = enText;
+                                } else if (node.tagName === 'SPAN' && !node.children.length) {
+                                     node.innerText = enText;
+                                }
+                            });
+                        }
+                     }
+                });
+            }
+        }
+    </script>
 
 </body>
 </html>
