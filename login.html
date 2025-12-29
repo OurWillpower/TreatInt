@@ -3,152 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TreatInt | Secure Login</title>
+    <title>TreatInt | Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <style>
-        body { font-family: 'Poppins', sans-serif; }
-        /* Smooth fade for tab switching */
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
+    <style> body { font-family: 'Poppins', sans-serif; } body.bangla-active { font-family: 'Hind Siliguri', sans-serif; } </style>
 </head>
 <body class="bg-blue-50 h-screen flex items-center justify-center p-4">
 
+    <div class="absolute top-6 right-6 z-50">
+        <button onclick="toggleLanguage()" class="flex items-center bg-white border border-gray-300 rounded-full px-4 py-2 text-sm font-bold text-gray-600 hover:text-blue-600 shadow-md">
+            <i class="fas fa-globe mr-2"></i><span id="lang-label">EN</span>
+        </button>
+    </div>
+
     <div class="w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row h-auto md:h-[600px]">
-        
         <div class="w-full md:w-1/2 bg-blue-900 relative hidden md:flex flex-col items-center justify-center text-white p-12 text-center">
-            <div class="absolute inset-0 bg-black bg-opacity-30 z-0"></div>
-            <div class="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')] bg-cover bg-center z-0"></div>
-            
             <div class="relative z-10">
-                <div class="w-20 h-20 bg-blue-800 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg border border-blue-400">
-                    <i class="fas fa-heartbeat text-4xl text-blue-300"></i>
-                </div>
-                <h2 class="text-4xl font-bold mb-4 tracking-wide">TreatInt</h2>
-                <p class="text-blue-200 text-lg leading-relaxed">Your health journey begins with a single step. Access your treatment plan and travel details here.</p>
-            </div>
-            
-            <div class="absolute bottom-8 text-blue-300 text-xs z-10">
-                &copy; 2025 TreatInt Medical Tourism
+                <i class="fas fa-heartbeat text-6xl mb-6 text-blue-300"></i>
+                <h2 class="text-4xl font-bold mb-4">TreatInt</h2>
+                <p class="text-blue-200 text-lg" data-en="Your health journey begins here." data-bn="আপনার সুস্বাস্থ্যের যাত্রা এখান থেকেই শুরু।">Your health journey begins here.</p>
             </div>
         </div>
 
         <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center relative bg-white">
-            
-            <a href="index.html" class="absolute top-6 right-6 text-gray-400 hover:text-blue-900 transition p-2">
-                <i class="fas fa-times text-2xl"></i>
-            </a>
-
             <div class="mb-8">
-                <h3 class="text-3xl font-bold text-gray-800">Welcome Back</h3>
-                <p class="text-gray-500 mt-2">Please enter your details to sign in.</p>
+                <h3 class="text-3xl font-bold text-gray-800" data-en="Welcome Back" data-bn="স্বাগতম">Welcome Back</h3>
+                <p class="text-gray-500 mt-2" data-en="Please enter your details." data-bn="আপনার তথ্য দিন।">Please enter your details.</p>
             </div>
 
             <div class="flex p-1 bg-gray-100 rounded-lg mb-8">
-                <button onclick="switchTab('patient')" id="tab-patient" class="w-1/2 py-3 rounded-md text-sm font-bold bg-white text-blue-900 shadow-sm transition duration-300 flex items-center justify-center">
-                    <i class="fas fa-user-injured mr-2"></i> Patient
-                </button>
-                <button onclick="switchTab('partner')" id="tab-partner" class="w-1/2 py-3 rounded-md text-sm font-bold text-gray-500 hover:text-blue-900 transition duration-300 flex items-center justify-center">
-                    <i class="fas fa-hospital-user mr-2"></i> Hospital/Partner
-                </button>
+                <button class="w-1/2 py-3 rounded-md text-sm font-bold bg-white text-blue-900 shadow-sm" data-en="Patient" data-bn="রোগী">Patient</button>
+                <button class="w-1/2 py-3 rounded-md text-sm font-bold text-gray-500" data-en="Hospital" data-bn="হাসপাতাল">Hospital</button>
             </div>
 
-            <form onsubmit="handleLogin(event)" class="fade-in" id="loginForm">
+            <form onsubmit="event.preventDefault(); window.location.href='patient-home.html';">
                 <div class="mb-5">
-                    <label class="block text-xs font-bold text-gray-600 uppercase mb-2">Email Address</label>
-                    <div class="relative">
-                        <span class="absolute left-4 top-3.5 text-gray-400"><i class="fas fa-envelope"></i></span>
-                        <input type="email" id="email" class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition bg-gray-50 focus:bg-white" placeholder="name@example.com" required>
-                    </div>
+                    <label class="block text-xs font-bold text-gray-600 uppercase mb-2" data-en="Email Address" data-bn="ইমেইল ঠিকানা">Email Address</label>
+                    <input type="email" class="w-full pl-4 py-3 border border-gray-200 rounded-lg" data-en="name@example.com" data-bn="নাম@উদাহরণ.কম" placeholder="name@example.com">
                 </div>
-
                 <div class="mb-6">
-                    <label class="block text-xs font-bold text-gray-600 uppercase mb-2">Password</label>
-                    <div class="relative">
-                        <span class="absolute left-4 top-3.5 text-gray-400"><i class="fas fa-lock"></i></span>
-                        <input type="password" id="password" class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition bg-gray-50 focus:bg-white" placeholder="••••••••" required>
-                    </div>
+                    <label class="block text-xs font-bold text-gray-600 uppercase mb-2" data-en="Password" data-bn="পাসওয়ার্ড">Password</label>
+                    <input type="password" class="w-full pl-4 py-3 border border-gray-200 rounded-lg" data-en="********" data-bn="********" placeholder="********">
                 </div>
-
-                <div class="flex justify-between items-center mb-6">
-                    <label class="flex items-center text-sm text-gray-500 cursor-pointer hover:text-gray-700">
-                        <input type="checkbox" class="mr-2 text-blue-600 focus:ring-blue-500 rounded border-gray-300"> Remember me
-                    </label>
-                    <a href="forgot-password.html" class="text-sm font-bold text-blue-600 hover:text-blue-800 transition">Forgot Password?</a>
-                </div>
-
-                <button type="submit" class="w-full bg-blue-900 text-white font-bold py-4 rounded-lg hover:bg-blue-800 transition shadow-lg transform hover:-translate-y-0.5 active:translate-y-0 text-lg">
-                    Sign In
-                </button>
+                <button type="submit" class="w-full bg-blue-900 text-white font-bold py-4 rounded-lg hover:bg-blue-800 transition shadow-lg" data-en="Sign In" data-bn="লগইন করুন">Sign In</button>
             </form>
 
-            <div class="mt-8 text-center text-sm text-gray-500 border-t pt-6">
-                Don't have an account? 
-                <a href="register-patient.html" id="register-link" class="font-bold text-blue-600 hover:text-blue-800 hover:underline ml-1">Register as Patient</a>
+            <div class="mt-8 text-center text-sm text-gray-500">
+                <span data-en="Don't have an account?" data-bn="একাউন্ট নেই?">Don't have an account?</span> 
+                <a href="register-patient.html" class="font-bold text-blue-600 hover:underline" data-en="Register Now" data-bn="রেজিস্টার করুন">Register Now</a>
             </div>
         </div>
     </div>
 
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        <a href="https://wa.me/917039196489" target="_blank" class="bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition animate-bounce flex items-center justify-center w-16 h-16">
+            <i class="fab fa-whatsapp text-4xl"></i>
+        </a>
+    </div>
+
     <script>
-        let currentUserType = 'patient';
+        let currentLang = localStorage.getItem('treatIntLang') || 'en';
+        updateLanguageDisplay();
 
-        // 1. Switch Tab Functionality
-        function switchTab(type) {
-            currentUserType = type;
-            const tabPatient = document.getElementById('tab-patient');
-            const tabPartner = document.getElementById('tab-partner');
-            const registerLink = document.getElementById('register-link');
-            const loginForm = document.getElementById('loginForm');
-
-            // Reset animation
-            loginForm.classList.remove('fade-in');
-            void loginForm.offsetWidth; // trigger reflow
-            loginForm.classList.add('fade-in');
-
-            if(type === 'patient') {
-                // Style Active Tab
-                tabPatient.className = "w-1/2 py-3 rounded-md text-sm font-bold bg-white text-blue-900 shadow-sm transition duration-300 flex items-center justify-center border border-gray-100";
-                tabPartner.className = "w-1/2 py-3 rounded-md text-sm font-bold text-gray-500 hover:text-blue-900 transition duration-300 flex items-center justify-center";
-                
-                // Update Register Link
-                registerLink.innerText = "Register as Patient";
-                registerLink.href = "register-patient.html";
-            } else {
-                // Style Active Tab
-                tabPartner.className = "w-1/2 py-3 rounded-md text-sm font-bold bg-white text-blue-900 shadow-sm transition duration-300 flex items-center justify-center border border-gray-100";
-                tabPatient.className = "w-1/2 py-3 rounded-md text-sm font-bold text-gray-500 hover:text-blue-900 transition duration-300 flex items-center justify-center";
-                
-                // Update Register Link
-                registerLink.innerText = "Register as Partner";
-                registerLink.href = "register-partner.html";
-            }
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'bn' : 'en';
+            localStorage.setItem('treatIntLang', currentLang);
+            updateLanguageDisplay();
         }
 
-        // 2. Login Handling Logic
-        function handleLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            // Simple validation
-            if (password.length < 4) {
-                alert("Password is too short.");
-                return;
-            }
-
-            console.log("Logging in as: " + currentUserType);
-
-            // 3. REDIRECTS BASED ON YOUR FILE NAMES
-            if (currentUserType === 'patient') {
-                // Redirect to Patient Home
-                window.location.href = 'patient-home.html';
-            } else {
-                // Redirect to Hospital/Partner Dashboard
-                window.location.href = 'dashboard-hospital.html';
-            }
+        function updateLanguageDisplay() {
+            document.body.classList.toggle('bangla-active', currentLang === 'bn');
+            document.getElementById('lang-label').innerText = currentLang === 'bn' ? "বাংলা" : "EN";
+            document.querySelectorAll('[data-en]').forEach(el => {
+                if(el.tagName === 'INPUT') el.placeholder = el.getAttribute(`data-${currentLang}`);
+                else el.innerText = el.getAttribute(`data-${currentLang}`);
+            });
         }
     </script>
 </body>
