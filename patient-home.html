@@ -6,11 +6,12 @@
     <title>TreatInt | Patient Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style> 
         body { font-family: 'Poppins', sans-serif; }
-        /* Smooth fade in animation */
+        body.bangla-active { font-family: 'Hind Siliguri', sans-serif; }
         .fade-in { animation: fadeIn 0.5s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -22,13 +23,17 @@
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center">
                     <i class="fas fa-heartbeat text-2xl mr-2 text-blue-300"></i>
-                    <span class="font-bold text-xl tracking-wide">TreatInt <span class="text-blue-300 font-normal text-sm hidden md:inline">| Patient Portal</span></span>
+                    <span class="font-bold text-xl tracking-wide">TreatInt <span class="text-blue-300 font-normal text-sm hidden md:inline" data-en="| Patient Portal" data-bn="| রোগী পোর্টাল">| Patient Portal</span></span>
                 </div>
 
                 <div class="flex items-center space-x-4">
+                    <button onclick="toggleLanguage()" class="flex items-center bg-blue-800 border border-blue-700 rounded-full px-3 py-1 text-xs font-bold hover:bg-blue-700 transition">
+                        <i class="fas fa-globe mr-2"></i><span id="lang-label">EN</span>
+                    </button>
+
                     <div class="hidden md:flex flex-col text-right mr-2">
                         <span id="navName" class="text-sm font-bold">Guest User</span>
-                        <span class="text-xs text-blue-300">Patient ID: #TI-2025</span>
+                        <span class="text-xs text-blue-300">ID: #TI-2025</span>
                     </div>
                     <div class="h-10 w-10 rounded-full bg-blue-700 flex items-center justify-center border-2 border-blue-400 shadow-md">
                         <i class="fas fa-user text-lg"></i>
@@ -45,11 +50,14 @@
         
         <div class="bg-white rounded-2xl shadow-sm p-8 mb-8 border-l-4 border-blue-600 flex justify-between items-center relative overflow-hidden group">
             <div class="relative z-10">
-                <h1 id="welcomeHeading" class="text-2xl md:text-3xl font-bold text-gray-800">Welcome back! 👋</h1>
-                <p class="text-gray-500 mt-2">Current Status: <span class="font-bold text-orange-500 bg-orange-50 px-2 py-1 rounded-lg text-sm border border-orange-100">Doctor Review in Progress</span></p>
+                <h1 id="welcomeHeading" class="text-2xl md:text-3xl font-bold text-gray-800" data-en="Welcome back!" data-bn="স্বাগতম!">Welcome back!</h1>
+                <p class="text-gray-500 mt-2">
+                    <span data-en="Current Status:" data-bn="বর্তমান অবস্থা:">Current Status:</span> 
+                    <span class="font-bold text-orange-500 bg-orange-50 px-2 py-1 rounded-lg text-sm border border-orange-100" data-en="Doctor Review in Progress" data-bn="ডাক্তার পর্যালোচনা চলছে">Doctor Review in Progress</span>
+                </p>
                 <div class="mt-6">
                     <button class="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-6 py-2.5 rounded-full text-sm font-bold hover:shadow-lg transition transform hover:-translate-y-0.5">
-                        <i class="fas fa-phone-alt mr-2"></i> Contact Care Manager
+                        <i class="fas fa-phone-alt mr-2"></i> <span data-en="Contact Care Manager" data-bn="কেয়ার ম্যানেজারের সাথে কথা বলুন">Contact Care Manager</span>
                     </button>
                 </div>
             </div>
@@ -59,141 +67,130 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             
             <div class="md:col-span-2 space-y-8">
-                
                 <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
                     <h3 class="font-bold text-gray-800 mb-6 flex items-center border-b pb-4">
-                        <i class="fas fa-stream text-blue-600 mr-2"></i> Your Journey
+                        <i class="fas fa-stream text-blue-600 mr-2"></i> <span data-en="Your Journey" data-bn="আপনার যাত্রা">Your Journey</span>
                     </h3>
                     <div class="relative border-l-2 border-gray-200 ml-3 space-y-10 pl-6">
                         
                         <div class="relative">
                             <span class="absolute -left-[35px] top-0 h-5 w-5 rounded-full bg-green-500 border-4 border-white shadow"></span>
-                            <h4 class="font-bold text-gray-800 text-lg">Registration Complete</h4>
-                            <p class="text-sm text-gray-500 mt-1">You created your profile successfully.</p>
+                            <h4 class="font-bold text-gray-800 text-lg" data-en="Registration Complete" data-bn="রেজিস্ট্রেশন সম্পূর্ণ">Registration Complete</h4>
+                            <p class="text-sm text-gray-500 mt-1" data-en="You created your profile successfully." data-bn="আপনার প্রোফাইল সফলভাবে তৈরি হয়েছে।">You created your profile successfully.</p>
                         </div>
 
                         <div class="relative">
                             <span class="absolute -left-[35px] top-0 h-5 w-5 rounded-full bg-blue-600 border-4 border-white shadow-lg animate-pulse"></span>
-                            <h4 class="font-bold text-blue-700 text-lg">Medical Review</h4>
-                            <p class="text-sm text-gray-600 mt-1">Our specialists are currently reviewing your uploaded reports. Expected response: <span class="font-bold">24 Hours</span>.</p>
+                            <h4 class="font-bold text-blue-700 text-lg" data-en="Medical Review" data-bn="মেডিকেল রিভিউ">Medical Review</h4>
+                            <p class="text-sm text-gray-600 mt-1">
+                                <span data-en="Our specialists are reviewing your reports." data-bn="আমাদের বিশেষজ্ঞরা আপনার রিপোর্ট দেখছেন।">Our specialists are reviewing your reports.</span>
+                                <span class="font-bold">24 Hours</span>.
+                            </p>
                             <div class="mt-4 bg-blue-50 p-4 rounded-xl border border-blue-100 text-sm text-blue-800 flex items-start">
                                 <i class="fas fa-info-circle mr-2 mt-1"></i> 
-                                <span><strong>Dr. Sharma (Cardiology)</strong> has been assigned to your case for preliminary assessment.</span>
+                                <span data-en="Dr. Sharma (Cardiology) has been assigned to your case." data-bn="ডাঃ শর্মা (কার্ডিওলজি) আপনার কেস দেখছেন।">Dr. Sharma (Cardiology) has been assigned to your case.</span>
                             </div>
                         </div>
 
                         <div class="relative opacity-50">
                             <span class="absolute -left-[35px] top-0 h-5 w-5 rounded-full bg-gray-300 border-4 border-white"></span>
-                            <h4 class="font-bold text-gray-500 text-lg">Treatment Plan Proposal</h4>
-                            <p class="text-sm text-gray-500 mt-1">Waiting for doctor's approval.</p>
+                            <h4 class="font-bold text-gray-500 text-lg" data-en="Treatment Plan" data-bn="চিকিৎসা পরিকল্পনা">Treatment Plan</h4>
+                            <p class="text-sm text-gray-500 mt-1" data-en="Waiting for approval." data-bn="অনুমোদনের অপেক্ষায়।">Waiting for approval.</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
                     <h3 class="font-bold text-gray-800 mb-4 flex items-center justify-between">
-                        <span>Suggested Hospitals</span>
-                        <a href="hospitals.html" class="text-blue-600 text-sm hover:underline">View All</a>
+                        <span data-en="Suggested Hospitals" data-bn="প্রস্তাবিত হাসপাতাল">Suggested Hospitals</span>
+                        <a href="hospitals.html" class="text-blue-600 text-sm hover:underline" data-en="View All" data-bn="সব দেখুন">View All</a>
                     </h3>
-                    <div class="flex space-x-4 overflow-x-auto pb-4 scrollbar-hide">
+                    <div class="flex space-x-4 overflow-x-auto pb-4">
                         <div class="min-w-[220px] border border-gray-200 rounded-xl p-3 hover:shadow-lg transition cursor-pointer bg-white">
                             <img src="https://images.unsplash.com/photo-1587351021759-3e566b9af9ef?w=400" class="h-28 w-full object-cover rounded-lg mb-3">
                             <h5 class="font-bold text-gray-800">Apollo Indraprastha</h5>
-                            <p class="text-xs text-gray-500 mt-1"><i class="fas fa-map-marker-alt text-red-500 mr-1"></i> New Delhi</p>
+                            <p class="text-xs text-gray-500 mt-1" data-en="New Delhi" data-bn="নয়া দিল্লি">New Delhi</p>
                         </div>
                         <div class="min-w-[220px] border border-gray-200 rounded-xl p-3 hover:shadow-lg transition cursor-pointer bg-white">
                             <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400" class="h-28 w-full object-cover rounded-lg mb-3">
                             <h5 class="font-bold text-gray-800">Fortis Memorial</h5>
-                            <p class="text-xs text-gray-500 mt-1"><i class="fas fa-map-marker-alt text-red-500 mr-1"></i> Gurgaon</p>
-                        </div>
-                        <div class="min-w-[220px] border border-gray-200 rounded-xl p-3 hover:shadow-lg transition cursor-pointer bg-white">
-                            <img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=400" class="h-28 w-full object-cover rounded-lg mb-3">
-                            <h5 class="font-bold text-gray-800">Medanta</h5>
-                            <p class="text-xs text-gray-500 mt-1"><i class="fas fa-map-marker-alt text-red-500 mr-1"></i> Gurgaon</p>
+                            <p class="text-xs text-gray-500 mt-1" data-en="Gurgaon" data-bn="গুরগাঁও">Gurgaon</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="space-y-8">
-                
                 <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-                    <h3 class="font-bold text-gray-800 mb-4">Quick Actions</h3>
+                    <h3 class="font-bold text-gray-800 mb-4" data-en="Quick Actions" data-bn="দ্রুত পদক্ষেপ">Quick Actions</h3>
                     <div class="space-y-3">
-                        <button class="w-full flex items-center justify-between p-4 rounded-xl bg-gray-50 hover:bg-blue-50 hover:text-blue-700 transition border border-transparent hover:border-blue-200 group">
+                        <button class="w-full flex items-center justify-between p-4 rounded-xl bg-gray-50 hover:bg-blue-50 hover:text-blue-700 transition group">
                             <span class="font-medium text-sm flex items-center">
-                                <span class="w-8 h-8 rounded-full bg-white flex items-center justify-center mr-3 shadow-sm text-blue-500"><i class="fas fa-file-upload"></i></span>
-                                Upload New Report
+                                <i class="fas fa-file-upload w-8 text-blue-500"></i> <span data-en="Upload Report" data-bn="রিপোর্ট আপলোড করুন">Upload Report</span>
                             </span>
-                            <i class="fas fa-chevron-right text-xs text-gray-400 group-hover:text-blue-600"></i>
                         </button>
-                        <button class="w-full flex items-center justify-between p-4 rounded-xl bg-gray-50 hover:bg-blue-50 hover:text-blue-700 transition border border-transparent hover:border-blue-200 group">
+                        <button class="w-full flex items-center justify-between p-4 rounded-xl bg-gray-50 hover:bg-blue-50 hover:text-blue-700 transition group">
                             <span class="font-medium text-sm flex items-center">
-                                <span class="w-8 h-8 rounded-full bg-white flex items-center justify-center mr-3 shadow-sm text-blue-500"><i class="fas fa-passport"></i></span>
-                                Request Visa Letter
+                                <i class="fas fa-passport w-8 text-blue-500"></i> <span data-en="Visa Letter" data-bn="ভিসা লেটার">Visa Letter</span>
                             </span>
-                            <i class="fas fa-chevron-right text-xs text-gray-400 group-hover:text-blue-600"></i>
-                        </button>
-                        <button class="w-full flex items-center justify-between p-4 rounded-xl bg-gray-50 hover:bg-blue-50 hover:text-blue-700 transition border border-transparent hover:border-blue-200 group">
-                            <span class="font-medium text-sm flex items-center">
-                                <span class="w-8 h-8 rounded-full bg-white flex items-center justify-center mr-3 shadow-sm text-blue-500"><i class="fas fa-user-edit"></i></span>
-                                Edit Profile
-                            </span>
-                            <i class="fas fa-chevron-right text-xs text-gray-400 group-hover:text-blue-600"></i>
                         </button>
                     </div>
                 </div>
 
-                <div class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl shadow-lg p-6 text-white text-center relative overflow-hidden">
-                    <div class="relative z-10">
-                        <div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30">
-                            <i class="fab fa-whatsapp text-3xl"></i>
-                        </div>
-                        <h3 class="font-bold text-lg mb-1">Need Immediate Help?</h3>
-                        <p class="text-blue-100 text-sm mb-6">Our care managers are online 24/7 to assist you.</p>
-                        <a href="https://wa.me/917039196489" target="_blank" class="block w-full bg-white text-blue-900 font-bold py-3 rounded-lg text-sm hover:bg-blue-50 transition shadow-md">
-                            Chat Now
-                        </a>
-                    </div>
-                    <div class="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-white opacity-10"></div>
-                    <div class="absolute bottom-0 left-0 -ml-8 -mb-8 w-24 h-24 rounded-full bg-white opacity-10"></div>
+                <div class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl shadow-lg p-6 text-white text-center">
+                    <i class="fab fa-whatsapp text-3xl mb-4 block"></i>
+                    <h3 class="font-bold text-lg mb-1" data-en="Need Help?" data-bn="সাহায্য লাগবে?">Need Help?</h3>
+                    <p class="text-blue-100 text-sm mb-6" data-en="Care managers online 24/7." data-bn="কেয়ার ম্যানেজাররা ২৪/৭ অনলাইনে আছেন।">Care managers online 24/7.</p>
+                    <a href="https://wa.me/917039196489" target="_blank" class="block w-full bg-white text-blue-900 font-bold py-3 rounded-lg text-sm hover:bg-blue-50 transition" data-en="Chat Now" data-bn="চ্যাট করুন">Chat Now</a>
                 </div>
-
             </div>
         </div>
     </main>
 
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        <a href="https://wa.me/917039196489" target="_blank" class="bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition animate-bounce flex items-center justify-center w-16 h-16">
+            <i class="fab fa-whatsapp text-4xl"></i>
+        </a>
+    </div>
+
     <script>
+        // 1. Load Name & Greeting
         window.onload = function() {
-            // 1. Retrieve the saved name and the 'New User' flag
             const savedName = localStorage.getItem('patientName');
             const isNewUser = localStorage.getItem('isNewUser');
-
-            // 2. Get HTML Elements
             const heading = document.getElementById('welcomeHeading');
-            const navName = document.getElementById('navName');
-
-            // 3. Logic to update text
+            
             if (savedName) {
-                // Update the Top Navbar Name
-                navName.innerText = savedName;
-
-                // Determine Message Type
+                document.getElementById('navName').innerText = savedName;
                 if (isNewUser === 'true') {
-                    // Scenario A: Just Registered
-                    heading.innerHTML = `Welcome to the Family, <span class="text-blue-600">${savedName}</span>! 🎉`;
-                    
-                    // IMPORTANT: Clear the flag so next time it shows "Welcome Back"
+                    heading.innerHTML = localStorage.getItem('treatIntLang') === 'bn' 
+                        ? `পরিবারে স্বাগতম, <span class="text-blue-600">${savedName}</span>! 🎉` 
+                        : `Welcome to the Family, <span class="text-blue-600">${savedName}</span>! 🎉`;
                     localStorage.removeItem('isNewUser'); 
                 } else {
-                    // Scenario B: Returning User
-                    heading.innerHTML = `Welcome back, <span class="text-blue-600">${savedName}</span>! 👋`;
+                    heading.innerHTML = localStorage.getItem('treatIntLang') === 'bn' 
+                        ? `স্বাগতম, <span class="text-blue-600">${savedName}</span>! 👋` 
+                        : `Welcome back, <span class="text-blue-600">${savedName}</span>! 👋`;
                 }
-            } else {
-                // Scenario C: Fallback (Guest)
-                heading.innerText = "Welcome to TreatInt! 👋";
-                navName.innerText = "Guest User";
             }
+            updateLanguageDisplay(); // Ensure lang is correct after loading
+        }
+
+        // 2. Language Switcher
+        let currentLang = localStorage.getItem('treatIntLang') || 'en';
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'bn' : 'en';
+            localStorage.setItem('treatIntLang', currentLang);
+            updateLanguageDisplay();
+            // Reload to update dynamic JS greeting if needed
+            location.reload(); 
+        }
+        function updateLanguageDisplay() {
+            document.body.classList.toggle('bangla-active', currentLang === 'bn');
+            document.getElementById('lang-label').innerText = currentLang === 'bn' ? "বাংলা" : "EN";
+            document.querySelectorAll('[data-en]').forEach(el => {
+                if(!el.children.length) el.innerText = el.getAttribute(`data-${currentLang}`);
+            });
         }
     </script>
 </body>
