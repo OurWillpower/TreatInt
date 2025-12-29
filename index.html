@@ -3,14 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TreatInt | Leaders in Medical Tourism India</title>
+    <title>TreatInt | Medical Tourism India</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
+        /* Default font for English */
         body { font-family: 'Poppins', sans-serif; }
         
+        /* Font for Bangla */
+        body.bangla-active { font-family: 'Hind Siliguri', sans-serif; }
+
         /* SLIDER ANIMATIONS */
         .slide {
             transition: opacity 1s ease-in-out; opacity: 0; position: absolute;
@@ -22,13 +27,6 @@
         /* CARD HOVER EFFECTS */
         .feature-card { transition: all 0.3s ease; }
         .feature-card:hover { transform: translateY(-10px); }
-        
-        /* GRADIENT TEXT */
-        .text-gradient {
-            background: linear-gradient(to right, #1e3a8a, #2563eb);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -44,15 +42,21 @@
                 </a>
                 
                 <div class="hidden md:flex space-x-8 items-center">
-                    <a href="index.html" class="text-blue-600 font-bold">Home</a>
-                    <a href="hospitals.html" class="text-gray-600 hover:text-blue-600 font-medium transition">Hospitals</a>
-                    <a href="treatments.html" class="text-gray-600 hover:text-blue-600 font-medium transition">Treatments</a>
-                    <a href="contact.html" class="text-gray-600 hover:text-blue-600 font-medium transition">Contact</a>
+                    <a href="index.html" class="text-blue-600 font-bold" data-en="Home" data-bn="হোম">Home</a>
+                    <a href="hospitals.html" class="text-gray-600 hover:text-blue-600 font-medium transition" data-en="Hospitals" data-bn="হাসপাতাল">Hospitals</a>
+                    <a href="treatments.html" class="text-gray-600 hover:text-blue-600 font-medium transition" data-en="Treatments" data-bn="চিকিৎসা">Treatments</a>
+                    <a href="contact.html" class="text-gray-600 hover:text-blue-600 font-medium transition" data-en="Contact" data-bn="যোগাযোগ">Contact</a>
                 </div>
                 
                 <div class="flex items-center space-x-4">
-                    <a href="login.html" class="text-gray-600 font-bold hover:text-blue-600 transition">Login</a>
-                    <a href="register-patient.html" class="bg-gradient-to-r from-blue-700 to-blue-500 text-white px-6 py-2.5 rounded-full font-bold hover:shadow-lg hover:scale-105 transition transform">Get Started</a>
+                    
+                    <button onclick="toggleLanguage()" class="flex items-center border border-gray-300 rounded-full px-3 py-1 text-sm font-bold text-gray-600 hover:border-blue-500 hover:text-blue-600 transition">
+                        <i class="fas fa-globe mr-2"></i>
+                        <span id="lang-label">EN</span>
+                    </button>
+
+                    <a href="login.html" class="text-gray-600 font-bold hover:text-blue-600 transition hidden md:block" data-en="Login" data-bn="লগইন">Login</a>
+                    <a href="register-patient.html" class="bg-gradient-to-r from-blue-700 to-blue-500 text-white px-6 py-2.5 rounded-full font-bold hover:shadow-lg hover:scale-105 transition transform" data-en="Get Started" data-bn="শুরু করুন">Get Started</a>
                 </div>
             </div>
         </div>
@@ -62,82 +66,91 @@
         <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
             <div class="overlay flex items-center px-4 md:px-20">
                 <div class="max-w-3xl text-left mt-16">
-                    <div class="inline-block px-4 py-1 bg-blue-600/20 border border-blue-400 backdrop-blur-sm rounded-full text-blue-100 text-sm font-bold mb-6 tracking-wide">
+                    <div class="inline-block px-4 py-1 bg-blue-600/20 border border-blue-400 backdrop-blur-sm rounded-full text-blue-100 text-sm font-bold mb-6 tracking-wide" 
+                         data-en="Trusted by 10,000+ Families" 
+                         data-bn="১০,০০০+ পরিবারের বিশ্বস্ত সঙ্গী">
                         <i class="fas fa-check-circle mr-2"></i> Trusted by 10,000+ Families
                     </div>
                     <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight drop-shadow-lg">
-                        World-Class Care,<br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-white">Zero Compromise.</span>
+                        <span data-en="World-Class Care," data-bn="বিশ্বমানের সেবা,">World-Class Care,</span><br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-white" data-en="Zero Compromise." data-bn="কোনো আপোষ নেই।">Zero Compromise.</span>
                     </h1>
-                    <p class="text-xl text-gray-200 mb-10 max-w-2xl leading-relaxed">
+                    <p class="text-xl text-gray-200 mb-10 max-w-2xl leading-relaxed" 
+                       data-en="From Visa to Recovery, we handle everything. Access India's top JCI accredited hospitals at a fraction of the cost."
+                       data-bn="ভিসা থেকে সুস্থ হওয়া পর্যন্ত, সব দায়িত্ব আমাদের। ভারতের সেরা হাসপাতালগুলোতে চিকিৎসা নিন সাশ্রয়ী মূল্যে।">
                         From Visa to Recovery, we handle everything. Access India's top JCI accredited hospitals at a fraction of the cost.
                     </p>
                     <div class="flex space-x-4">
-                        <a href="register-patient.html" class="bg-white text-blue-900 px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition shadow-xl">
+                        <a href="register-patient.html" class="bg-white text-blue-900 px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition shadow-xl" 
+                           data-en="Plan My Trip" data-bn="আমার ট্রিপ প্ল্যান করুন">
                             Plan My Trip
                         </a>
-                        <a href="hospitals.html" class="border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white/20 transition backdrop-blur-sm">
+                        <a href="hospitals.html" class="border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white/20 transition backdrop-blur-sm" 
+                           data-en="View Hospitals" data-bn="হাসপাতাল দেখুন">
                             View Hospitals
                         </a>
                     </div>
                 </div>
             </div>
         </div>
-        </header>
+    </header>
 
     <section class="relative -mt-24 z-20 px-4">
         <div class="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
             <div class="text-center mb-8">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Treatment at <span class="text-blue-600">Your Choice</span> Hospital</h2>
-                <p class="text-gray-500 mt-2">Don't settle. Choose from India's Top 50+ Accredited Institutes.</p>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800">
+                    <span data-en="Treatment at" data-bn="চিকিৎসা নিন">Treatment at</span> 
+                    <span class="text-blue-600" data-en="Your Choice" data-bn="আপনার পছন্দের">Your Choice</span> 
+                    <span data-en="Hospital" data-bn="হাসপাতালে">Hospital</span>
+                </h2>
+                <p class="text-gray-500 mt-2" data-en="Don't settle. Choose from India's Top 50+ Accredited Institutes." data-bn="ভারতের সেরা ৫০+ হাসপাতাল থেকে বেছে নিন।">Don't settle. Choose from India's Top 50+ Accredited Institutes.</p>
             </div>
             
             <form action="hospitals.html" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Condition / Specialty</label>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1" data-en="Condition / Specialty" data-bn="রোগ / বিশেষজ্ঞ">Condition / Specialty</label>
                     <div class="relative">
                         <i class="fas fa-stethoscope absolute left-4 top-3.5 text-blue-600"></i>
                         <select class="w-full bg-gray-50 border border-gray-200 text-gray-700 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium h-12">
-                            <option>Any Specialty</option>
-                            <option>Heart Surgery</option>
-                            <option>Cancer / Oncology</option>
-                            <option>Organ Transplant</option>
-                            <option>Orthopedics</option>
+                            <option data-en="Any Specialty" data-bn="যেকোনো বিভাগ">Any Specialty</option>
+                            <option data-en="Heart Surgery" data-bn="হার্ট সার্জারি">Heart Surgery</option>
+                            <option data-en="Cancer / Oncology" data-bn="ক্যান্সার / অনকোলজি">Cancer / Oncology</option>
+                            <option data-en="Organ Transplant" data-bn="অঙ্গ প্রতিস্থাপন">Organ Transplant</option>
                         </select>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Preferred Hospital</label>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1" data-en="Preferred Hospital" data-bn="পছন্দের হাসপাতাল">Preferred Hospital</label>
                     <div class="relative">
                         <i class="fas fa-hospital absolute left-4 top-3.5 text-blue-600"></i>
                         <select class="w-full bg-gray-50 border border-gray-200 text-gray-700 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium h-12">
-                            <option>Any Hospital</option>
+                            <option data-en="Any Hospital" data-bn="যেকোনো হাসপাতাল">Any Hospital</option>
                             <option>Apollo Group</option>
                             <option>Fortis Healthcare</option>
                             <option>Medanta</option>
-                            <option>Max Healthcare</option>
                         </select>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Preferred City</label>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1" data-en="Preferred City" data-bn="পছন্দের শহর">Preferred City</label>
                     <div class="relative">
                         <i class="fas fa-map-marker-alt absolute left-4 top-3.5 text-blue-600"></i>
                         <select class="w-full bg-gray-50 border border-gray-200 text-gray-700 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium h-12">
-                            <option>Any City</option>
+                            <option data-en="Any City" data-bn="যেকোনো শহর">Any City</option>
                             <option>New Delhi</option>
                             <option>Mumbai</option>
                             <option>Bangalore</option>
                             <option>Chennai</option>
+                            <option>Kolkata</option>
                         </select>
                     </div>
                 </div>
 
                 <div>
                     <button type="submit" class="w-full bg-blue-600 text-white font-bold rounded-xl py-3 h-12 hover:bg-blue-700 shadow-lg hover:shadow-xl transition flex items-center justify-center">
-                        <i class="fas fa-search mr-2"></i> Find Doctors
+                        <i class="fas fa-search mr-2"></i> <span data-en="Find Doctors" data-bn="ডাক্তার খুঁজুন">Find Doctors</span>
                     </button>
                 </div>
             </form>
@@ -147,13 +160,14 @@
     <section class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4">
             <div class="text-center mb-16">
-                <span class="bg-blue-50 text-blue-700 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border border-blue-100">
+                <span class="bg-blue-50 text-blue-700 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border border-blue-100" data-en="Why Choose TreatInt?" data-bn="কেন TreatInt বেছে নেবেন?">
                     Why Choose TreatInt?
                 </span>
                 <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 mt-4 mb-4">
-                    A Home Away <span class="text-blue-600">From Home</span>
+                    <span data-en="A Home Away" data-bn="বিদেশে আপনার">A Home Away</span> 
+                    <span class="text-blue-600" data-en="From Home" data-bn="নিজের ঘর">From Home</span>
                 </h2>
-                <p class="text-gray-500 text-lg max-w-2xl mx-auto leading-relaxed">
+                <p class="text-gray-500 text-lg max-w-2xl mx-auto leading-relaxed" data-en="We don't just book appointments. We manage your entire life in India so you can focus 100% on getting better." data-bn="আমরা শুধু অ্যাপয়েন্টমেন্ট বুক করি না। ভারতে আপনার থাকা-খাওয়া সব ব্যবস্থা করি যাতে আপনি শুধু সুস্থ হওয়ার দিকে মনোযোগ দিতে পারেন।">
                     We don't just book appointments. We manage your entire life in India so you can focus 100% on getting better.
                 </p>
             </div>
@@ -164,8 +178,8 @@
                     <div class="w-20 h-20 mx-auto bg-blue-50 rounded-2xl flex items-center justify-center mb-6 text-blue-600 group-hover:scale-110 transition duration-300">
                         <i class="fas fa-home text-3xl"></i>
                     </div>
-                    <h3 class="font-bold text-gray-800 text-xl mb-3">Accommodation</h3>
-                    <p class="text-gray-500 leading-relaxed text-sm">Premium guest houses near your hospital with kitchen facilities.</p>
+                    <h3 class="font-bold text-gray-800 text-xl mb-3" data-en="Accommodation" data-bn="থাকার ব্যবস্থা">Accommodation</h3>
+                    <p class="text-gray-500 leading-relaxed text-sm" data-en="Premium guest houses near your hospital with kitchen facilities." data-bn="হাসপাতালের কাছেই প্রিমিয়াম গেস্ট হাউস এবং রান্নার সুবিধা।">Premium guest houses near your hospital with kitchen facilities.</p>
                 </div>
 
                 <div class="feature-card bg-white p-8 rounded-3xl shadow-lg border border-gray-100 text-center relative overflow-hidden group">
@@ -173,8 +187,8 @@
                     <div class="w-20 h-20 mx-auto bg-green-50 rounded-2xl flex items-center justify-center mb-6 text-green-600 group-hover:scale-110 transition duration-300">
                         <i class="fas fa-utensils text-3xl"></i>
                     </div>
-                    <h3 class="font-bold text-gray-800 text-xl mb-3">Food & Diet</h3>
-                    <p class="text-gray-500 leading-relaxed text-sm">Customized meals that taste like home, approved by dieticians.</p>
+                    <h3 class="font-bold text-gray-800 text-xl mb-3" data-en="Food & Diet" data-bn="খাবার ও পথ্য">Food & Diet</h3>
+                    <p class="text-gray-500 leading-relaxed text-sm" data-en="Customized meals that taste like home, approved by dieticians." data-bn="বাড়ির স্বাদের পুষ্টিকর খাবার যা ডায়েটিশিয়ান অনুমোদিত।">Customized meals that taste like home, approved by dieticians.</p>
                 </div>
 
                 <div class="feature-card bg-white p-8 rounded-3xl shadow-lg border border-gray-100 text-center relative overflow-hidden group">
@@ -182,8 +196,8 @@
                     <div class="w-20 h-20 mx-auto bg-purple-50 rounded-2xl flex items-center justify-center mb-6 text-purple-600 group-hover:scale-110 transition duration-300">
                         <i class="fas fa-language text-3xl"></i>
                     </div>
-                    <h3 class="font-bold text-gray-800 text-xl mb-3">Language Support</h3>
-                    <p class="text-gray-500 leading-relaxed text-sm">24/7 Translators ensuring you understand every doctor's word.</p>
+                    <h3 class="font-bold text-gray-800 text-xl mb-3" data-en="Language Support" data-bn="ভাষা সহায়তা">Language Support</h3>
+                    <p class="text-gray-500 leading-relaxed text-sm" data-en="24/7 Translators ensuring you understand every doctor's word." data-bn="২৪/৭ দোভাষী যাতে আপনি ডাক্তারের সব কথা বুঝতে পারেন।">24/7 Translators ensuring you understand every doctor's word.</p>
                 </div>
 
                 <div class="feature-card bg-white p-8 rounded-3xl shadow-lg border border-gray-100 text-center relative overflow-hidden group">
@@ -191,8 +205,8 @@
                     <div class="w-20 h-20 mx-auto bg-yellow-50 rounded-2xl flex items-center justify-center mb-6 text-yellow-600 group-hover:scale-110 transition duration-300">
                         <i class="fas fa-car text-3xl"></i>
                     </div>
-                    <h3 class="font-bold text-gray-800 text-xl mb-3">Local Logistics</h3>
-                    <p class="text-gray-500 leading-relaxed text-sm">Airport pickup, daily hospital transfers, and SIM cards provided.</p>
+                    <h3 class="font-bold text-gray-800 text-xl mb-3" data-en="Local Logistics" data-bn="যাতায়াত ব্যবস্থা">Local Logistics</h3>
+                    <p class="text-gray-500 leading-relaxed text-sm" data-en="Airport pickup, daily hospital transfers, and SIM cards provided." data-bn="এয়ারপোর্ট পিকআপ, হাসপাতালে যাতায়াত এবং সিম কার্ডের ব্যবস্থা।">Airport pickup, daily hospital transfers, and SIM cards provided.</p>
                 </div>
             </div>
         </div>
@@ -206,42 +220,26 @@
                         <i class="fas fa-heartbeat text-blue-500 text-3xl mr-3"></i>
                         <span class="font-bold text-2xl">TreatInt</span>
                     </div>
-                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6" data-en="Bridging borders for better health. We are India's most trusted medical tourism facilitator." data-bn="সুস্বাস্থ্যের জন্য সীমান্তের বাধা পেরিয়ে। আমরা ভারতের সবচেয়ে বিশ্বস্ত মেডিকেল ট্যুরিজম পার্টনার।">
                         Bridging borders for better health. We are India's most trusted medical tourism facilitator.
                     </p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:bg-blue-600 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:bg-blue-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:bg-pink-600 hover:text-white transition"><i class="fab fa-instagram"></i></a>
-                    </div>
                 </div>
                 
                 <div>
-                    <h4 class="font-bold text-lg mb-6">Quick Links</h4>
+                    <h4 class="font-bold text-lg mb-6" data-en="Quick Links" data-bn="কুইক লিঙ্ক">Quick Links</h4>
                     <ul class="space-y-3 text-gray-400 text-sm">
-                        <li><a href="index.html" class="hover:text-blue-500 transition">Home</a></li>
-                        <li><a href="hospitals.html" class="hover:text-blue-500 transition">Top Hospitals</a></li>
-                        <li><a href="treatments.html" class="hover:text-blue-500 transition">Treatments</a></li>
-                        <li><a href="login.html" class="hover:text-blue-500 transition">Login</a></li>
+                        <li><a href="index.html" class="hover:text-blue-500 transition" data-en="Home" data-bn="হোম">Home</a></li>
+                        <li><a href="hospitals.html" class="hover:text-blue-500 transition" data-en="Top Hospitals" data-bn="সেরা হাসপাতাল">Top Hospitals</a></li>
+                        <li><a href="login.html" class="hover:text-blue-500 transition" data-en="Login" data-bn="লগইন">Login</a></li>
                     </ul>
                 </div>
                 
                 <div>
-                    <h4 class="font-bold text-lg mb-6">Treatments</h4>
-                    <ul class="space-y-3 text-gray-400 text-sm">
-                        <li><a href="#" class="hover:text-blue-500 transition">Cardiac Surgery</a></li>
-                        <li><a href="#" class="hover:text-blue-500 transition">Oncology</a></li>
-                        <li><a href="#" class="hover:text-blue-500 transition">Organ Transplants</a></li>
-                        <li><a href="#" class="hover:text-blue-500 transition">Orthopedics</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="font-bold text-lg mb-6">Contact Us</h4>
+                    <h4 class="font-bold text-lg mb-6" data-en="Contact Us" data-bn="যোগাযোগ">Contact Us</h4>
                     <ul class="space-y-4 text-gray-400 text-sm">
                         <li class="flex items-start">
                             <i class="fas fa-map-marker-alt mt-1 mr-3 text-blue-500"></i>
-                            <span>Mumbai, India</span>
+                            <span data-en="Mumbai, India" data-bn="মুম্বাই, ভারত">Mumbai, India</span>
                         </li>
                         <li class="flex items-center">
                             <i class="fas fa-phone-alt mr-3 text-blue-500"></i>
@@ -260,11 +258,63 @@
         </div>
     </footer>
 
-    <div id="wa-widget" class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-        <a href="https://wa.me/917039196489?text=Hi%20TreatInt,%20I%20need%20help." target="_blank" class="bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition transform hover:scale-105 animate-bounce flex items-center justify-center w-16 h-16">
-            <i class="fab fa-whatsapp text-4xl"></i>
-        </a>
-    </div>
+    <script>
+        // Check local storage for language preference
+        let currentLang = localStorage.getItem('treatIntLang') || 'en';
+        
+        // Run on load
+        updateLanguageDisplay();
 
+        function toggleLanguage() {
+            // Toggle between 'en' and 'bn'
+            currentLang = currentLang === 'en' ? 'bn' : 'en';
+            
+            // Save preference
+            localStorage.setItem('treatIntLang', currentLang);
+            
+            // Update UI
+            updateLanguageDisplay();
+        }
+
+        function updateLanguageDisplay() {
+            const body = document.body;
+            const langLabel = document.getElementById('lang-label');
+            const elements = document.querySelectorAll('[data-en]');
+
+            if (currentLang === 'bn') {
+                // Switch to Bangla
+                body.classList.add('bangla-active');
+                langLabel.innerText = "বাংলা";
+                elements.forEach(el => {
+                    if(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.placeholder = el.getAttribute('data-bn');
+                    } else if (el.tagName === 'OPTION') {
+                        el.innerText = el.getAttribute('data-bn');
+                    } else {
+                        // Use innerHTML to preserve spans inside headers
+                        if(el.children.length === 0) {
+                             el.innerText = el.getAttribute('data-bn');
+                        } else {
+                            // If element has children (like spans), we might need more specific targeting
+                            // But for this simple implementation, direct text replacement on spans works best.
+                        }
+                    }
+                });
+                
+                // Specific fix for spans/headers
+                document.querySelectorAll('span[data-bn], p[data-bn], h1[data-bn], h2[data-bn], h3[data-bn], h4[data-bn], a[data-bn], button[data-bn], option[data-bn], label[data-bn]').forEach(el => {
+                     el.innerText = el.getAttribute('data-bn');
+                });
+
+            } else {
+                // Switch to English
+                body.classList.remove('bangla-active');
+                langLabel.innerText = "EN";
+                document.querySelectorAll('span[data-en], p[data-en], h1[data-en], h2[data-en], h3[data-en], h4[data-en], a[data-en], button[data-en], option[data-en], label[data-en]').forEach(el => {
+                     el.innerText = el.getAttribute('data-en');
+                });
+            }
+        }
+    </script>
 </body>
 </html>
