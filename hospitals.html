@@ -6,8 +6,9 @@
     <title>TreatInt | Partner Hospitals</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style> body { font-family: 'Poppins', sans-serif; } </style>
+    <style> body { font-family: 'Poppins', sans-serif; } body.bangla-active { font-family: 'Hind Siliguri', sans-serif; } </style>
 </head>
 <body class="bg-white">
 
@@ -19,113 +20,87 @@
                     <span class="font-bold text-2xl text-blue-900">TreatInt</span>
                 </a>
                 <div class="hidden md:flex space-x-8">
-                    <a href="index.html" class="text-gray-600 hover:text-blue-900 transition">Home</a>
-                    <a href="hospitals.html" class="text-blue-900 font-bold hover:text-blue-600 transition">Hospitals</a>
-                    <a href="contact.html" class="text-gray-600 hover:text-blue-900 transition">Contact</a>
+                    <a href="index.html" class="text-gray-600 hover:text-blue-900" data-en="Home" data-bn="হোম">Home</a>
+                    <a href="hospitals.html" class="text-blue-900 font-bold" data-en="Hospitals" data-bn="হাসপাতাল">Hospitals</a>
+                    <a href="contact.html" class="text-gray-600 hover:text-blue-900" data-en="Contact" data-bn="যোগাযোগ">Contact</a>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <a href="login.html" class="bg-blue-900 text-white px-5 py-2 rounded-full font-bold hover:bg-blue-800 transition shadow-lg">Login</a>
+                    <button onclick="toggleLanguage()" class="flex items-center border border-gray-300 rounded-full px-3 py-1 text-sm font-bold text-gray-600 hover:text-blue-600">
+                        <i class="fas fa-globe mr-2"></i><span id="lang-label">EN</span>
+                    </button>
+                    <a href="login.html" class="bg-blue-900 text-white px-5 py-2 rounded-full font-bold hover:bg-blue-800 transition shadow-lg" data-en="Login" data-bn="লগইন">Login</a>
                 </div>
             </div>
         </div>
     </nav>
 
     <header class="bg-blue-900 text-white pt-32 pb-20 px-4 text-center">
-        <h1 class="text-3xl md:text-5xl font-bold mb-4">World-Class Hospitals</h1>
-        <p class="text-blue-200 text-lg max-w-2xl mx-auto">Browse our network of JCI and NABH accredited hospitals across India. Filter by city or specialty to find the perfect match for your needs.</p>
+        <h1 class="text-3xl md:text-5xl font-bold mb-4" data-en="World-Class Hospitals" data-bn="বিশ্বমানের হাসপাতাল">World-Class Hospitals</h1>
+        <p class="text-blue-200 text-lg max-w-2xl mx-auto" data-en="Browse our network of JCI accredited hospitals." data-bn="আমাদের JCI স্বীকৃত হাসপাতালের নেটওয়ার্ক দেখুন।">Browse our network of JCI accredited hospitals.</p>
         
         <div class="max-w-3xl mx-auto mt-8 bg-white rounded-full p-2 flex shadow-2xl">
-            <div class="flex-1 px-4 border-r border-gray-200 flex items-center">
+            <div class="flex-1 px-4 flex items-center">
                 <i class="fas fa-search text-gray-400 mr-3"></i>
-                <input type="text" placeholder="Search Hospital or Treatment..." class="w-full text-gray-700 focus:outline-none">
+                <input type="text" data-en="Search Hospital..." data-bn="হাসপাতাল খুঁজুন..." placeholder="Search Hospital..." class="w-full text-gray-700 focus:outline-none">
             </div>
-            <div class="px-4 flex items-center">
-                <i class="fas fa-map-marker-alt text-gray-400 mr-3"></i>
-                <select class="bg-transparent text-gray-700 focus:outline-none cursor-pointer">
-                    <option>All Cities</option>
-                    <option>New Delhi</option>
-                    <option>Mumbai</option>
-                    <option>Bangalore</option>
-                    <option>Chennai</option>
-                </select>
-            </div>
-            <button class="bg-blue-600 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-700 transition">Search</button>
+            <button class="bg-blue-600 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-700 transition" data-en="Search" data-bn="খুঁজুন">Search</button>
         </div>
     </header>
 
     <section class="py-16 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-2xl transition duration-300">
                     <div class="relative h-48">
-                        <img src="https://images.unsplash.com/photo-1587351021759-3e566b9af9ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                        <div class="absolute top-4 right-4 bg-white px-2 py-1 rounded text-xs font-bold text-blue-900 shadow">JCI Accredited</div>
+                        <img src="https://images.unsplash.com/photo-1587351021759-3e566b9af9ef?w=800" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        <div class="absolute top-4 right-4 bg-white px-2 py-1 rounded text-xs font-bold text-blue-900 shadow">JCI</div>
                     </div>
                     <div class="p-6">
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="text-xl font-bold text-gray-800">Apollo Hospital</h3>
                             <span class="text-yellow-400 text-sm"><i class="fas fa-star"></i> 4.9</span>
                         </div>
-                        <p class="text-gray-500 text-sm mb-4"><i class="fas fa-map-marker-alt mr-1 text-red-500"></i> Indraprastha, New Delhi</p>
-                        
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded">Cardiology</span>
-                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded">Oncology</span>
-                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded">Transplants</span>
-                        </div>
-                        
+                        <p class="text-gray-500 text-sm mb-4" data-en="New Delhi" data-bn="নয়া দিল্লি">New Delhi</p>
                         <div class="border-t pt-4 flex justify-between items-center">
-                            <a href="#" class="text-blue-600 font-bold text-sm hover:underline">View Details</a>
-                            <a href="register-patient.html" class="bg-blue-900 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-800 transition">Get Quote</a>
+                            <a href="#" class="text-blue-600 font-bold text-sm hover:underline" data-en="View Details" data-bn="বিস্তারিত দেখুন">View Details</a>
+                            <a href="register-patient.html" class="bg-blue-900 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-800 transition" data-en="Get Quote" data-bn="খরচ জানুন">Get Quote</a>
                         </div>
                     </div>
                 </div>
 
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-2xl transition duration-300">
                     <div class="relative h-48">
-                        <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                        <div class="absolute top-4 right-4 bg-white px-2 py-1 rounded text-xs font-bold text-blue-900 shadow">NABH Accredited</div>
+                        <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        <div class="absolute top-4 right-4 bg-white px-2 py-1 rounded text-xs font-bold text-blue-900 shadow">NABH</div>
                     </div>
                     <div class="p-6">
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="text-xl font-bold text-gray-800">Fortis Memorial</h3>
                             <span class="text-yellow-400 text-sm"><i class="fas fa-star"></i> 4.8</span>
                         </div>
-                        <p class="text-gray-500 text-sm mb-4"><i class="fas fa-map-marker-alt mr-1 text-red-500"></i> Gurgaon, Haryana</p>
-                        
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded">Robotic Surgery</span>
-                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded">Neurology</span>
-                        </div>
-                        
+                        <p class="text-gray-500 text-sm mb-4" data-en="Gurgaon" data-bn="গুরগাঁও">Gurgaon</p>
                         <div class="border-t pt-4 flex justify-between items-center">
-                            <a href="#" class="text-blue-600 font-bold text-sm hover:underline">View Details</a>
-                            <a href="register-patient.html" class="bg-blue-900 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-800 transition">Get Quote</a>
+                            <a href="#" class="text-blue-600 font-bold text-sm hover:underline" data-en="View Details" data-bn="বিস্তারিত দেখুন">View Details</a>
+                            <a href="register-patient.html" class="bg-blue-900 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-800 transition" data-en="Get Quote" data-bn="খরচ জানুন">Get Quote</a>
                         </div>
                     </div>
                 </div>
 
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-2xl transition duration-300">
                     <div class="relative h-48">
-                        <img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                        <div class="absolute top-4 right-4 bg-white px-2 py-1 rounded text-xs font-bold text-blue-900 shadow">JCI Accredited</div>
+                        <img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=800" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        <div class="absolute top-4 right-4 bg-white px-2 py-1 rounded text-xs font-bold text-blue-900 shadow">JCI</div>
                     </div>
                     <div class="p-6">
                         <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-xl font-bold text-gray-800">Medanta - The Medicity</h3>
+                            <h3 class="text-xl font-bold text-gray-800">Medanta</h3>
                             <span class="text-yellow-400 text-sm"><i class="fas fa-star"></i> 5.0</span>
                         </div>
-                        <p class="text-gray-500 text-sm mb-4"><i class="fas fa-map-marker-alt mr-1 text-red-500"></i> Gurgaon, Haryana</p>
-                        
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded">Liver Transplant</span>
-                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded">Ayurveda</span>
-                        </div>
-                        
+                        <p class="text-gray-500 text-sm mb-4" data-en="Gurgaon" data-bn="গুরগাঁও">Gurgaon</p>
                         <div class="border-t pt-4 flex justify-between items-center">
-                            <a href="#" class="text-blue-600 font-bold text-sm hover:underline">View Details</a>
-                            <a href="register-patient.html" class="bg-blue-900 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-800 transition">Get Quote</a>
+                            <a href="#" class="text-blue-600 font-bold text-sm hover:underline" data-en="View Details" data-bn="বিস্তারিত দেখুন">View Details</a>
+                            <a href="register-patient.html" class="bg-blue-900 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-800 transition" data-en="Get Quote" data-bn="খরচ জানুন">Get Quote</a>
                         </div>
                     </div>
                 </div>
@@ -134,5 +109,30 @@
         </div>
     </section>
 
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        <a href="https://wa.me/917039196489" target="_blank" class="bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition animate-bounce flex items-center justify-center w-16 h-16">
+            <i class="fab fa-whatsapp text-4xl"></i>
+        </a>
+    </div>
+
+    <script>
+        let currentLang = localStorage.getItem('treatIntLang') || 'en';
+        updateLanguageDisplay();
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'bn' : 'en';
+            localStorage.setItem('treatIntLang', currentLang);
+            updateLanguageDisplay();
+        }
+
+        function updateLanguageDisplay() {
+            document.body.classList.toggle('bangla-active', currentLang === 'bn');
+            document.getElementById('lang-label').innerText = currentLang === 'bn' ? "বাংলা" : "EN";
+            document.querySelectorAll('[data-en]').forEach(el => {
+                if(el.tagName === 'INPUT') el.placeholder = el.getAttribute(`data-${currentLang}`);
+                else if(!el.children.length) el.innerText = el.getAttribute(`data-${currentLang}`);
+            });
+        }
+    </script>
 </body>
 </html>
