@@ -1,453 +1,146 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TreatInt | Medical Tourism</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <style>
-        /* --- RESET & BASIC SETUP --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
+<div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
+<div class="overlay flex items-center px-4 md:px-20">
+<div class="max-w-3xl text-left mt-16">
+                    <div class="inline-block px-4 py-1 bg-blue-600/20 border border-blue-400 backdrop-blur-sm rounded-full text-blue-100 text-sm font-bold mb-6 tracking-wide" 
+                    <div id="dynamic-badge" class="inline-block px-4 py-1 bg-blue-600/20 border border-blue-400 backdrop-blur-sm rounded-full text-blue-100 text-sm font-bold mb-6 tracking-wide" 
+data-en="Trusted by 10,000+ Families" data-bn="১০,০০০+ পরিবারের বিশ্বস্ত সঙ্গী">
+                        Trusted by 10,000+ Families
+                        <i class="fas fa-check-circle mr-2"></i> Trusted by 10,000+ Families
+</div>
+                    
+<h1 class="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight drop-shadow-lg">
+<span data-en="World-Class Care," data-bn="বিশ্বমানের সেবা,">World-Class Care,</span><br>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-white" data-en="Zero Compromise." data-bn="কোনো আপোষ নেই।">Zero Compromise.</span>
+@@ -345,40 +346,68 @@ <h4 class="font-bold text-lg mb-6" data-en="Contact Us" data-bn="যোগায
+</footer>
 
-        body {
-            background-color: #f8f9fa;
-            color: #1e293b;
-        }
+<script>
+        // --- SLIDER LOGIC ---
+        // --- 1. SLIDER LOGIC ---
+let slideIndex = 0;
+const slides = document.getElementsByClassName("slide");
 
-        a { text-decoration: none; color: inherit; }
-        ul { list-style: none; }
+        // Auto-start slider
+setInterval(showNextSlide, 5000); // 5 seconds
 
-        /* --- NAVIGATION --- */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 5%;
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: #0f172a;
-            gap: 10px;
-        }
-        
-        .logo i { color: #2563eb; }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav-links a {
-            font-weight: 500;
-            color: #64748b;
-            transition: 0.3s;
-        }
-
-        .nav-links a:hover, .nav-links a.active {
-            color: #2563eb;
-        }
-
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .lang-btn {
-            border: 1px solid #e2e8f0;
-            padding: 5px 10px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            background: transparent;
-        }
-
-        .btn-primary {
-            background: #2563eb;
-            color: white;
-            padding: 10px 24px;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-
-        .btn-primary:hover { background: #1d4ed8; }
-
-        /* --- HERO SECTION --- */
-        .hero {
-            /* Placeholder for the airplane image you had */
-            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2074&auto=format&fit=crop'); 
-            background-size: cover;
-            background-position: center;
-            height: 450px; /* Reduced height so search bar floats nicely */
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* --- SEARCH SECTION (The Floating Card) --- */
-        .search-container {
-            max-width: 1000px;
-            margin: -80px auto 0 auto; /* Pulls it UP over the hero image */
-            padding: 0 20px;
-            position: relative;
-            z-index: 10;
-        }
-
-        .search-card {
-            background: white;
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        .search-card h1 {
-            font-size: 1.8rem;
-            margin-bottom: 30px;
-            color: #0f172a;
-        }
-
-        .highlight-text { color: #2563eb; }
-
-        .search-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr auto;
-            gap: 15px;
-            align-items: end;
-        }
-
-        .input-group { text-align: left; }
-        
-        .input-group label {
-            display: block;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #64748b;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-
-        .input-wrapper {
-            position: relative;
-            background: #f1f5f9;
-            border-radius: 8px;
-        }
-
-        .input-wrapper select {
-            width: 100%;
-            padding: 12px 16px;
-            border: none;
-            background: transparent;
-            font-size: 0.95rem;
-            color: #334155;
-            appearance: none;
-            cursor: pointer;
-            outline: none;
-        }
-
-        .search-btn {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            height: 46px; /* Match input height */
-        }
-
-        /* --- WORKFLOW SECTION (Re-added to fix spacing) --- */
-        .workflow-section {
-            padding: 140px 5% 80px 5%; /* Top padding ensures space below the floating search bar */
-            text-align: center;
-        }
-
-        .section-header h2 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            color: #0f172a;
-        }
-
-        .section-header p {
-            color: #64748b;
-            margin-bottom: 50px;
-        }
-
-        .workflow-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .workflow-card {
-            background: white;
-            padding: 40px 30px;
-            border-radius: 12px;
-            transition: transform 0.3s ease;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-
-        .workflow-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .icon-box {
-            width: 70px;
-            height: 70px;
-            background: #eff6ff;
-            color: #2563eb;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin: 0 auto 20px auto;
-        }
-
-        .workflow-card h3 {
-            margin-bottom: 15px;
-            color: #1e293b;
-        }
-
-        .workflow-card p {
-            color: #64748b;
-            line-height: 1.6;
-            font-size: 0.95rem;
-        }
-
-        /* --- FOOTER (Dark Blue) --- */
-        .footer {
-            background: #0f172a;
-            color: white;
-            padding: 60px 5% 30px;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-            border-bottom: 1px solid #334155;
-            padding-bottom: 40px;
-        }
-
-        .footer-brand h2 {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-        }
-
-        .footer-brand p {
-            color: #94a3b8;
-            max-width: 300px;
-            line-height: 1.6;
-        }
-
-        .footer-links h4 {
-            color: white;
-            margin-bottom: 20px;
-        }
-
-        .footer-links ul li {
-            margin-bottom: 12px;
-        }
-
-        .footer-links a {
-            color: #94a3b8;
-            transition: 0.2s;
-        }
-
-        .footer-links a:hover { color: white; }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 30px;
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-        
-        /* Floating Whatsapp */
-        .whatsapp-float {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #25D366;
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            z-index: 1000;
-        }
-
-        /* Responsive Fixes */
-        @media (max-width: 768px) {
-            .search-form { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
-            .workflow-section { padding-top: 250px; } /* More space needed on mobile due to stacked search inputs */
-        }
-    </style>
-</head>
-<body>
-
-    <nav class="navbar">
-        <div class="logo">
-            <i class="fas fa-heartbeat"></i> TreatInt
-        </div>
-        <div class="nav-links">
-            <a href="#" class="active">Home</a>
-            <a href="#">Hospitals</a>
-            <a href="#">Contact</a>
-        </div>
-        <div class="nav-actions">
-            <button class="lang-btn"><i class="fas fa-globe"></i> EN</button>
-            <a href="#" style="font-weight: 600; font-size: 0.95rem;">Login</a>
-            <a href="#" class="btn-primary">Get Started</a>
-        </div>
-    </nav>
-
-    <section class="hero">
-        </section>
-
-    <div class="search-container">
-        <div class="search-card">
-            <h1>Treatment at <span class="highlight-text">Your Choice</span> Hospital</h1>
+function showNextSlide() {
+            // Hide current
+slides[slideIndex].classList.remove("active");
             
-            <form class="search-form">
-                <div class="input-group">
-                    <label>Specialty</label>
-                    <div class="input-wrapper">
-                        <select>
-                            <option>Any Specialty</option>
-                            <option>Cardiology</option>
-                            <option>Orthopedics</option>
-                        </select>
-                    </div>
-                </div>
+            // Increment
+slideIndex++;
+if (slideIndex >= slides.length) { slideIndex = 0; }
+            
+            // Show next
+slides[slideIndex].classList.add("active");
+}
 
-                <div class="input-group">
-                    <label>Hospital</label>
-                    <div class="input-wrapper">
-                        <select>
-                            <option>Any Hospital</option>
-                            <option>Apollo Hospital</option>
-                            <option>Fortis Healthcare</option>
-                        </select>
-                    </div>
-                </div>
+        // --- 2. LOCATION INTELLIGENCE (The Intelligent Greeting) ---
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Fetch User Location from Free API
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+                
+                const badge = document.getElementById('dynamic-badge');
+                if (!badge) return;
+                
+                // Logic based on Country/City
+                if (data.country_name && data.country_name.includes("Bangladesh")) {
+                    // Visitor from Bangladesh
+                    badge.innerHTML = `<i class="fas fa-heart text-red-500 mr-2"></i> Proudly Serving Families from ${data.city}, BD 🇧🇩`;
+                    badge.setAttribute('data-en', `Proudly Serving Families from ${data.city}, BD 🇧🇩`);
+                    badge.setAttribute('data-bn', `${data.city}, বাংলাদেশ থেকে রোগীদের গর্বিত সেবক 🇧🇩`);
+                } 
+                else if (data.country_name && data.country_name.includes("India")) {
+                    // Visitor from India
+                    badge.innerHTML = `<i class="fas fa-map-marker-alt text-yellow-400 mr-2"></i> Finding Top Doctors in ${data.city}?`;
+                    badge.setAttribute('data-en', `Finding Top Doctors in ${data.city}?`);
+                    badge.setAttribute('data-bn', `${data.city}-তে সেরা ডাক্তার খুঁজছেন?`);
+                }
+                else {
+                    // International Visitor
+                    const country = data.country_name || "Abroad";
+                    badge.innerHTML = `<i class="fas fa-plane text-white mr-2"></i> Welcome from ${country}! We manage your travel.`;
+                    badge.setAttribute('data-en', `Welcome from ${country}! We manage your travel.`);
+                    badge.setAttribute('data-bn', `${country} থেকে স্বাগতম! আমরা আপনার ভ্রমণের ব্যবস্থা করছি।`);
+                }
 
-                <div class="input-group">
-                    <label>City</label>
-                    <div class="input-wrapper">
-                        <select>
-                            <option>Any City</option>
-                            <option>Mumbai</option>
-                            <option>Delhi</option>
-                        </select>
-                    </div>
-                </div>
+                // If Language is already set to Bangla, apply the new translation immediately
+                if(localStorage.getItem('treatIntLang') === 'bn') {
+                    badge.innerText = badge.getAttribute('data-bn');
+                }
 
-                <button type="button" class="search-btn">
-                    <i class="fas fa-search"></i> Find Doctors
-                </button>
-            </form>
-        </div>
-    </div>
+            } catch (error) {
+                console.log("Location detection failed, keeping default text.");
+            }
+        });
 
-    <section class="workflow-section">
-        <div class="section-header">
-            <h2>How It Works</h2>
-            <p>Your journey to better health in 3 simple steps</p>
-        </div>
+        // --- LANGUAGE SWITCHER LOGIC ---
 
-        <div class="workflow-grid">
-            <div class="workflow-card">
-                <div class="icon-box">
-                    <i class="fas fa-search"></i>
-                </div>
-                <h3>1. Search</h3>
-                <p>Find the best hospitals and specialists for your specific condition based on your needs.</p>
-            </div>
+        // --- 3. LANGUAGE SWITCHER LOGIC ---
+let currentLang = localStorage.getItem('treatIntLang') || 'en';
+        
+        // Run on load
+updateLanguageDisplay();
 
-            <div class="workflow-card">
-                <div class="icon-box">
-                    <i class="fas fa-file-medical"></i>
-                </div>
-                <h3>2. Compare</h3>
-                <p>Review treatment costs, doctor profiles, and hospital facilities transparently.</p>
-            </div>
+function toggleLanguage() {
+            // Toggle between 'en' and 'bn'
+currentLang = currentLang === 'en' ? 'bn' : 'en';
+            
+            // Save preference
+localStorage.setItem('treatIntLang', currentLang);
+            
+            // Update UI
+updateLanguageDisplay();
+}
 
-            <div class="workflow-card">
-                <div class="icon-box">
-                    <i class="fas fa-plane-departure"></i>
-                </div>
-                <h3>3. Travel</h3>
-                <p>Book your appointment and travel with our full assistance for a hassle-free experience.</p>
-            </div>
-        </div>
-    </section>
+@@ -388,7 +417,6 @@ <h4 class="font-bold text-lg mb-6" data-en="Contact Us" data-bn="যোগায
+const elements = document.querySelectorAll('[data-en]');
 
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <h2><i class="fas fa-heartbeat"></i> TreatInt</h2>
-                <p>Bridging borders for better health. Connecting you with world-class medical care at affordable prices.</p>
-            </div>
-            <div class="footer-links">
-                <h4>Company</h4>
-                <ul>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Careers</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-links">
-                <h4>Legal</h4>
-                <ul>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms of Service</a></li>
-                    <li><a href="#">Cookie Policy</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 TreatInt. All rights reserved.</p>
-        </div>
-    </footer>
+if (currentLang === 'bn') {
+                // Switch to Bangla
+body.classList.add('bangla-active');
+langLabel.innerText = "বাংলা";
+elements.forEach(el => {
+@@ -397,28 +425,28 @@ <h4 class="font-bold text-lg mb-6" data-en="Contact Us" data-bn="যোগায
+} else if (el.tagName === 'OPTION') {
+el.innerText = el.getAttribute('data-bn');
+} else {
+                        // For text elements, we use innerText if it has no children, otherwise careful replacement
+                         if(el.children.length === 0) {
+                        // Safe replacement for text nodes
+                        if(el.children.length === 0) {
+el.innerText = el.getAttribute('data-bn');
+}
+}
+});
+                
+                // Specific fix for text-only elements
+                document.querySelectorAll('span[data-bn], p[data-bn], h1[data-bn], h2[data-bn], h3[data-bn], h4[data-bn], a[data-bn], button[data-bn], option[data-bn], label[data-bn]').forEach(el => {
+                     // Check if it's not a container with icons (except buttons)
+                     if(el.children.length === 0 || el.tagName === 'BUTTON') {
+                        // For buttons with icons, we might need to be careful, but pure text replacement works if icon is separate
+                // Force update specifically for known text elements to ensure translation sticks
+                document.querySelectorAll('span[data-bn], p[data-bn], h1[data-bn], h2[data-bn], h3[data-bn], h4[data-bn], a[data-bn], button[data-bn], div[data-bn]').forEach(el => {
+                     // Avoid overwriting icons if they exist as children
+                     if(el.children.length === 0 || el.id === 'dynamic-badge') {
+                        el.innerText = el.getAttribute('data-bn');
+                        // Re-add icon for badge if needed
+                        if(el.id === 'dynamic-badge' && el.innerHTML.indexOf('<i') === -1) {
+                             // Simple text replacement is fine for the badge as the icon is decorative
+                        }
+}
+                     // Force replacement for known text nodes
+                     if(el.getAttribute('data-bn')) el.innerText = el.getAttribute('data-bn');
+});
 
-    <a href="#" class="whatsapp-float">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-
-</body>
-</html>
+} else {
+                // Switch to English
+body.classList.remove('bangla-active');
+langLabel.innerText = "EN";
+                document.querySelectorAll('span[data-en], p[data-en], h1[data-en], h2[data-en], h3[data-en], h4[data-en], a[data-en], button[data-en], option[data-en], label[data-en]').forEach(el => {
+                document.querySelectorAll('span[data-en], p[data-en], h1[data-en], h2[data-en], h3[data-en], h4[data-en], a[data-en], button[data-en], div[data-en]').forEach(el => {
+if(el.getAttribute('data-en')) el.innerText = el.getAttribute('data-en');
+});
+}
