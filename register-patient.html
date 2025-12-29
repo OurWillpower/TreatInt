@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style> body { font-family: 'Poppins', sans-serif; } </style>
 </head>
-<body class="bg-blue-50 min-h-screen py-10">
+<body class="bg-blue-50 min-h-screen py-10 relative">
 
     <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
         
@@ -23,7 +23,7 @@
             </a>
         </div>
 
-        <form action="patient-home.html" class="p-8">
+        <form id="regForm" onsubmit="handleRegistration(event)" class="p-8">
             
             <h3 class="text-blue-900 font-bold border-b border-gray-200 pb-2 mb-6 uppercase text-sm tracking-wide">
                 <i class="fas fa-user-circle mr-2"></i> Personal Details
@@ -32,7 +32,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
                     <label class="block text-gray-700 text-sm font-bold mb-2">Full Name</label>
-                    <input type="text" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600" placeholder="Patient Name">
+                    <input type="text" id="fullName" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600" placeholder="Patient Name" required>
                 </div>
                 <div>
                     <label class="block text-gray-700 text-sm font-bold mb-2">Country of Residence</label>
@@ -84,13 +84,49 @@
             <button type="submit" class="w-full bg-blue-900 text-white font-bold py-4 rounded-lg shadow-lg hover:bg-blue-800 transition transform hover:-translate-y-0.5">
                 Create Patient Profile
             </button>
-            
-            <p class="text-center text-gray-500 text-sm mt-4">
-                Already registered? <a href="login.html" class="text-blue-600 font-bold hover:underline">Login here</a>
-            </p>
-
         </form>
     </div>
+
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center transform transition-all scale-100">
+            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-check text-4xl text-green-600"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Registration Successful!</h3>
+            <p class="text-gray-500 mb-6 leading-relaxed">
+                Thank you, <span id="modalName" class="font-bold text-blue-600">User</span>. We have received your details. <br><br>
+                Our Medical Team will review your reports and <strong>contact you within 24 hours</strong> with a treatment plan.
+            </p>
+            <button onclick="goToDashboard()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition shadow-lg">
+                Go to Dashboard
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function handleRegistration(event) {
+            // 1. Stop the form from submitting immediately
+            event.preventDefault();
+
+            // 2. Get the name typed by user
+            const nameInput = document.getElementById('fullName').value;
+
+            // 3. Save name to Browser Memory (LocalStorage) so Dashboard can see it
+            localStorage.setItem('patientName', nameInput);
+
+            // 4. Update Modal Text
+            document.getElementById('modalName').innerText = nameInput;
+
+            // 5. Show the Success Modal
+            document.getElementById('successModal').classList.remove('hidden');
+            document.getElementById('successModal').classList.add('flex');
+        }
+
+        function goToDashboard() {
+            // 6. Redirect to the Dashboard page
+            window.location.href = 'patient-home.html';
+        }
+    </script>
 
 </body>
 </html>
