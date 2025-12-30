@@ -2,106 +2,163 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register | TreatInt</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: sans-serif; padding: 40px; background: #f0f0f0; }
-        .box { background: white; padding: 30px; max-width: 400px; margin: 0 auto; border-radius: 10px; }
-        input { display: block; width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; }
-        button { padding: 15px 30px; background: blue; color: white; font-weight: bold; cursor: pointer; border: none; font-size: 16px; }
-        button:hover { background: darkblue; }
+        /* --- UNIFIED THEME --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body.bangla-active, body.bangla-active * { font-family: 'Hind Siliguri', sans-serif !important; }
+        
+        body { 
+            background-color: #fffbf2;
+            background-image: radial-gradient(#e2e8f0 0.5px, transparent 0.5px), radial-gradient(#e2e8f0 0.5px, #fffbf2 0.5px);
+            background-size: 20px 20px;
+            color: #1e293b; min-height: 100vh; display: flex; flex-direction: column;
+        }
+
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; position: absolute; top: 0; width: 100%; z-index: 10; }
+        .logo { display: flex; align-items: center; font-size: 1.5rem; font-weight: 900; color: #0f172a; gap: 10px; text-decoration: none; }
+        .logo i { background: linear-gradient(135deg, #2563eb, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .back-link { font-weight: 600; color: #64748b; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .back-link:hover { color: #2563eb; }
+
+        .register-section { flex: 1; display: flex; align-items: center; justify-content: center; padding: 100px 20px 50px; }
+        .register-card { background: white; width: 100%; max-width: 550px; padding: 40px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(202, 138, 4, 0.15); border-top: 4px solid; border-image: linear-gradient(to right, #bf953f, #fcf6ba, #b38728) 1; position: relative; }
+
+        .form-header { text-align: center; margin-bottom: 30px; }
+        .form-header h1 { font-size: 2rem; font-weight: 800; color: #0f172a; margin-bottom: 10px; }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .full-width { grid-column: span 2; }
+        .input-group label { display: block; font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 8px; }
+        .input-field { width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; background: #f8fafc; outline: none; }
+        .input-field:focus { border-color: #2563eb; background: white; }
+
+        .submit-btn { width: 100%; padding: 16px; border: none; border-radius: 12px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4); }
+        .submit-btn:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; box-shadow: none; }
+        
+        .footer-links { margin-top: 25px; text-align: center; font-size: 0.9rem; color: #64748b; }
+        .footer-links a { color: #2563eb; font-weight: 600; text-decoration: none; }
     </style>
 </head>
 <body>
 
-    <div class="box">
-        <h2>System Test Registration</h2>
-        <p>This form will ALERT every step.</p>
-        
-        <input type="email" id="email" placeholder="Email">
-        <input type="password" id="password" placeholder="Password">
-        <input type="text" id="fullName" placeholder="Full Name">
-        <input type="text" id="phone" placeholder="Phone">
-        <input type="text" id="country" placeholder="Country">
+    <nav class="navbar">
+        <a href="index.html" class="logo"><i class="fas fa-heartbeat"></i> TreatInt</a>
+        <a href="index.html" class="back-link"><i class="fas fa-times"></i></a>
+    </nav>
 
-        <button onclick="runTest()" id="btn">CREATE ACCOUNT</button>
-    </div>
+    <section class="register-section">
+        <div class="register-card">
+            <div class="form-header">
+                <h1 data-en="Begin Your Journey" data-bn="আপনার যাত্রা শুরু করুন">Begin Your Journey</h1>
+                <p style="color: #64748b;">Create a secure medical profile.</p>
+            </div>
+
+            <div id="regContainer">
+                <div class="form-grid">
+                    <div class="input-group full-width">
+                        <label>Full Name</label>
+                        <input type="text" id="fullName" class="input-field" placeholder="e.g. Rahul Sharma">
+                    </div>
+                    <div class="input-group">
+                        <label>Email</label>
+                        <input type="email" id="email" class="input-field" placeholder="name@example.com">
+                    </div>
+                    <div class="input-group">
+                        <label>WhatsApp Number</label>
+                        <input type="tel" id="phone" class="input-field" placeholder="+91...">
+                    </div>
+                    <div class="input-group">
+                        <label>Country</label>
+                        <input type="text" id="country" class="input-field" placeholder="e.g. Bangladesh">
+                    </div>
+                    <div class="input-group full-width">
+                        <label>Create Password</label>
+                        <input type="password" id="password" class="input-field" placeholder="Min 6 characters">
+                    </div>
+                </div>
+
+                <button onclick="register()" id="btnRegister" class="submit-btn">Create Profile</button>
+                
+                <div id="errorMsg" style="color: red; text-align: center; margin-top: 15px; font-size: 0.9rem; display: none;"></div>
+
+                <div class="footer-links">
+                    <span>Already have an account?</span> 
+                    <a href="login.html">Login here</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <script>
-        // 1. KEYS
+        // ==========================================
+        // PASTE YOUR KEYS HERE (Ensure no spaces!)
+        // ==========================================
         const SUPABASE_URL = 'https://atsdebykxuhtruuwcmlx.supabase.co'; 
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
+        // ==========================================
 
-        async function runTest() {
-            // STEP 1: TEST BUTTON
-            alert("Step 1: Button Clicked. Code is running.");
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-            const btn = document.getElementById('btn');
+        async function register() {
+            const btn = document.getElementById('btnRegister');
+            const errorDiv = document.getElementById('errorMsg');
+            
+            // UI Loading State
+            btn.innerText = "Creating...";
+            btn.disabled = true;
+            errorDiv.style.display = 'none';
+
+            // Get Data
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const name = document.getElementById('fullName').value;
             const phone = document.getElementById('phone').value;
             const country = document.getElementById('country').value;
 
-            // STEP 2: TEST LIBRARY
-            if(typeof supabase === 'undefined') {
-                alert("CRITICAL ERROR: Supabase library did not load. Check your internet connection.");
-                return;
-            }
-
-            // STEP 3: INIT CLIENT
-            let sb;
             try {
-                sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-            } catch(e) {
-                alert("Error initializing Supabase. Did you paste your keys?");
-                return;
+                // 1. Auth SignUp
+                const { data: authData, error: authError } = await supabase.auth.signUp({
+                    email: email,
+                    password: password
+                });
+
+                if (authError) throw authError;
+
+                if (!authData.user) {
+                    throw new Error("User created but no ID returned. Check Email Confirm settings.");
+                }
+
+                // 2. DB Insert
+                const { error: dbError } = await supabase
+                    .from('patients')
+                    .insert([{ 
+                        id: authData.user.id, 
+                        name: name,
+                        phone: phone, 
+                        location: country 
+                    }]);
+
+                if (dbError) throw dbError;
+
+                // 3. Success
+                alert("Registration Successful! Welcome to TreatInt.");
+                window.location.href = 'dashboard-patient.html';
+
+            } catch (error) {
+                console.error(error);
+                errorDiv.innerText = error.message;
+                errorDiv.style.display = 'block';
+                btn.innerText = "Create Profile";
+                btn.disabled = false;
             }
-
-            // STEP 4: SEND AUTH
-            alert("Step 2: Sending data to Supabase Auth...");
-            btn.innerText = "Working...";
-
-            const { data: authData, error: authError } = await sb.auth.signUp({
-                email: email,
-                password: password
-            });
-
-            if (authError) {
-                alert("AUTH ERROR: " + authError.message);
-                btn.innerText = "Failed";
-                return;
-            }
-
-            if (!authData.user) {
-                alert("Auth finished but no User returned. Did you disable 'Confirm Email' in Supabase?");
-                btn.innerText = "Stuck";
-                return;
-            }
-
-            alert("Step 3: Auth Success! User ID: " + authData.user.id);
-
-            // STEP 5: SAVE TO DB
-            alert("Step 4: Saving profile to Database...");
-
-            const { error: dbError } = await sb
-                .from('patients')
-                .insert([{ 
-                    id: authData.user.id,
-                    name: name,
-                    phone: phone, 
-                    location: country 
-                }]);
-
-            if (dbError) {
-                alert("DATABASE ERROR: " + dbError.message + "\n\nHint: Check your table columns or RLS settings.");
-                btn.innerText = "DB Failed";
-                return;
-            }
-
-            // SUCCESS
-            alert("SUCCESS! Everything worked. Redirecting...");
-            window.location.href = 'dashboard-patient.html';
         }
     </script>
 </body>
