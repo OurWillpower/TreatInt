@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register | TreatInt</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- UNIFIED THEME (Matches Home & Login) --- */
+        /* --- UNIFIED THEME --- */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body.bangla-active, body.bangla-active * { font-family: 'Hind Siliguri', sans-serif !important; }
         
@@ -17,242 +18,154 @@
             background-color: #fffbf2;
             background-image: radial-gradient(#e2e8f0 0.5px, transparent 0.5px), radial-gradient(#e2e8f0 0.5px, #fffbf2 0.5px);
             background-size: 20px 20px;
-            background-position: 0 0, 10px 10px;
-            color: #1e293b;
-            min-height: 100vh;
-            display: flex; flex-direction: column;
+            color: #1e293b; min-height: 100vh; display: flex; flex-direction: column;
         }
 
-        /* --- NAVBAR --- */
-        .navbar {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 1rem 5%; background: transparent; 
-            position: absolute; top: 0; width: 100%; z-index: 10;
-        }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; position: absolute; top: 0; width: 100%; z-index: 10; }
         .logo { display: flex; align-items: center; font-size: 1.5rem; font-weight: 900; color: #0f172a; gap: 10px; text-decoration: none; }
-        .logo i { 
-            background: linear-gradient(135deg, #2563eb, #06b6d4);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
+        .logo i { background: linear-gradient(135deg, #2563eb, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .back-link { font-weight: 600; color: #64748b; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
         .back-link:hover { color: #2563eb; }
 
-        /* --- REGISTER SECTION --- */
-        .register-section {
-            flex: 1; display: flex; align-items: center; justify-content: center;
-            padding: 100px 20px 50px;
-        }
-
-        .register-card {
-            background: white;
-            width: 100%; max-width: 550px; /* Slightly wider than login for 2 columns */
-            padding: 40px;
-            border-radius: 24px;
-            /* Golden Shadow Effect */
-            box-shadow: 0 25px 50px -12px rgba(202, 138, 4, 0.15);
-            border-top: 4px solid; border-image: linear-gradient(to right, #bf953f, #fcf6ba, #b38728) 1;
-            position: relative; overflow: hidden;
-        }
+        .register-section { flex: 1; display: flex; align-items: center; justify-content: center; padding: 100px 20px 50px; }
+        .register-card { background: white; width: 100%; max-width: 550px; padding: 40px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(202, 138, 4, 0.15); border-top: 4px solid; border-image: linear-gradient(to right, #bf953f, #fcf6ba, #b38728) 1; position: relative; }
 
         .form-header { text-align: center; margin-bottom: 30px; }
         .form-header h1 { font-size: 2rem; font-weight: 800; color: #0f172a; margin-bottom: 10px; }
-        .form-header p { color: #64748b; font-size: 0.95rem; }
-
-        /* --- FORM GRID --- */
+        
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .full-width { grid-column: span 2; }
-
-        .input-group { margin-bottom: 15px; }
         .input-group label { display: block; font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 8px; }
+        .input-field { width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; background: #f8fafc; outline: none; }
+        .input-field:focus { border-color: #2563eb; background: white; }
+
+        .submit-btn { width: 100%; padding: 16px; border: none; border-radius: 12px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .submit-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
         
-        .input-field {
-            width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 10px;
-            font-size: 0.95rem; transition: 0.3s; background: #f8fafc; outline: none;
-        }
-        .input-field:focus { border-color: #2563eb; background: white; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
-
-        .submit-btn {
-            width: 100%; padding: 16px; border: none; border-radius: 12px;
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            color: white; font-weight: 700; font-size: 1rem; cursor: pointer;
-            transition: all 0.3s; box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4);
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            margin-top: 10px;
-        }
-        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 15px 30px -5px rgba(37, 99, 235, 0.6); }
-
         .footer-links { margin-top: 25px; text-align: center; font-size: 0.9rem; color: #64748b; }
-        .footer-links a { color: #2563eb; font-weight: 600; text-decoration: none; }
-        .footer-links a:hover { text-decoration: underline; }
-
-        /* Floating Whatsapp */
-        .whatsapp-float {
-            position: fixed; bottom: 30px; right: 30px; 
-            background: linear-gradient(135deg, #25D366, #128C7E); color: white;
-            width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 30px; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.4); z-index: 100; transition: all 0.3s;
-        }
-        .whatsapp-float:hover { transform: scale(1.1); }
-
-        /* Language Toggle - Top Right (Absolute in Navbar for this page style) */
-        .lang-float {
-            padding: 8px 16px; border-radius: 50px; border: 2px solid #e2e8f0;
-            font-weight: 700; color: #475569; background: white; cursor: pointer;
-            display: flex; align-items: center; gap: 5px; font-size: 0.85rem;
-        }
-
-        @media (max-width: 640px) {
-            .form-grid { grid-template-columns: 1fr; }
-            .full-width { grid-column: span 1; }
-        }
-
+        .footer-links a { color: #2563eb; font-weight: 600; }
     </style>
 </head>
 <body>
 
     <nav class="navbar">
-        <a href="index.html" class="logo">
-            <i class="fas fa-heartbeat"></i> TreatInt
-        </a>
-        <div style="display:flex; gap:15px; align-items:center;">
-            <button class="lang-float" onclick="toggleLanguage()">
-                <i class="fas fa-globe"></i> <span id="lang-label">EN</span>
-            </button>
-            <a href="index.html" class="back-link" data-en="Home" data-bn="হোম">
-                <i class="fas fa-times"></i>
-            </a>
-        </div>
+        <a href="index.html" class="logo"><i class="fas fa-heartbeat"></i> TreatInt</a>
+        <a href="index.html" class="back-link"><i class="fas fa-times"></i></a>
     </nav>
 
     <section class="register-section">
         <div class="register-card">
             <div class="form-header">
                 <h1 data-en="Begin Your Journey" data-bn="আপনার যাত্রা শুরু করুন">Begin Your Journey</h1>
-                <p data-en="Create a profile to manage treatments, visa, and travel." data-bn="চিকিৎসা, ভিসা এবং ভ্রমণ পরিচালনা করতে একটি প্রোফাইল তৈরি করুন।">Create a profile to manage treatments, visa, and travel.</p>
+                <p style="color: #64748b;">Create a secure medical profile.</p>
             </div>
 
-            <form id="regForm" onsubmit="handleRegistration(event)">
+            <form id="regForm">
                 <div class="form-grid">
                     <div class="input-group full-width">
-                        <label data-en="Full Name" data-bn="পুরো নাম">Full Name</label>
+                        <label>Full Name</label>
                         <input type="text" id="fullName" class="input-field" placeholder="e.g. Rahul Sharma" required>
                     </div>
-
                     <div class="input-group">
-                        <label data-en="Email" data-bn="ইমেইল">Email</label>
+                        <label>Email</label>
                         <input type="email" id="email" class="input-field" placeholder="name@example.com" required>
                     </div>
-
                     <div class="input-group">
-                        <label data-en="WhatsApp Number" data-bn="হোয়াটসঅ্যাপ নম্বর">WhatsApp Number</label>
-                        <input type="tel" id="phone" class="input-field" placeholder="+91 98765 43210" required>
+                        <label>WhatsApp Number</label>
+                        <input type="tel" id="phone" class="input-field" placeholder="+91..." required>
                     </div>
-
                     <div class="input-group">
-                        <label data-en="Country" data-bn="দেশ">Country</label>
+                        <label>Country</label>
                         <input type="text" id="country" class="input-field" placeholder="e.g. Bangladesh" required>
                     </div>
-
-                    <div class="input-group">
-                        <label data-en="Create Password" data-bn="পাসওয়ার্ড তৈরি করুন">Create Password</label>
+                    <div class="input-group full-width">
+                        <label>Create Password</label>
                         <input type="password" id="password" class="input-field" placeholder="••••••••" required>
                     </div>
                 </div>
 
-                <button type="submit" class="submit-btn">
-                    <span data-en="Create Profile" data-bn="প্রোফাইল তৈরি করুন">Create Profile</span> <i class="fas fa-chevron-right"></i>
-                </button>
+                <button type="submit" id="btnText" class="submit-btn">Create Profile</button>
+                
+                <div id="errorMsg" style="color: red; text-align: center; margin-top: 10px; font-size: 0.9rem; display: none;"></div>
 
                 <div class="footer-links">
-                    <span style="color:#64748b" data-en="Already have an account?" data-bn="ইতিমধ্যে একটি অ্যাকাউন্ট আছে?">Already have an account?</span> 
-                    <a href="login.html" data-en="Login here" data-bn="এখানে লগইন করুন">Login here</a>
+                    <span>Already have an account?</span> 
+                    <a href="login.html">Login here</a>
                 </div>
             </form>
         </div>
     </section>
 
-    <a href="https://wa.me/917039196489" target="_blank" class="whatsapp-float">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-
     <script>
-        function handleRegistration(event) {
-            event.preventDefault();
-            
-            // 1. Get Values
-            const nameInput = document.getElementById('fullName').value;
-            const emailInput = document.getElementById('email').value;
-            
-            // 2. Simulate Backend Storage (Save to LocalStorage)
-            localStorage.setItem('treatInt_userName', nameInput);
-            localStorage.setItem('treatInt_userEmail', emailInput);
-            localStorage.setItem('treatInt_isLoggedIn', 'true');
+        // --- 1. SUPABASE CONFIGURATION ---
+        // PASTE YOUR KEYS HERE FROM SUPABASE DASHBOARD
+        const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL'; 
+        const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        
+        const supabase = showSupabaseWarning() ? null : supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-            // 3. Redirect to Dashboard
-            // NOTE: We are directing to dashboard-patient.html as discussed
-            window.location.href = 'dashboard-patient.html';
-        }
-
-        // --- LANGUAGE LOGIC (Consistent with other pages) ---
-        let currentLang = localStorage.getItem('treatIntLang') || 'en';
-        updateLanguageDisplay();
-
-        function toggleLanguage() {
-            currentLang = currentLang === 'en' ? 'bn' : 'en';
-            localStorage.setItem('treatIntLang', currentLang);
-            updateLanguageDisplay();
-        }
-
-        function updateLanguageDisplay() {
-            const body = document.body;
-            const langLabel = document.getElementById('lang-label');
-            const elements = document.querySelectorAll('[data-en]');
-
-            if (currentLang === 'bn') {
-                body.classList.add('bangla-active');
-                if(langLabel) langLabel.innerText = "বাংলা";
-                elements.forEach(el => {
-                    const bnText = el.getAttribute('data-bn');
-                    if(el.tagName === 'INPUT') {
-                        // Keep placeholders simple or update if needed
-                    } else {
-                        // Safe text replacement
-                        if(el.children.length === 0) {
-                             el.innerText = bnText;
-                        } else {
-                            // Careful replacement for buttons with icons
-                            Array.from(el.childNodes).forEach(node => {
-                                if(node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '') {
-                                    node.textContent = bnText; 
-                                } else if (node.tagName === 'SPAN' && !node.children.length) {
-                                    node.innerText = bnText;
-                                }
-                            });
-                        }
-                    }
-                });
-            } else {
-                body.classList.remove('bangla-active');
-                if(langLabel) langLabel.innerText = "EN";
-                elements.forEach(el => {
-                     const enText = el.getAttribute('data-en');
-                     if(el.tagName === 'INPUT') {
-                     } else {
-                        if(el.children.length === 0) {
-                            el.innerText = enText;
-                        } else {
-                             Array.from(el.childNodes).forEach(node => {
-                                if(node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '') {
-                                    node.textContent = enText;
-                                } else if (node.tagName === 'SPAN' && !node.children.length) {
-                                     node.innerText = enText;
-                                }
-                            });
-                        }
-                     }
-                });
+        function showSupabaseWarning() {
+            if (SUPABASE_URL === 'YOUR_SUPABASE_PROJECT_URL') {
+                alert("Please open the code and paste your Supabase URL and Key in the script tag!");
+                return true;
             }
+            return false;
         }
+
+        // --- 2. HANDLE REGISTRATION ---
+        const form = document.getElementById('regForm');
+        const btn = document.getElementById('btnText');
+        const errorMsg = document.getElementById('errorMsg');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            btn.innerText = "Creating...";
+            btn.disabled = true;
+            errorMsg.style.display = 'none';
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const fullName = document.getElementById('fullName').value;
+            const phone = document.getElementById('phone').value;
+            const country = document.getElementById('country').value;
+
+            try {
+                // A. Create User in Supabase Auth
+                const { data: authData, error: authError } = await supabase.auth.signUp({
+                    email: email,
+                    password: password,
+                });
+
+                if (authError) throw authError;
+
+                // B. Insert Profile into 'patients' table
+                // Note: Ensure your 'patients' table has these columns (name, phone, country)
+                const { error: dbError } = await supabase
+                    .from('patients')
+                    .insert([
+                        { 
+                            id: authData.user.id, // Links DB row to Auth User
+                            name: fullName,
+                            phone: phone, 
+                            location: country, // Mapping country to 'location' based on your screenshot
+                            created_at: new Date()
+                        }
+                    ]);
+
+                if (dbError) throw dbError;
+
+                // C. Success! Redirect
+                alert("Registration Successful! Redirecting to Dashboard...");
+                window.location.href = 'dashboard-patient.html';
+
+            } catch (error) {
+                console.error(error);
+                errorMsg.innerText = error.message;
+                errorMsg.style.display = 'block';
+                btn.innerText = "Create Profile";
+                btn.disabled = false;
+            }
+        });
     </script>
 </body>
 </html>
