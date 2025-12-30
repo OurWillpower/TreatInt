@@ -81,7 +81,6 @@
             max-width: 950px; padding: 0 20px; margin-bottom: 100px;
         }
         
-        /* Animations */
         #dynamic-badge, .hero-title span, .hero-subtitle {
             opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
@@ -191,43 +190,41 @@
         }
 
         .service-card { 
-            /* DARKER / MORE SOLID BOX STYLE */
-            background: #f1f5f9; /* Light Slate Grey (Darker than white) */
+            background: #f1f5f9;
             padding: 50px 40px; 
             border-radius: 25px; 
-            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.08); /* More defined shadow */
-            border: 1px solid #cbd5e1; /* Stronger border for definition */
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.08); 
+            border: 1px solid #cbd5e1; 
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
             position: relative; overflow: hidden; text-align: left; z-index: 1;
-            display: flex; flex-direction: column; /* To align buttons at bottom */
+            display: flex; flex-direction: column;
         }
 
         .card-number {
-            font-size: 5rem; font-weight: 900; color: #cbd5e1; /* Darker number */
+            font-size: 5rem; font-weight: 900; color: #cbd5e1; 
             position: absolute; top: 0px; right: 20px; z-index: -1;
             transition: all 0.4s; opacity: 0.4;
         }
         
         .icon-box { 
             width: 80px; height: 80px; 
-            background: #ffffff; color: #475569; /* White bg for contrast against grey card */
+            background: #ffffff; color: #475569; 
             border-radius: 20px; 
             display: flex; align-items: center; justify-content: center; 
             font-size: 2rem; margin-bottom: 30px; 
             position: relative; z-index: 1;
             transition: all 0.4s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Slight lift */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             border: 1px solid #e2e8f0;
         }
 
         .service-card h3 { 
-            font-weight: 800; font-size: 1.5rem; margin-bottom: 20px; color: #0f172a; /* Darker heading */
+            font-weight: 800; font-size: 1.5rem; margin-bottom: 20px; color: #0f172a; 
             position: relative; z-index: 1;
         }
         
         .service-card p { 
-            color: #475569; /* Darker text */
-            line-height: 1.7; font-size: 1rem; 
+            color: #475569; line-height: 1.7; font-size: 1rem; 
             position: relative; z-index: 1; margin-bottom: 25px;
         }
 
@@ -241,7 +238,6 @@
         }
         .card-features li i { color: #94a3b8; margin-right: 12px; font-size: 0.9rem; transition: 0.3s; }
 
-        /* --- BUTTONS FOR CARDS --- */
         .book-btn {
             display: inline-flex; align-items: center; justify-content: center;
             width: 100%; margin-top: 20px;
@@ -257,8 +253,7 @@
         }
         .book-btn i { margin-left: 8px; }
 
-        /* --- JAZZY COLORFUL HOVER EFFECTS (Updated for Darker Boxes) --- */
-        
+        /* Card Hovers */
         .service-card::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 6px;
             transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease;
@@ -268,43 +263,75 @@
         .service-card:hover .icon-box { color: white; transform: rotate(5deg); box-shadow: 0 15px 30px -10px rgba(0,0,0,0.2); border: none; }
         .service-card:hover .card-number { color: white; opacity: 0.15; transform: scale(1.2) translateX(20px); }
 
-        /* Card 1: Consultation (Blue) */
+        /* Color Variations */
         .service-card:nth-child(1):hover { box-shadow: 0 30px 60px -15px rgba(37, 99, 235, 0.25); }
         .service-card:nth-child(1)::before { background: linear-gradient(to right, #2563eb, #60a5fa); }
         .service-card:nth-child(1):hover .icon-box { background: linear-gradient(135deg, #2563eb, #60a5fa); }
         .service-card:nth-child(1):hover .card-features li i { color: #2563eb; }
 
-        /* Card 2: Visa/Travel (Orange/Gold) */
         .service-card:nth-child(2):hover { box-shadow: 0 30px 60px -15px rgba(245, 158, 11, 0.25); }
         .service-card:nth-child(2)::before { background: linear-gradient(to right, #f59e0b, #fbbf24); }
         .service-card:nth-child(2):hover .icon-box { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
         .service-card:nth-child(2):hover .card-features li i { color: #f59e0b; }
-        .service-card:nth-child(2) .book-btn { background: #d97706; } /* Orange btn default */
+        .service-card:nth-child(2) .book-btn { background: #d97706; }
         .service-card:nth-child(2) .book-btn:hover { background: #b45309; }
 
-        /* Card 3: Stay (Green) */
         .service-card:nth-child(3):hover { box-shadow: 0 30px 60px -15px rgba(16, 185, 129, 0.25); }
         .service-card:nth-child(3)::before { background: linear-gradient(to right, #10b981, #34d399); }
         .service-card:nth-child(3):hover .icon-box { background: linear-gradient(135deg, #10b981, #34d399); }
         .service-card:nth-child(3):hover .card-features li i { color: #10b981; }
-        .service-card:nth-child(3) .book-btn { background: #059669; } /* Green btn default */
+        .service-card:nth-child(3) .book-btn { background: #059669; }
         .service-card:nth-child(3) .book-btn:hover { background: #047857; }
 
-        /* Card 4: Treatment (Purple/Pink) */
         .service-card:nth-child(4):hover { box-shadow: 0 30px 60px -15px rgba(147, 51, 234, 0.25); }
         .service-card:nth-child(4)::before { background: linear-gradient(to right, #9333ea, #c084fc); }
         .service-card:nth-child(4):hover .icon-box { background: linear-gradient(135deg, #9333ea, #c084fc); }
         .service-card:nth-child(4):hover .card-features li i { color: #9333ea; }
-        .service-card:nth-child(4) .book-btn { background: #7e22ce; } /* Purple btn default */
+        .service-card:nth-child(4) .book-btn { background: #7e22ce; }
         .service-card:nth-child(4) .book-btn:hover { background: #6b21a8; }
 
 
-        /* --- FOOTER & REST --- */
-        .footer { background: #0f172a; color: white; padding: 100px 5% 50px; position: relative; overflow: hidden; }
+        /* --- UPDATED FOOTER --- */
+        .footer { background: #0f172a; color: white; padding: 100px 5% 40px; position: relative; overflow: hidden; }
         .footer::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.05; background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 20px 20px; pointer-events: none; }
-        .footer-content { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 60px; max-width: 1200px; margin: 0 auto; border-bottom: 1px solid #334155; padding-bottom: 60px; position: relative; z-index: 1; }
+        
+        /* Grid Layout: 4 Columns */
+        .footer-content { 
+            display: grid; 
+            grid-template-columns: 1.5fr 1fr 1fr 1fr; 
+            gap: 50px; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            border-bottom: 1px solid #334155; 
+            padding-bottom: 60px; 
+            position: relative; z-index: 1; 
+        }
+
+        .footer-brand h2 { display: flex; align-items: center; gap: 12px; font-size: 1.8rem; font-weight: 900; margin-bottom: 25px; letter-spacing: -0.5px; }
+        .footer-brand p { color: #94a3b8; line-height: 1.7; font-size: 0.95rem; margin-bottom: 30px; }
+        
+        /* Social Icons */
+        .social-links { display: flex; gap: 15px; }
+        .social-links a { 
+            width: 45px; height: 45px; background: rgba(255,255,255,0.1); border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; transition: 0.3s;
+            color: white; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .social-links a:hover { background: #2563eb; border-color: #2563eb; transform: translateY(-3px); }
+
+        .footer-links h4 { color: white; font-weight: 800; margin-bottom: 25px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
+        .footer-links ul { padding: 0; }
+        .footer-links li { margin-bottom: 15px; display: flex; align-items: flex-start; gap: 10px; color: #94a3b8; font-size: 0.95rem; }
+        .footer-links a { color: #94a3b8; transition: 0.3s; font-weight: 500; display: inline-block; }
         .footer-links a:hover { color: white; transform: translateX(5px); }
-        .footer-bottom { text-align: center; padding-top: 40px; color: #64748b; font-size: 0.95rem; font-weight: 500; position: relative; z-index: 1; }
+        .footer-links i { color: #3b82f6; margin-top: 4px; }
+
+        /* Footer Bottom Bar */
+        .footer-bottom { 
+            text-align: center; padding-top: 30px; color: #64748b; font-size: 0.9rem; font-weight: 500; position: relative; z-index: 1; 
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .payment-icons { display: flex; gap: 20px; font-size: 24px; color: #cbd5e1; }
 
         /* Floating Whatsapp */
         .whatsapp-float {
@@ -320,6 +347,11 @@
             .hero-title { font-size: 2.5rem; }
             .nav-links { display: none; }
             .hero { height: 600px; }
+            .footer-content { grid-template-columns: 1fr 1fr; gap: 40px; }
+            .footer-bottom { flex-direction: column; gap: 20px; }
+        }
+        @media (max-width: 600px) {
+            .footer-content { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -545,26 +577,56 @@
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-brand">
-                <h2 style="display: flex; align-items: center; gap: 10px; font-size: 1.5rem; font-weight: 700; margin-bottom: 20px;"><i class="fas fa-heartbeat text-blue-500"></i> TreatInt</h2>
-                <p style="color: #94a3b8; line-height: 1.6;" data-en="Bridging borders for better health." data-bn="সুস্বাস্থ্যের জন্য সীমান্তের বাধা পেরিয়ে।">Bridging borders for better health.</p>
+                <h2><i class="fas fa-heartbeat text-blue-500"></i> TreatInt</h2>
+                <p data-en="Bridging borders for better health. We are India's most trusted medical tourism facilitator." data-bn="সুস্বাস্থ্যের জন্য সীমান্তের বাধা পেরিয়ে। আমরা ভারতের সবচেয়ে বিশ্বস্ত মেডিকেল ট্যুরিজম পার্টনার।">
+                    Bridging borders for better health. We are India's most trusted medical tourism facilitator.
+                </p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
             </div>
+
             <div class="footer-links">
-                <h4 data-en="Company" data-bn="কোম্পানি">Company</h4>
+                <h4 data-en="Quick Links" data-bn="দ্রুত লিঙ্ক">Quick Links</h4>
                 <ul>
-                    <li style="margin-bottom: 10px;"><a href="#" data-en="About Us" data-bn="আমাদের সম্পর্কে">About Us</a></li>
-                    <li style="margin-bottom: 10px;"><a href="#" data-en="Contact" data-bn="যোগাযোগ">Contact</a></li>
+                    <li><a href="index.html" data-en="Home" data-bn="হোম">Home</a></li>
+                    <li><a href="hospitals.html" data-en="Top Hospitals" data-bn="সেরা হাসপাতাল">Top Hospitals</a></li>
+                    <li><a href="treatments.html" data-en="Treatments" data-bn="চিকিৎসা">Treatments</a></li>
+                    <li><a href="login.html" data-en="Login" data-bn="লগইন">Login</a></li>
                 </ul>
             </div>
+
+            <div class="footer-links">
+                <h4 data-en="Contact Us" data-bn="যোগাযোগ">Contact Us</h4>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> <span data-en="Mumbai, India" data-bn="মুম্বাই, ভারত">Mumbai, India</span></li>
+                    <li><i class="fas fa-phone-alt"></i> <span>+91 7039196489</span></li>
+                    <li><i class="fas fa-envelope"></i> <span>support@treatint.com</span></li>
+                </ul>
+            </div>
+
             <div class="footer-links">
                 <h4 data-en="Legal" data-bn="আইনি তথ্য">Legal</h4>
                 <ul>
-                    <li style="margin-bottom: 10px;"><a href="#" data-en="Privacy Policy" data-bn="গোপনীয়তা নীতি">Privacy Policy</a></li>
-                    <li style="margin-bottom: 10px;"><a href="#" data-en="Terms" data-bn="শর্তাবলী">Terms</a></li>
+                    <li><a href="privacy.html" data-en="Privacy Policy" data-bn="গোপনীয়তা নীতি">Privacy Policy</a></li>
+                    <li><a href="terms.html" data-en="Terms of Service" data-bn="শর্তাবলী">Terms of Service</a></li>
+                    <li><a href="disclaimer.html" data-en="Medical Disclaimer" data-bn="মেডিকেল ডিসক্লেইমার">Medical Disclaimer</a></li>
+                    <li><a href="refunds.html" data-en="Refund Policy" data-bn="রিফান্ড পলিসি">Refund Policy</a></li>
                 </ul>
             </div>
         </div>
+        
         <div class="footer-bottom">
             <p>&copy; 2025 TreatInt. All rights reserved.</p>
+            <div class="payment-icons">
+                <i class="fab fa-cc-visa"></i>
+                <i class="fab fa-cc-mastercard"></i>
+                <i class="fab fa-cc-paypal"></i>
+                <i class="fab fa-cc-amex"></i>
+            </div>
         </div>
     </footer>
 
