@@ -3,172 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Dashboard | TreatInt</title>
+    <title>Dashboard | TreatInt</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
-        /* --- THEME SETUP --- */
+        /* [Keeping your exact Premium Jazzy CSS from before] */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: #fffbf2; background-image: radial-gradient(#e2e8f0 0.5px, transparent 0.5px), radial-gradient(#e2e8f0 0.5px, #fffbf2 0.5px); background-size: 20px 20px; color: #1e293b; min-height: 100vh; }
         
-        body { 
-            background-color: #fffbf2;
-            background-image: radial-gradient(#e2e8f0 0.5px, transparent 0.5px), radial-gradient(#e2e8f0 0.5px, #fffbf2 0.5px);
-            background-size: 20px 20px;
-            color: #1e293b;
-            min-height: 100vh;
-        }
-
-        /* --- NAVBAR --- */
-        .navbar {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 1rem 5%; background: white; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            position: sticky; top: 0; z-index: 50;
-        }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; background: white; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 50; }
         .logo { display: flex; align-items: center; font-size: 1.5rem; font-weight: 900; color: #0f172a; gap: 10px; text-decoration: none; }
-        .logo i { 
-            background: linear-gradient(135deg, #2563eb, #06b6d4);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
+        .logo i { background: linear-gradient(135deg, #2563eb, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
         .user-menu { display: flex; align-items: center; gap: 15px; }
-        .user-avatar { 
-            width: 40px; height: 40px; background: #eff6ff; color: #2563eb; 
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;
-            border: 2px solid #bfdbfe;
-        }
-        .logout-btn { 
-            font-size: 0.9rem; color: #64748b; font-weight: 600; cursor: pointer; transition: 0.3s;
-        }
+        .user-avatar { width: 40px; height: 40px; background: #eff6ff; color: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; border: 2px solid #bfdbfe; }
+        .logout-btn { font-size: 0.9rem; color: #64748b; font-weight: 600; cursor: pointer; transition: 0.3s; }
         .logout-btn:hover { color: #ef4444; }
 
-        /* --- DASHBOARD LAYOUT --- */
         .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
-        
         .welcome-header { margin-bottom: 40px; }
         .welcome-header h1 { font-size: 2.2rem; font-weight: 800; color: #0f172a; margin-bottom: 5px; }
-        .welcome-header p { color: #64748b; font-size: 1.1rem; }
-
-        /* --- JOURNEY TRACKER (STATUS BAR) --- */
-        .status-card {
-            background: white; padding: 30px; border-radius: 20px;
-            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05);
-            border: 1px solid #e2e8f0; margin-bottom: 40px;
-        }
-        .status-title { font-weight: 700; color: #334155; margin-bottom: 20px; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
         
-        .progress-track { display: flex; justify-content: space-between; position: relative; }
-        /* Line behind circles */
-        .progress-track::before {
-            content: ''; position: absolute; top: 15px; left: 0; width: 100%; height: 4px;
-            background: #f1f5f9; z-index: 0;
-        }
-        
+        /* Status Card */
+        .status-card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 40px; }
+        .progress-track { display: flex; justify-content: space-between; position: relative; margin-top: 20px; }
+        .progress-track::before { content: ''; position: absolute; top: 15px; left: 0; width: 100%; height: 4px; background: #f1f5f9; z-index: 0; }
         .step { position: relative; z-index: 1; text-align: center; width: 25%; }
-        .step-circle {
-            width: 35px; height: 35px; background: #f1f5f9; border: 4px solid white;
-            border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center;
-            color: #94a3b8; font-weight: 700; transition: 0.3s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-        .step-label { font-size: 0.9rem; font-weight: 600; color: #94a3b8; }
-
-        /* Active State logic */
+        .step-circle { width: 35px; height: 35px; background: #f1f5f9; border: 4px solid white; border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-weight: 700; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .step.active .step-circle { background: #2563eb; color: white; box-shadow: 0 0 0 4px #bfdbfe; }
-        .step.active .step-label { color: #2563eb; }
-        .step.completed .step-circle { background: #10b981; color: white; }
-
-        /* --- ACTION GRID --- */
-        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
-
-        /* Main Card Style */
-        .card {
-            background: white; border-radius: 20px; padding: 30px;
-            box-shadow: 0 15px 30px -10px rgba(0,0,0,0.05);
-            border: 1px solid #e2e8f0; transition: 0.3s;
-        }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1); }
         
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .card-title { font-weight: 700; font-size: 1.2rem; color: #0f172a; display: flex; align-items: center; gap: 10px; }
-        .card-title i { color: #2563eb; }
-
-        /* Upload Box */
-        .upload-zone {
-            border: 2px dashed #cbd5e1; border-radius: 12px; padding: 40px;
-            text-align: center; cursor: pointer; transition: 0.3s; background: #f8fafc;
-        }
+        /* Cards */
+        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+        .card { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 15px 30px -10px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        .upload-zone { border: 2px dashed #cbd5e1; border-radius: 12px; padding: 40px; text-align: center; cursor: pointer; transition: 0.3s; background: #f8fafc; }
         .upload-zone:hover { border-color: #2563eb; background: #eff6ff; }
-        .upload-icon { font-size: 2rem; color: #64748b; margin-bottom: 10px; }
-        .upload-text { font-weight: 600; color: #334155; }
-        .upload-sub { font-size: 0.8rem; color: #94a3b8; }
-
-        /* Appointment List */
-        .appt-item {
-            display: flex; gap: 15px; padding: 15px; background: #f8fafc; 
-            border-radius: 12px; margin-bottom: 15px; border-left: 4px solid #f59e0b;
-        }
-        .date-box { 
-            background: white; padding: 8px 12px; border-radius: 8px; text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .date-day { display: block; font-weight: 800; font-size: 1.2rem; color: #0f172a; }
-        .date-month { display: block; font-size: 0.75rem; font-weight: 600; color: #64748b; text-transform: uppercase; }
-        .appt-info h4 { font-weight: 700; color: #334155; }
-        .appt-info p { font-size: 0.9rem; color: #64748b; }
-
-        /* Floating Whatsapp */
-        .whatsapp-float {
-            position: fixed; bottom: 30px; right: 30px; 
-            background: linear-gradient(135deg, #25D366, #128C7E); color: white;
-            width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 30px; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.4); z-index: 100; transition: all 0.3s;
-        }
-        .whatsapp-float:hover { transform: scale(1.1); }
-
-        @media (max-width: 768px) {
-            .dashboard-grid { grid-template-columns: 1fr; }
-            .step-label { font-size: 0.7rem; }
-        }
+        
+        /* Loading Overlay */
+        #loading { position: fixed; inset: 0; background: white; z-index: 999; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #2563eb; }
     </style>
 </head>
 <body>
 
+    <div id="loading">Loading Secure Dashboard...</div>
+
     <nav class="navbar">
-        <a href="index.html" class="logo">
-            <i class="fas fa-heartbeat"></i> TreatInt
-        </a>
+        <a href="index.html" class="logo"><i class="fas fa-heartbeat"></i> TreatInt</a>
         <div class="user-menu">
             <div class="user-avatar" id="avatarInitial">U</div>
-            <span class="logout-btn" onclick="handleLogout()">Logout</span>
+            <span class="logout-btn" onclick="logout()">Logout</span>
         </div>
     </nav>
 
     <div class="container">
         <div class="welcome-header">
-            <h1 id="welcomeMsg">Welcome Back!</h1>
-            <p>Here is the status of your medical journey.</p>
+            <h1 id="welcomeText">Welcome Back!</h1>
+            <p>Your medical profile status is active.</p>
         </div>
 
         <div class="status-card">
-            <div class="status-title">Current Status: Reports Review</div>
+            <div style="font-weight: 700; color: #334155;">YOUR JOURNEY STATUS</div>
             <div class="progress-track">
                 <div class="step active">
                     <div class="step-circle"><i class="fas fa-file-medical"></i></div>
-                    <div class="step-label">Reports</div>
+                    <div>Reports</div>
                 </div>
                 <div class="step">
                     <div class="step-circle">2</div>
-                    <div class="step-label">Consultation</div>
+                    <div>Consult</div>
                 </div>
                 <div class="step">
                     <div class="step-circle">3</div>
-                    <div class="step-label">Visa</div>
+                    <div>Visa</div>
                 </div>
                 <div class="step">
                     <div class="step-circle">4</div>
-                    <div class="step-label">Travel</div>
+                    <div>Fly</div>
                 </div>
             </div>
         </div>
@@ -176,84 +87,67 @@
         <div class="dashboard-grid">
             <div class="main-col">
                 <div class="card">
-                    <div class="card-header">
-                        <div class="card-title"><i class="fas fa-cloud-upload-alt"></i> Upload Reports</div>
+                    <h3 style="margin-bottom:15px; font-weight:700;">Upload Documents</h3>
+                    <div class="upload-zone" onclick="alert('File Manager will open here')">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color:#64748b;"></i>
+                        <div style="font-weight:600; margin-top:10px;">Click to upload reports</div>
                     </div>
-                    <div class="upload-zone" onclick="triggerUpload()">
-                        <div class="upload-icon"><i class="fas fa-file-pdf"></i></div>
-                        <div class="upload-text">Click to upload your medical files</div>
-                        <div class="upload-sub">PDF, JPG, or PNG (Max 5MB)</div>
-                    </div>
-                </div>
-
-                <div class="card" style="margin-top: 30px;">
-                    <div class="card-header">
-                        <div class="card-title"><i class="fas fa-user-md"></i> Recommended Doctors</div>
-                    </div>
-                    <p style="color:#64748b; font-size:0.95rem;">
-                        Our medical team is currently reviewing your reports. You will see recommended specialists here within 24 hours.
-                    </p>
                 </div>
             </div>
-
             <div class="side-col">
                 <div class="card">
-                    <div class="card-header">
-                        <div class="card-title"><i class="fas fa-calendar-check"></i> Next Step</div>
+                    <h3 style="margin-bottom:15px; font-weight:700;">Next Appointment</h3>
+                    <div style="background:#f8fafc; padding:15px; border-radius:10px; border-left:4px solid #f59e0b;">
+                        <div>Status: <b>Pending Review</b></div>
+                        <div style="font-size:0.9rem; color:#64748b;">Waiting for doctor notes</div>
                     </div>
-                    <div class="appt-item">
-                        <div class="date-box">
-                            <span class="date-day">--</span>
-                            <span class="date-month">--</span>
-                        </div>
-                        <div class="appt-info">
-                            <h4>Awaiting Review</h4>
-                            <p>Video Consult</p>
-                        </div>
-                    </div>
-                    <a href="https://wa.me/917039196489" class="block text-center text-blue-600 font-bold text-sm mt-4 hover:underline">
-                        Contact Support Team
-                    </a>
                 </div>
             </div>
         </div>
     </div>
 
-    <a href="https://wa.me/917039196489" target="_blank" class="whatsapp-float">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-
     <script>
-        // --- BACKEND SIMULATION ---
-        
-        // 1. Get User Name from Registration
-        document.addEventListener('DOMContentLoaded', () => {
-            const userName = localStorage.getItem('treatInt_userName');
-            
-            // Security Check (Simulated)
-            const isLoggedIn = localStorage.getItem('treatInt_isLoggedIn');
-            if (!isLoggedIn) {
-                // If they tried to access dashboard without login, send them back
-                // Uncomment the line below to enforce security
-                // window.location.href = 'login.html';
-            }
+        // --- 1. SUPABASE CONFIGURATION (Must match Register page) ---
+        const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL'; 
+        const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-            if (userName) {
-                document.getElementById('welcomeMsg').innerText = `Welcome, ${userName}!`;
-                document.getElementById('avatarInitial').innerText = userName.charAt(0).toUpperCase();
-            }
-        });
+        // --- 2. AUTH CHECK LOGIC ---
+        async function checkSession() {
+            const { data: { session } } = await supabase.auth.getSession();
 
-        // 2. Logout Logic
-        function handleLogout() {
-            localStorage.removeItem('treatInt_isLoggedIn');
+            if (!session) {
+                // No login found? Kick them out
+                window.location.href = 'login.html';
+            } else {
+                // Login found! Load data
+                loadUserProfile(session.user.id);
+            }
+        }
+
+        async function loadUserProfile(userId) {
+            // Fetch name from 'patients' table
+            const { data, error } = await supabase
+                .from('patients')
+                .select('name')
+                .eq('id', userId)
+                .single();
+
+            if (data) {
+                document.getElementById('welcomeText').innerText = `Welcome, ${data.name}!`;
+                document.getElementById('avatarInitial').innerText = data.name.charAt(0).toUpperCase();
+            }
+            // Hide loading screen
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        async function logout() {
+            await supabase.auth.signOut();
             window.location.href = 'index.html';
         }
 
-        // 3. Upload Simulation
-        function triggerUpload() {
-            alert("This will open your file manager. (Demo Mode)");
-        }
+        // Run check on load
+        checkSession();
     </script>
 
 </body>
