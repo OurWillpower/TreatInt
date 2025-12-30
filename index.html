@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TreatInt | Medical Tourism</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
@@ -14,9 +14,13 @@
         body.bangla-active, body.bangla-active * { font-family: 'Hind Siliguri', sans-serif !important; }
         
         body { 
-            /* UPDATED BACKGROUND: Subtle warm gradient */
-            background: linear-gradient(to bottom, #fffbf2, #f8f9fa);
-            color: #1e293b; 
+            /* UPDATED BACKGROUND: Warm gradient + Subtle Texture Overlay for Depth */
+            background-color: #fffbf2;
+            background-image: radial-gradient(#e2e8f0 0.5px, transparent 0.5px), radial-gradient(#e2e8f0 0.5px, #fffbf2 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            color: #1e293b;
+            overflow-x: hidden; /* Prevent scrollbar during animations */
         }
         
         a { text-decoration: none; color: inherit; }
@@ -25,249 +29,304 @@
         /* --- NAVIGATION --- */
         .navbar {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 1rem 5%; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 1rem 5%; background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(10px); /* Frosted glass effect */
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
             position: sticky; top: 0; z-index: 1000;
+            transition: 0.3s;
         }
-        .logo { display: flex; align-items: center; font-size: 1.5rem; font-weight: 800; color: #0f172a; gap: 10px; }
-        .logo i { color: #2563eb; }
+        .logo { display: flex; align-items: center; font-size: 1.5rem; font-weight: 900; color: #0f172a; gap: 10px; letter-spacing: -0.5px; }
+        /* JAZZY LOGO ICON: Gradient Text */
+        .logo i { 
+            background: linear-gradient(135deg, #2563eb, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
         .nav-links { display: flex; gap: 30px; }
-        .nav-links a { font-weight: 500; color: #64748b; transition: 0.3s; }
+        .nav-links a { font-weight: 600; color: #64748b; transition: 0.3s; font-size: 0.95rem; }
         .nav-links a:hover, .nav-links a.active { color: #2563eb; }
         .nav-actions { display: flex; align-items: center; gap: 20px; }
         
         .lang-btn {
-            border: 1px solid #e2e8f0; padding: 8px 16px; border-radius: 50px;
+            border: 2px solid #e2e8f0; padding: 8px 16px; border-radius: 50px;
             font-size: 0.9rem; cursor: pointer; background: white; display: flex; align-items: center; gap: 8px;
-            transition: 0.3s; font-weight: 600; color: #475569;
+            transition: 0.3s; font-weight: 700; color: #475569;
         }
-        .lang-btn:hover { border-color: #2563eb; color: #2563eb; }
+        .lang-btn:hover { border-color: #2563eb; color: #2563eb; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1); }
 
         .btn-primary {
-            background: #2563eb; color: white; padding: 10px 24px; border-radius: 50px;
-            font-weight: 600; transition: 0.3s;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; padding: 12px 28px; border-radius: 50px;
+            font-weight: 700; transition: 0.3s; box-shadow: 0 10px 20px -10px rgba(37, 99, 235, 0.5);
         }
-        .btn-primary:hover { background: #1d4ed8; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 15px 30px -10px rgba(37, 99, 235, 0.7); }
 
-        /* --- HERO SLIDER --- */
+        /* --- HERO SLIDER (JAZZED UP ANIMATIONS) --- */
         .hero {
-            height: 650px;
+            height: 680px; /* Slightly taller */
             position: relative;
             overflow: hidden;
         }
         .slide {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-size: cover; background-position: center;
-            opacity: 0; transition: opacity 1s ease-in-out;
+            opacity: 0; transition: opacity 0.8s ease-in-out;
             display: flex; align-items: center; justify-content: center;
         }
         .slide.active { opacity: 1; z-index: 1; }
+        /* Heavier overlay for better text pop */
         .hero-overlay {
             position: absolute; inset: 0;
-            background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4));
+            background: linear-gradient(to right, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.5));
         }
         
         .hero-content {
             position: relative; z-index: 2; text-align: center; color: white;
-            max-width: 900px; padding: 0 20px; margin-bottom: 100px;
+            max-width: 950px; padding: 0 20px; margin-bottom: 100px;
         }
         
-        #dynamic-badge {
-            display: inline-block; padding: 8px 20px; 
-            background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(5px); border-radius: 50px;
-            font-size: 0.9rem; font-weight: 600; margin-bottom: 25px;
-            color: #e2e8f0; letter-spacing: 0.5px;
+        /* --- JAZZY HERO TEXT ANIMATIONS --- */
+        /* Initial state: hidden and slightly down */
+        #dynamic-badge, .hero-title span, .hero-subtitle {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Active state: visible and in place (staggered delays) */
+        .slide.active #dynamic-badge { opacity: 1; transform: translateY(0); transition-delay: 0.2s; }
+        .slide.active .hero-title span:nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: 0.4s; display: inline-block; }
+        .slide.active .hero-title span:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: 0.6s; display: inline-block; }
+        .slide.active .hero-subtitle { opacity: 1; transform: translateY(0); transition-delay: 0.8s; }
+
+        
+        #dynamic-badge, .hero-content .inline-block {
+            display: inline-block; padding: 10px 24px; 
+            background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px); border-radius: 50px;
+            font-size: 0.95rem; font-weight: 700; margin-bottom: 30px;
+            color: #f8fafc; letter-spacing: 0.5px; box-shadow: 0 10px 20px -10px rgba(0,0,0,0.2);
         }
 
         .hero-title {
-            font-size: 3.5rem; font-weight: 800; line-height: 1.2; margin-bottom: 20px;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            font-size: 4rem; font-weight: 900; line-height: 1.1; margin-bottom: 25px;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5); letter-spacing: -1px;
         }
         .hero-subtitle {
-            font-size: 1.2rem; color: #e2e8f0; line-height: 1.6; margin-bottom: 30px; font-weight: 500;
+            font-size: 1.35rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 40px; font-weight: 500; max-width: 800px; margin-left: auto; margin-right: auto;
         }
 
-        /* --- FLOATING SEARCH CARD (GOLDEN EFFECT ADDED) --- */
+        /* --- FLOATING SEARCH CARD (JAZZED UP) --- */
         .search-container {
-            max-width: 1100px;
-            margin: -100px auto 0 auto;
+            max-width: 1150px;
+            margin: -120px auto 0 auto; /* Pull up more */
             padding: 0 20px;
             position: relative;
             z-index: 10;
         }
         .search-card {
             background: white; 
-            padding: 40px; 
-            border-radius: 20px;
-            /* UPDATED SHADOW AND BORDER: Golden Effect */
-            box-shadow: 0 25px 50px -12px rgba(202, 138, 4, 0.15);
-            border-top: 3px solid #d97706; /* Golden accent border */
+            padding: 45px; 
+            border-radius: 25px;
+            box-shadow: 0 30px 60px -15px rgba(202, 138, 4, 0.2), 0 10px 20px -10px rgba(0,0,0,0.1); /* Deeper golden shadow */
+            border-top: 4px solid; border-image: linear-gradient(to right, #bf953f, #fcf6ba, #b38728) 1; /* Gradient Border */
             text-align: center;
+            backdrop-filter: blur(10px); /* Subtle if bg wasn't solid white */
         }
         .search-card h2 {
-            font-size: 1.6rem; margin-bottom: 30px; color: #0f172a;
+            font-size: 1.8rem; margin-bottom: 35px; color: #0f172a; font-weight: 800;
         }
         
-        /* UPDATED HIGHLIGHT TEXT: Metallic Gold Gradient */
         .highlight-text { 
             background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-weight: 800;
+            font-weight: 900;
+            text-shadow: 0 2px 10px rgba(191, 149, 63, 0.3);
         }
 
         .search-form {
             display: grid; grid-template-columns: 1fr 1fr 1fr auto;
-            gap: 15px; align-items: end;
+            gap: 20px; align-items: end;
         }
         .input-group { text-align: left; }
         .input-group label {
-            display: block; font-size: 0.75rem; font-weight: 700;
-            color: #64748b; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;
+            display: block; font-size: 0.8rem; font-weight: 800;
+            color: #475569; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;
         }
         .input-wrapper {
-            position: relative; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;
-            transition: 0.3s;
+            position: relative; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px;
+            transition: 0.3s; overflow: hidden;
         }
-        .input-wrapper:hover { border-color: #cbd5e1; }
+        .input-wrapper:hover, .input-wrapper:focus-within { border-color: #2563eb; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
+        
         .input-wrapper select {
-            width: 100%; padding: 14px 16px; border: none; background: transparent;
-            font-size: 0.95rem; color: #334155; appearance: none; cursor: pointer; outline: none;
-            font-weight: 500;
+            width: 100%; padding: 16px 20px; border: none; background: transparent;
+            font-size: 1rem; color: #1e293b; appearance: none; cursor: pointer; outline: none;
+            font-weight: 600;
         }
+        /* Custom Arrow for select */
+        .input-wrapper::after {
+            content: '\f078'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
+            position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+            color: #64748b; pointer-events: none; font-size: 0.8rem;
+        }
+
+        /* JAZZY SEARCH BUTTON */
         .search-btn {
-            background: #2563eb; color: white; border: none; padding: 14px 28px;
-            border-radius: 10px; font-weight: 600; cursor: pointer; display: flex;
-            align-items: center; gap: 10px; height: 50px; transition: 0.3s;
+            /* Gradient Background */
+            background: linear-gradient(45deg, #2563eb, #06b6d4, #2563eb);
+            background-size: 200% auto; /* For animation */
+            color: white; border: none; padding: 16px 32px;
+            border-radius: 12px; font-weight: 700; cursor: pointer; display: flex;
+            align-items: center; gap: 12px; height: 58px; font-size: 1rem;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4);
         }
         .search-btn:hover { 
-            background: #1e40af; 
-            transform: translateY(-2px);
-            /* Added golden glow on hover */
-            box-shadow: 0 10px 20px -10px rgba(218, 165, 32, 0.3);
+            background-position: right center; /* Sweep effect */
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 30px -5px rgba(37, 99, 235, 0.6);
         }
+        .search-btn i { transition: 0.3s; }
+        .search-btn:hover i { transform: rotate(-10deg) scale(1.2); }
+
 
         /* --- SERVICES / WORKFLOW SECTION --- */
         .workflow-section { 
-            padding: 140px 5% 80px 5%; text-align: center; 
-            /* Made transparent to show body background */
-            background: transparent; 
+            padding: 160px 5% 100px 5%; text-align: center; 
+            background: transparent;
+            position: relative;
         }
         
-        .section-header h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; color: #0f172a; }
-        .section-header p { color: #64748b; margin-bottom: 60px; font-size: 1.1rem; }
+        .section-header h2 { font-size: 3rem; font-weight: 900; margin-bottom: 20px; color: #0f172a; letter-spacing: -1px; }
+        .section-header p { color: #64748b; margin-bottom: 70px; font-size: 1.25rem; max-width: 700px; margin-left: auto; margin-right: auto; }
 
         .workflow-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
-            gap: 30px; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 40px; 
             max-width: 1300px; 
             margin: 0 auto; 
         }
 
         .service-card { 
             background: white; 
-            padding: 40px 30px; 
-            border-radius: 20px; 
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
+            padding: 50px 40px; 
+            border-radius: 25px; 
+            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05); 
             border: 2px solid transparent; 
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy transition */
             position: relative;
             overflow: hidden;
             text-align: left;
+            z-index: 1;
         }
 
         .card-number {
-            font-size: 4rem; font-weight: 900; color: #f1f5f9;
-            position: absolute; top: 10px; right: 20px; z-index: 0;
-            transition: color 0.3s;
+            font-size: 5rem; font-weight: 900; color: #f1f5f9;
+            position: absolute; top: 0px; right: 20px; z-index: -1;
+            transition: all 0.4s; opacity: 0.5;
         }
         
         .icon-box { 
-            width: 70px; height: 70px; 
-            background: #f1f5f9; color: #64748b; 
-            border-radius: 16px; 
+            width: 80px; height: 80px; 
+            background: #f8fafc; color: #64748b; 
+            border-radius: 20px; 
             display: flex; align-items: center; justify-content: center; 
-            font-size: 1.8rem; margin-bottom: 25px; 
+            font-size: 2rem; margin-bottom: 30px; 
             position: relative; z-index: 1;
-            transition: all 0.3s;
+            transition: all 0.4s ease;
+            box-shadow: inset 0 0 0 2px #e2e8f0;
         }
 
         .service-card h3 { 
-            font-weight: 700; font-size: 1.25rem; margin-bottom: 15px; color: #1e293b; 
+            font-weight: 800; font-size: 1.5rem; margin-bottom: 20px; color: #1e293b; 
             position: relative; z-index: 1;
         }
         
         .service-card p { 
-            color: #64748b; line-height: 1.6; font-size: 0.95rem; 
-            position: relative; z-index: 1;
+            color: #64748b; line-height: 1.7; font-size: 1rem; 
+            position: relative; z-index: 1; margin-bottom: 25px;
         }
 
         .card-features {
-            margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0;
+            margin-top: auto; padding-top: 25px; border-top: 2px dashed #e2e8f0;
             position: relative; z-index: 1;
         }
         .card-features li {
-            font-size: 0.85rem; color: #475569; margin-bottom: 8px;
+            font-size: 0.9rem; color: #475569; margin-bottom: 12px; font-weight: 600;
             display: flex; align-items: center;
         }
-        .card-features li i { color: #94a3b8; margin-right: 8px; font-size: 0.8rem; transition: 0.3s; }
+        .card-features li i { color: #cbd5e1; margin-right: 12px; font-size: 0.9rem; transition: 0.3s; }
 
-        /* --- COLORFUL HOVER EFFECTS --- */
+        /* --- JAZZY COLORFUL HOVER EFFECTS --- */
         
         .service-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 0%; height: 5px;
-            transition: width 0.4s ease;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 6px;
+            transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease;
         }
-        .service-card:hover { transform: translateY(-12px); }
-        .service-card:hover::before { width: 100%; }
-        .service-card:hover .icon-box { color: white; transform: scale(1.1) rotate(3deg); }
-        .service-card:hover .card-number { color: #f8fafc; }
+        .service-card:hover { transform: translateY(-15px) scale(1.02); }
+        .service-card:hover::before { transform: scaleX(1); }
+        .service-card:hover .icon-box { color: white; transform: rotate(5deg); box-shadow: 0 15px 30px -10px rgba(0,0,0,0.2); border: none; }
+        .service-card:hover .card-number { color: white; opacity: 0.15; transform: scale(1.2) translateX(20px); }
 
         /* Card 1: Consultation (Blue) */
-        .service-card:nth-child(1):hover { border-color: #bfdbfe; box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15); }
-        .service-card:nth-child(1)::before { background: #2563eb; }
-        .service-card:nth-child(1):hover .icon-box { background: #2563eb; }
+        .service-card:nth-child(1):hover { border-color: #bfdbfe; box-shadow: 0 30px 60px -15px rgba(37, 99, 235, 0.25); }
+        .service-card:nth-child(1)::before { background: linear-gradient(to right, #2563eb, #60a5fa); }
+        .service-card:nth-child(1):hover .icon-box { background: linear-gradient(135deg, #2563eb, #60a5fa); }
         .service-card:nth-child(1):hover .card-features li i { color: #2563eb; }
 
         /* Card 2: Visa/Travel (Orange/Gold) */
-        .service-card:nth-child(2):hover { border-color: #fde68a; box-shadow: 0 20px 40px rgba(245, 158, 11, 0.15); }
-        .service-card:nth-child(2)::before { background: #f59e0b; }
-        .service-card:nth-child(2):hover .icon-box { background: #f59e0b; }
+        .service-card:nth-child(2):hover { border-color: #fde68a; box-shadow: 0 30px 60px -15px rgba(245, 158, 11, 0.25); }
+        .service-card:nth-child(2)::before { background: linear-gradient(to right, #f59e0b, #fbbf24); }
+        .service-card:nth-child(2):hover .icon-box { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
         .service-card:nth-child(2):hover .card-features li i { color: #f59e0b; }
 
         /* Card 3: Stay (Green) */
-        .service-card:nth-child(3):hover { border-color: #a7f3d0; box-shadow: 0 20px 40px rgba(16, 185, 129, 0.15); }
-        .service-card:nth-child(3)::before { background: #10b981; }
-        .service-card:nth-child(3):hover .icon-box { background: #10b981; }
+        .service-card:nth-child(3):hover { border-color: #a7f3d0; box-shadow: 0 30px 60px -15px rgba(16, 185, 129, 0.25); }
+        .service-card:nth-child(3)::before { background: linear-gradient(to right, #10b981, #34d399); }
+        .service-card:nth-child(3):hover .icon-box { background: linear-gradient(135deg, #10b981, #34d399); }
         .service-card:nth-child(3):hover .card-features li i { color: #10b981; }
 
         /* Card 4: Treatment (Purple/Pink) */
-        .service-card:nth-child(4):hover { border-color: #e9d5ff; box-shadow: 0 20px 40px rgba(147, 51, 234, 0.15); }
-        .service-card:nth-child(4)::before { background: #9333ea; }
-        .service-card:nth-child(4):hover .icon-box { background: #9333ea; }
+        .service-card:nth-child(4):hover { border-color: #e9d5ff; box-shadow: 0 30px 60px -15px rgba(147, 51, 234, 0.25); }
+        .service-card:nth-child(4)::before { background: linear-gradient(to right, #9333ea, #c084fc); }
+        .service-card:nth-child(4):hover .icon-box { background: linear-gradient(135deg, #9333ea, #c084fc); }
         .service-card:nth-child(4):hover .card-features li i { color: #9333ea; }
 
 
         /* --- FOOTER & REST --- */
-        .footer { background: #0f172a; color: white; padding: 80px 5% 30px; }
-        .footer-content { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; max-width: 1200px; margin: 0 auto; border-bottom: 1px solid #334155; padding-bottom: 40px; }
-        .footer-links a { color: #94a3b8; transition: 0.2s; }
-        .footer-links a:hover { color: white; }
-        .footer-bottom { text-align: center; padding-top: 30px; color: #64748b; font-size: 0.9rem; }
+        .footer { background: #0f172a; color: white; padding: 100px 5% 50px; position: relative; overflow: hidden; }
+        /* Subtle pattern in footer */
+        .footer::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.05; background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 20px 20px; pointer-events: none; }
+        
+        .footer-content { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 60px; max-width: 1200px; margin: 0 auto; border-bottom: 1px solid #334155; padding-bottom: 60px; position: relative; z-index: 1; }
+        .footer-brand h2 { display: flex; align-items: center; gap: 12px; font-size: 1.8rem; font-weight: 900; margin-bottom: 25px; letter-spacing: -0.5px; }
+        .footer-links h4 { color: white; font-weight: 800; margin-bottom: 25px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
+        .footer-links li { margin-bottom: 15px; }
+        .footer-links a { color: #94a3b8; transition: 0.3s; font-weight: 500; display: inline-block; }
+        .footer-links a:hover { color: white; transform: translateX(5px); }
+        .footer-bottom { text-align: center; padding-top: 40px; color: #64748b; font-size: 0.95rem; font-weight: 500; position: relative; z-index: 1; }
 
-        /* Floating Whatsapp */
+        /* Floating Whatsapp (Jazzed Up) */
         .whatsapp-float {
-            position: fixed; bottom: 30px; right: 30px; background: #25D366; color: white;
-            width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 9999; transition: transform 0.3s;
+            position: fixed; bottom: 30px; right: 30px; 
+            background: linear-gradient(135deg, #25D366, #128C7E); color: white;
+            width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 32px; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.4); z-index: 9999; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .whatsapp-float:hover { transform: scale(1.1); }
+        .whatsapp-float:hover { transform: scale(1.15) rotate(10deg); box-shadow: 0 15px 30px rgba(37, 211, 102, 0.6); }
+
+        @media (max-width: 1024px) {
+            .hero-title { font-size: 3rem; }
+            .search-container { margin-top: -80px; }
+        }
 
         @media (max-width: 900px) {
             .search-form { grid-template-columns: 1fr; }
             .hero-title { font-size: 2.5rem; }
             .nav-links { display: none; }
+            .hero { height: 600px; }
         }
     </style>
 </head>
@@ -286,7 +345,7 @@
             <button class="lang-btn" onclick="toggleLanguage()">
                 <i class="fas fa-globe"></i> <span id="lang-label">EN</span>
             </button>
-            <a href="login.html" style="font-weight: 600; font-size: 0.95rem;" data-en="Login" data-bn="লগইন">Login</a>
+            <a href="login.html" style="font-weight: 700; font-size: 0.95rem;" data-en="Login" data-bn="লগইন">Login</a>
             <a href="register-patient.html" class="btn-primary" data-en="Get Started" data-bn="শুরু করুন">Get Started</a>
         </div>
     </nav>
@@ -487,21 +546,21 @@
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-brand">
-                <h2 style="display: flex; align-items: center; gap: 10px; font-size: 1.5rem; font-weight: 700; margin-bottom: 20px;"><i class="fas fa-heartbeat text-blue-500"></i> TreatInt</h2>
+                <h2 style=""><i class="fas fa-heartbeat text-blue-500"></i> TreatInt</h2>
                 <p style="color: #94a3b8; line-height: 1.6;" data-en="Bridging borders for better health." data-bn="সুস্বাস্থ্যের জন্য সীমান্তের বাধা পেরিয়ে।">Bridging borders for better health.</p>
             </div>
             <div class="footer-links">
-                <h4 style="color: white; font-weight: 700; margin-bottom: 20px;" data-en="Company" data-bn="কোম্পানি">Company</h4>
+                <h4 data-en="Company" data-bn="কোম্পানি">Company</h4>
                 <ul>
-                    <li style="margin-bottom: 10px;"><a href="#" data-en="About Us" data-bn="আমাদের সম্পর্কে">About Us</a></li>
-                    <li style="margin-bottom: 10px;"><a href="#" data-en="Contact" data-bn="যোগাযোগ">Contact</a></li>
+                    <li><a href="#" data-en="About Us" data-bn="আমাদের সম্পর্কে">About Us</a></li>
+                    <li><a href="#" data-en="Contact" data-bn="যোগাযোগ">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-links">
-                <h4 style="color: white; font-weight: 700; margin-bottom: 20px;" data-en="Legal" data-bn="আইনি তথ্য">Legal</h4>
+                <h4 data-en="Legal" data-bn="আইনি তথ্য">Legal</h4>
                 <ul>
-                    <li style="margin-bottom: 10px;"><a href="#" data-en="Privacy Policy" data-bn="গোপনীয়তা নীতি">Privacy Policy</a></li>
-                    <li style="margin-bottom: 10px;"><a href="#" data-en="Terms" data-bn="শর্তাবলী">Terms</a></li>
+                    <li><a href="#" data-en="Privacy Policy" data-bn="গোপনীয়তা নীতি">Privacy Policy</a></li>
+                    <li><a href="#" data-en="Terms" data-bn="শর্তাবলী">Terms</a></li>
                 </ul>
             </div>
         </div>
