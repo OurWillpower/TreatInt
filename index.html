@@ -199,6 +199,7 @@
             border: 1px solid #cbd5e1; /* Stronger border for definition */
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
             position: relative; overflow: hidden; text-align: left; z-index: 1;
+            display: flex; flex-direction: column; /* To align buttons at bottom */
         }
 
         .card-number {
@@ -240,7 +241,7 @@
         }
         .card-features li i { color: #94a3b8; margin-right: 12px; font-size: 0.9rem; transition: 0.3s; }
 
-        /* --- NEW BUTTON: BOOK TIME SLOT --- */
+        /* --- BUTTONS FOR CARDS --- */
         .book-btn {
             display: inline-flex; align-items: center; justify-content: center;
             width: 100%; margin-top: 20px;
@@ -278,18 +279,24 @@
         .service-card:nth-child(2)::before { background: linear-gradient(to right, #f59e0b, #fbbf24); }
         .service-card:nth-child(2):hover .icon-box { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
         .service-card:nth-child(2):hover .card-features li i { color: #f59e0b; }
+        .service-card:nth-child(2) .book-btn { background: #d97706; } /* Orange btn default */
+        .service-card:nth-child(2) .book-btn:hover { background: #b45309; }
 
         /* Card 3: Stay (Green) */
         .service-card:nth-child(3):hover { box-shadow: 0 30px 60px -15px rgba(16, 185, 129, 0.25); }
         .service-card:nth-child(3)::before { background: linear-gradient(to right, #10b981, #34d399); }
         .service-card:nth-child(3):hover .icon-box { background: linear-gradient(135deg, #10b981, #34d399); }
         .service-card:nth-child(3):hover .card-features li i { color: #10b981; }
+        .service-card:nth-child(3) .book-btn { background: #059669; } /* Green btn default */
+        .service-card:nth-child(3) .book-btn:hover { background: #047857; }
 
         /* Card 4: Treatment (Purple/Pink) */
         .service-card:nth-child(4):hover { box-shadow: 0 30px 60px -15px rgba(147, 51, 234, 0.25); }
         .service-card:nth-child(4)::before { background: linear-gradient(to right, #9333ea, #c084fc); }
         .service-card:nth-child(4):hover .icon-box { background: linear-gradient(135deg, #9333ea, #c084fc); }
         .service-card:nth-child(4):hover .card-features li i { color: #9333ea; }
+        .service-card:nth-child(4) .book-btn { background: #7e22ce; } /* Purple btn default */
+        .service-card:nth-child(4) .book-btn:hover { background: #6b21a8; }
 
 
         /* --- FOOTER & REST --- */
@@ -495,6 +502,9 @@
                     <li><i class="fas fa-check"></i> <span data-en="Invitation Letter" data-bn="ইনভাইটেশন লেটার">Invitation Letter</span></li>
                     <li><i class="fas fa-check"></i> <span data-en="Airport Pickup" data-bn="এয়ারপোর্ট পিকআপ">Airport Pickup</span></li>
                 </ul>
+                <a href="https://wa.me/917039196489?text=Hello%20TreatInt,%20I%20need%20assistance%20with%20Visa%20and%20Logistics." target="_blank" class="book-btn" data-en="Get Visa Support" data-bn="ভিসা সহায়তা নিন">
+                    Get Visa Support <i class="fas fa-arrow-right"></i>
+                </a>
             </div>
 
             <div class="service-card">
@@ -508,6 +518,9 @@
                     <li><i class="fas fa-check"></i> <span data-en="Halal Food" data-bn="হালাল খাবার">Halal Food</span></li>
                     <li><i class="fas fa-check"></i> <span data-en="Translators" data-bn="দোভাষী">Translators</span></li>
                 </ul>
+                <a href="https://wa.me/917039196489?text=Hello%20TreatInt,%20I%20want%20to%20see%20accommodation%20options." target="_blank" class="book-btn" data-en="View Stay Options" data-bn="থাকার ব্যবস্থা দেখুন">
+                    View Stay Options <i class="fas fa-arrow-right"></i>
+                </a>
             </div>
 
             <div class="service-card">
@@ -521,6 +534,9 @@
                     <li><i class="fas fa-check"></i> <span data-en="24/7 Support" data-bn="২৪/৭ সহায়তা">24/7 Support</span></li>
                     <li><i class="fas fa-check"></i> <span data-en="Pharmacy Aid" data-bn="ঔষধ সহায়তা">Pharmacy Aid</span></li>
                 </ul>
+                <a href="https://wa.me/917039196489?text=Hello%20TreatInt,%20I%20want%20to%20discuss%20my%20treatment%20plan." target="_blank" class="book-btn" data-en="Discuss Care Plan" data-bn="চিকিৎসা নিয়ে কথা বলুন">
+                    Discuss Care Plan <i class="fas fa-arrow-right"></i>
+                </a>
             </div>
 
         </div>
@@ -533,14 +549,14 @@
                 <p style="color: #94a3b8; line-height: 1.6;" data-en="Bridging borders for better health." data-bn="সুস্বাস্থ্যের জন্য সীমান্তের বাধা পেরিয়ে।">Bridging borders for better health.</p>
             </div>
             <div class="footer-links">
-                <h4 style="color: white; font-weight: 700; margin-bottom: 20px;" data-en="Company" data-bn="কোম্পানি">Company</h4>
+                <h4 data-en="Company" data-bn="কোম্পানি">Company</h4>
                 <ul>
                     <li style="margin-bottom: 10px;"><a href="#" data-en="About Us" data-bn="আমাদের সম্পর্কে">About Us</a></li>
                     <li style="margin-bottom: 10px;"><a href="#" data-en="Contact" data-bn="যোগাযোগ">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-links">
-                <h4 style="color: white; font-weight: 700; margin-bottom: 20px;" data-en="Legal" data-bn="আইনি তথ্য">Legal</h4>
+                <h4 data-en="Legal" data-bn="আইনি তথ্য">Legal</h4>
                 <ul>
                     <li style="margin-bottom: 10px;"><a href="#" data-en="Privacy Policy" data-bn="গোপনীয়তা নীতি">Privacy Policy</a></li>
                     <li style="margin-bottom: 10px;"><a href="#" data-en="Terms" data-bn="শর্তাবলী">Terms</a></li>
