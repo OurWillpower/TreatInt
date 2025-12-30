@@ -43,9 +43,9 @@
         }
         .btn-primary:hover { background: #1d4ed8; }
 
-        /* --- HERO SLIDER (Restored) --- */
+        /* --- HERO SLIDER --- */
         .hero {
-            height: 650px; /* Taller to fit text + floating card */
+            height: 650px;
             position: relative;
             overflow: hidden;
         }
@@ -58,16 +58,14 @@
         .slide.active { opacity: 1; z-index: 1; }
         .hero-overlay {
             position: absolute; inset: 0;
-            background: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.3)); /* Darker for text readability */
+            background: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.3));
         }
         
-        /* Hero Content Styling */
         .hero-content {
             position: relative; z-index: 2; text-align: center; color: white;
-            max-width: 800px; padding: 0 20px; margin-bottom: 100px; /* Push text up so card doesn't cover it */
+            max-width: 800px; padding: 0 20px; margin-bottom: 100px;
         }
         
-        /* Dynamic Greeting Badge */
         #dynamic-badge {
             display: inline-block; padding: 8px 20px; 
             background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.4);
@@ -87,7 +85,7 @@
         /* --- FLOATING SEARCH CARD --- */
         .search-container {
             max-width: 1100px;
-            margin: -100px auto 0 auto; /* Pulls overlapping hero */
+            margin: -100px auto 0 auto;
             padding: 0 20px;
             position: relative;
             z-index: 10;
@@ -128,12 +126,91 @@
         }
         .search-btn:hover { background: #1e40af; transform: translateY(-2px); }
 
-        /* --- FOOTER & REST --- */
-        .workflow-section { padding: 140px 5% 80px 5%; text-align: center; }
-        .workflow-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
-        .workflow-card { background: white; padding: 40px 30px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-        .icon-box { width: 70px; height: 70px; background: #eff6ff; color: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 20px auto; }
+        /* --- SERVICES / WORKFLOW SECTION (UPDATED) --- */
+        .workflow-section { padding: 140px 5% 80px 5%; text-align: center; background: #f8f9fa; }
         
+        .section-header h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; color: #0f172a; }
+        .section-header p { color: #64748b; margin-bottom: 60px; font-size: 1.1rem; }
+
+        .workflow-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
+            gap: 30px; 
+            max-width: 1300px; 
+            margin: 0 auto; 
+        }
+
+        /* NEW CARD DESIGN FOR HIGHLIGHTING */
+        .service-card { 
+            background: white; 
+            padding: 40px 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
+            border: 2px solid transparent; /* Invisible border by default */
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: left;
+        }
+
+        /* Hover Effect: The "Highlight" */
+        .service-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15); /* Blue tinted shadow */
+            border-color: #bfdbfe; /* Light blue border */
+        }
+
+        /* Decorative line at top of card */
+        .service-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 0%; height: 5px;
+            background: #2563eb; transition: width 0.4s ease;
+        }
+        .service-card:hover::before { width: 100%; }
+
+        .card-number {
+            font-size: 4rem; font-weight: 900; color: #f1f5f9;
+            position: absolute; top: 10px; right: 20px; z-index: 0;
+            transition: color 0.3s;
+        }
+        .service-card:hover .card-number { color: #eff6ff; }
+
+        .icon-box { 
+            width: 70px; height: 70px; 
+            background: #eff6ff; color: #2563eb; 
+            border-radius: 16px; 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 1.8rem; margin-bottom: 25px; 
+            position: relative; z-index: 1;
+            transition: all 0.3s;
+        }
+        
+        .service-card:hover .icon-box {
+            background: #2563eb; color: white;
+            transform: scale(1.1) rotate(3deg);
+        }
+
+        .service-card h3 { 
+            font-weight: 700; font-size: 1.25rem; margin-bottom: 15px; color: #1e293b; 
+            position: relative; z-index: 1;
+        }
+        
+        .service-card p { 
+            color: #64748b; line-height: 1.6; font-size: 0.95rem; 
+            position: relative; z-index: 1;
+        }
+
+        .card-features {
+            margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e2e8f0;
+            position: relative; z-index: 1;
+        }
+        .card-features li {
+            font-size: 0.85rem; color: #475569; margin-bottom: 8px;
+            display: flex; align-items: center;
+        }
+        .card-features li i { color: #10b981; margin-right: 8px; font-size: 0.8rem; }
+
+
+        /* --- FOOTER & REST --- */
         .footer { background: #0f172a; color: white; padding: 80px 5% 30px; }
         .footer-content { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; max-width: 1200px; margin: 0 auto; border-bottom: 1px solid #334155; padding-bottom: 40px; }
         .footer-links a { color: #94a3b8; transition: 0.2s; }
@@ -182,7 +259,6 @@
                 <div id="dynamic-badge" data-en="Welcome to TreatInt" data-bn="TreatInt এ স্বাগতম">
                     <i class="fas fa-sun mr-2"></i> Welcome to TreatInt
                 </div>
-                
                 <h1 class="hero-title">
                     <span data-en="World-Class Care," data-bn="বিশ্বমানের সেবা,">World-Class Care,</span><br>
                     <span style="color: #93c5fd;" data-en="Zero Compromise." data-bn="কোনো আপোষ নেই।">Zero Compromise.</span>
@@ -192,7 +268,6 @@
                 </p>
             </div>
         </div>
-
         <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
             <div class="hero-overlay"></div>
             <div class="hero-content">
@@ -217,7 +292,6 @@
                 <span class="highlight-text" data-en="Your Choice" data-bn="আপনার পছন্দের">Your Choice</span> 
                 <span data-en="Hospital" data-bn="হাসপাতালে">Hospital</span>
             </h2>
-            
             <form class="search-form" action="hospitals.html">
                 <div class="input-group">
                     <label data-en="Specialty" data-bn="বিশেষজ্ঞ">Specialty</label>
@@ -230,7 +304,6 @@
                         </select>
                     </div>
                 </div>
-
                 <div class="input-group">
                     <label data-en="Hospital" data-bn="হাসপাতাল">Hospital</label>
                     <div class="input-wrapper">
@@ -238,11 +311,9 @@
                             <option data-en="Any Hospital" data-bn="যেকোনো হাসপাতাল">Any Hospital</option>
                             <option data-en="Apollo Hospital" data-bn="অ্যাপোলো হাসপাতাল">Apollo Hospital</option>
                             <option data-en="Fortis Healthcare" data-bn="ফোর্টিস হেলথকেয়ার">Fortis Healthcare</option>
-                            <option data-en="Medanta" data-bn="মেদান্ত">Medanta</option>
                         </select>
                     </div>
                 </div>
-
                 <div class="input-group">
                     <label data-en="City" data-bn="শহর">City</label>
                     <div class="input-wrapper">
@@ -250,11 +321,9 @@
                             <option data-en="Any City" data-bn="যেকোনো শহর">Any City</option>
                             <option data-en="Mumbai" data-bn="মুম্বাই">Mumbai</option>
                             <option data-en="Delhi" data-bn="দিল্লি">Delhi</option>
-                            <option data-en="Chennai" data-bn="চেন্নাই">Chennai</option>
                         </select>
                     </div>
                 </div>
-
                 <button type="submit" class="search-btn">
                     <i class="fas fa-search"></i> <span data-en="Find Doctors" data-bn="ডাক্তার খুঁজুন">Find Doctors</span>
                 </button>
@@ -264,26 +333,64 @@
 
     <section class="workflow-section">
         <div class="section-header">
-            <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 10px; color: #0f172a;" data-en="How It Works" data-bn="কিভাবে কাজ করে">How It Works</h2>
-            <p style="color: #64748b; margin-bottom: 50px;" data-en="Your journey to better health in 3 simple steps" data-bn="আপনার সুস্বাস্থ্যের যাত্রা মাত্র ৩টি সহজ ধাপে">Your journey to better health in 3 simple steps</p>
+            <h2 data-en="Comprehensive Care Cycle" data-bn="সম্পূর্ণ সেবা প্রক্রিয়া">Comprehensive Care Cycle</h2>
+            <p data-en="We handle everything from your first click to your full recovery." data-bn="আপনার প্রথম ক্লিক থেকে সম্পূর্ণ সুস্থ হওয়া পর্যন্ত সব দায়িত্ব আমাদের।">We handle everything from your first click to your full recovery.</p>
         </div>
 
         <div class="workflow-grid">
-            <div class="workflow-card">
-                <div class="icon-box"><i class="fas fa-search"></i></div>
-                <h3 style="font-weight: 700; font-size: 1.2rem; margin-bottom: 15px;" data-en="1. Search" data-bn="১. অনুসন্ধান">1. Search</h3>
-                <p style="color: #64748b; line-height: 1.6;" data-en="Find the best hospitals and specialists for your specific condition based on your needs." data-bn="আপনার প্রয়োজন অনুযায়ী সেরা হাসপাতাল এবং বিশেষজ্ঞ ডাক্তার খুঁজুন।">Find the best hospitals and specialists for your specific condition based on your needs.</p>
+            
+            <div class="service-card">
+                <div class="card-number">01</div>
+                <div class="icon-box"><i class="fas fa-user-md"></i></div>
+                <h3 data-en="Consultation" data-bn="পরামর্শ ও পরিকল্পনা">Consultation</h3>
+                <p data-en="Free consultation with India's top specialists. We gather your reports and get you a treatment plan and cost estimate." data-bn="ভারতের সেরা বিশেষজ্ঞদের সাথে বিনামূল্যে পরামর্শ। আমরা আপনার রিপোর্ট দেখে চিকিৎসার পরিকল্পনা ও খরচের হিসাব দিই।">
+                    Free consultation with India's top specialists. We gather your reports and get you a treatment plan.
+                </p>
+                <ul class="card-features">
+                    <li><i class="fas fa-check"></i> <span data-en="Video Consultation" data-bn="ভিডিও পরামর্শ">Video Consultation</span></li>
+                    <li><i class="fas fa-check"></i> <span data-en="Cost Estimate" data-bn="খরচের হিসাব">Cost Estimate</span></li>
+                </ul>
             </div>
-            <div class="workflow-card">
-                <div class="icon-box"><i class="fas fa-file-medical"></i></div>
-                <h3 style="font-weight: 700; font-size: 1.2rem; margin-bottom: 15px;" data-en="2. Compare" data-bn="২. তুলনা করুন">2. Compare</h3>
-                <p style="color: #64748b; line-height: 1.6;" data-en="Review treatment costs, doctor profiles, and hospital facilities transparently." data-bn="চিকিৎসার খরচ, ডাক্তারের প্রোফাইল এবং হাসপাতালের সুবিধাগুলি যাচাই করুন।">Review treatment costs, doctor profiles, and hospital facilities transparently.</p>
+
+            <div class="service-card">
+                <div class="card-number">02</div>
+                <div class="icon-box"><i class="fas fa-passport"></i></div>
+                <h3 data-en="Visa & Logistics" data-bn="ভিসা ও যাতায়াত">Visa & Logistics</h3>
+                <p data-en="We provide the Visa Invitation Letter instantly and book your flight tickets. We handle all paperwork." data-bn="আমরা তাৎক্ষনিক ভিসা ইনভাইটেশন লেটার দিই এবং আপনার ফ্লাইট টিকেট বুক করি। সব কাগজপত্র আমরাই দেখি।">
+                    We provide the Visa Invitation Letter instantly and book your flight tickets. We handle all paperwork.
+                </p>
+                <ul class="card-features">
+                    <li><i class="fas fa-check"></i> <span data-en="Invitation Letter" data-bn="ইনভাইটেশন লেটার">Invitation Letter</span></li>
+                    <li><i class="fas fa-check"></i> <span data-en="Airport Pickup" data-bn="এয়ারপোর্ট পিকআপ">Airport Pickup</span></li>
+                </ul>
             </div>
-            <div class="workflow-card">
-                <div class="icon-box"><i class="fas fa-plane-departure"></i></div>
-                <h3 style="font-weight: 700; font-size: 1.2rem; margin-bottom: 15px;" data-en="3. Travel" data-bn="৩. ভ্রমণ">3. Travel</h3>
-                <p style="color: #64748b; line-height: 1.6;" data-en="Book your appointment and travel with our full assistance for a hassle-free experience." data-bn="অ্যাপয়েন্টমেন্ট বুক করুন এবং আমাদের সম্পূর্ণ সহায়তায় নিশ্চিন্তে ভ্রমণ করুন।">Book your appointment and travel with our full assistance for a hassle-free experience.</p>
+
+            <div class="service-card">
+                <div class="card-number">03</div>
+                <div class="icon-box"><i class="fas fa-hotel"></i></div>
+                <h3 data-en="Stay & Hospitality" data-bn="থাকা ও আতিথেয়তা">Stay & Hospitality</h3>
+                <p data-en="Comfortable guest houses near the hospital with kitchen facilities. We provide SIM cards and local currency exchange." data-bn="হাসপাতালের কাছেই রান্নাঘর সহ আরামদায়ক গেস্ট হাউস। আমরা সিম কার্ড এবং টাকা এক্সচেঞ্জের ব্যবস্থা করি।">
+                    Comfortable guest houses near the hospital with kitchen facilities. We provide SIM cards.
+                </p>
+                <ul class="card-features">
+                    <li><i class="fas fa-check"></i> <span data-en="Halal Food" data-bn="হালাল খাবার">Halal Food</span></li>
+                    <li><i class="fas fa-check"></i> <span data-en="Translators" data-bn="দোভাষী">Translators</span></li>
+                </ul>
             </div>
+
+            <div class="service-card">
+                <div class="card-number">04</div>
+                <div class="icon-box"><i class="fas fa-procedures"></i></div>
+                <h3 data-en="Treatment & Care" data-bn="চিকিৎসা ও যত্ন">Treatment & Care</h3>
+                <p data-en="Priority admission to the hospital. Our team stays with you during surgery and post-op recovery." data-bn="হাসপাতালে অগ্রাধিকার ভিত্তিতে ভর্তি। অপারেশন এবং পরবর্তী সময়ে আমাদের টিম সবসময় আপনার পাশে থাকে।">
+                    Priority admission to the hospital. Our team stays with you during surgery and post-op recovery.
+                </p>
+                <ul class="card-features">
+                    <li><i class="fas fa-check"></i> <span data-en="24/7 Support" data-bn="২৪/৭ সহায়তা">24/7 Support</span></li>
+                    <li><i class="fas fa-check"></i> <span data-en="Pharmacy Aid" data-bn="ঔষধ সহায়তা">Pharmacy Aid</span></li>
+                </ul>
+            </div>
+
         </div>
     </section>
 
@@ -291,13 +398,12 @@
         <div class="footer-content">
             <div class="footer-brand">
                 <h2 style="display: flex; align-items: center; gap: 10px; font-size: 1.5rem; font-weight: 700; margin-bottom: 20px;"><i class="fas fa-heartbeat text-blue-500"></i> TreatInt</h2>
-                <p style="color: #94a3b8; line-height: 1.6;" data-en="Bridging borders for better health. Connecting you with world-class medical care at affordable prices." data-bn="সুস্বাস্থ্যের জন্য সীমান্তের বাধা পেরিয়ে। সাশ্রয়ী মূল্যে বিশ্বমানের চিকিৎসাসেবা প্রদান করাই আমাদের লক্ষ্য।">Bridging borders for better health. Connecting you with world-class medical care at affordable prices.</p>
+                <p style="color: #94a3b8; line-height: 1.6;" data-en="Bridging borders for better health." data-bn="সুস্বাস্থ্যের জন্য সীমান্তের বাধা পেরিয়ে।">Bridging borders for better health.</p>
             </div>
             <div class="footer-links">
                 <h4 style="color: white; font-weight: 700; margin-bottom: 20px;" data-en="Company" data-bn="কোম্পানি">Company</h4>
                 <ul>
                     <li style="margin-bottom: 10px;"><a href="#" data-en="About Us" data-bn="আমাদের সম্পর্কে">About Us</a></li>
-                    <li style="margin-bottom: 10px;"><a href="#" data-en="Careers" data-bn="ক্যারিয়ার">Careers</a></li>
                     <li style="margin-bottom: 10px;"><a href="#" data-en="Contact" data-bn="যোগাযোগ">Contact</a></li>
                 </ul>
             </div>
@@ -305,7 +411,7 @@
                 <h4 style="color: white; font-weight: 700; margin-bottom: 20px;" data-en="Legal" data-bn="আইনি তথ্য">Legal</h4>
                 <ul>
                     <li style="margin-bottom: 10px;"><a href="#" data-en="Privacy Policy" data-bn="গোপনীয়তা নীতি">Privacy Policy</a></li>
-                    <li style="margin-bottom: 10px;"><a href="#" data-en="Terms of Service" data-bn="শর্তাবলী">Terms of Service</a></li>
+                    <li style="margin-bottom: 10px;"><a href="#" data-en="Terms" data-bn="শর্তাবলী">Terms</a></li>
                 </ul>
             </div>
         </div>
@@ -337,7 +443,6 @@
             if(!badge) return;
 
             try {
-                // Time
                 const hour = new Date().getHours();
                 let timeEn = "Hello"; let timeBn = "হ্যালো"; let icon = "fa-sun";
                 
@@ -345,7 +450,6 @@
                 else if (hour < 18) { timeEn = "Good Afternoon"; timeBn = "শুভ অপরাহ্ন"; icon = "fa-sun"; }
                 else { timeEn = "Good Evening"; timeBn = "শুভ সন্ধ্যা"; icon = "fa-moon"; }
 
-                // Location
                 const response = await fetch('https://ipapi.co/json/');
                 const data = await response.json();
                 
@@ -359,7 +463,6 @@
                     badge.setAttribute('data-bn', `${timeBn}! ${data.country_name || 'বিদেশ'} থেকে স্বাগতম।`);
                 }
                 
-                // Refresh translation if Bangla is already active
                 if(localStorage.getItem('treatIntLang') === 'bn') {
                     badge.innerText = badge.getAttribute('data-bn');
                 }
