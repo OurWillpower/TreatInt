@@ -3,202 +3,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Health Locker | TreatInt</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style> body { font-family: 'Poppins', sans-serif; } </style>
+    <title>My Dashboard | TreatInt</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- THEME SETUP --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        body { 
+            background-color: #fffbf2;
+            background-image: radial-gradient(#e2e8f0 0.5px, transparent 0.5px), radial-gradient(#e2e8f0 0.5px, #fffbf2 0.5px);
+            background-size: 20px 20px;
+            color: #1e293b;
+            min-height: 100vh;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 5%; background: white; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 50;
+        }
+        .logo { display: flex; align-items: center; font-size: 1.5rem; font-weight: 900; color: #0f172a; gap: 10px; text-decoration: none; }
+        .logo i { 
+            background: linear-gradient(135deg, #2563eb, #06b6d4);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        
+        .user-menu { display: flex; align-items: center; gap: 15px; }
+        .user-avatar { 
+            width: 40px; height: 40px; background: #eff6ff; color: #2563eb; 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;
+            border: 2px solid #bfdbfe;
+        }
+        .logout-btn { 
+            font-size: 0.9rem; color: #64748b; font-weight: 600; cursor: pointer; transition: 0.3s;
+        }
+        .logout-btn:hover { color: #ef4444; }
+
+        /* --- DASHBOARD LAYOUT --- */
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        
+        .welcome-header { margin-bottom: 40px; }
+        .welcome-header h1 { font-size: 2.2rem; font-weight: 800; color: #0f172a; margin-bottom: 5px; }
+        .welcome-header p { color: #64748b; font-size: 1.1rem; }
+
+        /* --- JOURNEY TRACKER (STATUS BAR) --- */
+        .status-card {
+            background: white; padding: 30px; border-radius: 20px;
+            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0; margin-bottom: 40px;
+        }
+        .status-title { font-weight: 700; color: #334155; margin-bottom: 20px; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
+        
+        .progress-track { display: flex; justify-content: space-between; position: relative; }
+        /* Line behind circles */
+        .progress-track::before {
+            content: ''; position: absolute; top: 15px; left: 0; width: 100%; height: 4px;
+            background: #f1f5f9; z-index: 0;
+        }
+        
+        .step { position: relative; z-index: 1; text-align: center; width: 25%; }
+        .step-circle {
+            width: 35px; height: 35px; background: #f1f5f9; border: 4px solid white;
+            border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center;
+            color: #94a3b8; font-weight: 700; transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .step-label { font-size: 0.9rem; font-weight: 600; color: #94a3b8; }
+
+        /* Active State logic */
+        .step.active .step-circle { background: #2563eb; color: white; box-shadow: 0 0 0 4px #bfdbfe; }
+        .step.active .step-label { color: #2563eb; }
+        .step.completed .step-circle { background: #10b981; color: white; }
+
+        /* --- ACTION GRID --- */
+        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+
+        /* Main Card Style */
+        .card {
+            background: white; border-radius: 20px; padding: 30px;
+            box-shadow: 0 15px 30px -10px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0; transition: 0.3s;
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1); }
+        
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .card-title { font-weight: 700; font-size: 1.2rem; color: #0f172a; display: flex; align-items: center; gap: 10px; }
+        .card-title i { color: #2563eb; }
+
+        /* Upload Box */
+        .upload-zone {
+            border: 2px dashed #cbd5e1; border-radius: 12px; padding: 40px;
+            text-align: center; cursor: pointer; transition: 0.3s; background: #f8fafc;
+        }
+        .upload-zone:hover { border-color: #2563eb; background: #eff6ff; }
+        .upload-icon { font-size: 2rem; color: #64748b; margin-bottom: 10px; }
+        .upload-text { font-weight: 600; color: #334155; }
+        .upload-sub { font-size: 0.8rem; color: #94a3b8; }
+
+        /* Appointment List */
+        .appt-item {
+            display: flex; gap: 15px; padding: 15px; background: #f8fafc; 
+            border-radius: 12px; margin-bottom: 15px; border-left: 4px solid #f59e0b;
+        }
+        .date-box { 
+            background: white; padding: 8px 12px; border-radius: 8px; text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .date-day { display: block; font-weight: 800; font-size: 1.2rem; color: #0f172a; }
+        .date-month { display: block; font-size: 0.75rem; font-weight: 600; color: #64748b; text-transform: uppercase; }
+        .appt-info h4 { font-weight: 700; color: #334155; }
+        .appt-info p { font-size: 0.9rem; color: #64748b; }
+
+        /* Floating Whatsapp */
+        .whatsapp-float {
+            position: fixed; bottom: 30px; right: 30px; 
+            background: linear-gradient(135deg, #25D366, #128C7E); color: white;
+            width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 30px; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.4); z-index: 100; transition: all 0.3s;
+        }
+        .whatsapp-float:hover { transform: scale(1.1); }
+
+        @media (max-width: 768px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .step-label { font-size: 0.7rem; }
+        }
+    </style>
 </head>
-<body class="bg-blue-50">
+<body>
 
-    <nav class="bg-blue-900 text-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <a href="index.html" class="flex items-center hover:opacity-80 transition">
-                    <i class="fas fa-heartbeat text-2xl mr-2"></i>
-                    <span class="font-bold text-xl">TreatInt Locker</span>
-                </a>
-
-                <div class="flex items-center space-x-6">
-                    <a href="index.html" class="hover:text-blue-200 transition flex items-center gap-2">
-                        <i class="fas fa-home"></i> <span class="hidden md:inline">Home</span>
-                    </a>
-                    
-                    <div class="text-right hidden md:block border-l border-blue-700 pl-4">
-                        <div class="font-bold" id="display-name">Loading...</div>
-                        <div class="text-xs text-blue-200">Patient Account</div>
-                    </div>
-                    
-                    <button onclick="logout()" class="text-sm bg-red-500 px-3 py-1 rounded hover:bg-red-600 ml-2 flex items-center gap-2">
-                        <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
-                    </button>
-                </div>
-            </div>
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <i class="fas fa-heartbeat"></i> TreatInt
+        </a>
+        <div class="user-menu">
+            <div class="user-avatar" id="avatarInitial">U</div>
+            <span class="logout-btn" onclick="handleLogout()">Logout</span>
         </div>
     </nav>
 
-    <div class="max-w-4xl mx-auto px-4 py-8">
-        
-        <div class="text-sm text-gray-500 mb-4 flex items-center">
-            <a href="patient-home.html" class="hover:text-blue-600 hover:underline transition font-bold text-blue-900">
-                <i class="fas fa-arrow-left mr-1"></i> Back to Dashboard
-            </a> 
-            <span class="mx-2">/</span> 
-            <span class="font-bold text-gray-800">My Health Locker</span>
+    <div class="container">
+        <div class="welcome-header">
+            <h1 id="welcomeMsg">Welcome Back!</h1>
+            <p>Here is the status of your medical journey.</p>
         </div>
 
-        <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
-            <h2 class="text-xl font-bold text-gray-800 mb-4">Upload Medical Records</h2>
-            <div class="border-2 border-dashed border-blue-200 rounded-lg p-8 text-center hover:bg-blue-50 transition group">
-                <input type="file" id="fileInput" class="hidden" onchange="handleFileSelect()">
-                <label for="fileInput" class="cursor-pointer block">
-                    <i class="fas fa-cloud-upload-alt text-4xl text-blue-400 mb-2 group-hover:scale-110 transition-transform"></i>
-                    <p class="text-gray-600 font-bold">Click to Upload Report</p>
-                    <p class="text-xs text-gray-400">PDF, JPG, PNG (Max 5MB)</p>
-                </label>
-                <div id="fileNameDisplay" class="mt-4 text-sm font-bold text-green-600 hidden"></div>
+        <div class="status-card">
+            <div class="status-title">Current Status: Reports Review</div>
+            <div class="progress-track">
+                <div class="step active">
+                    <div class="step-circle"><i class="fas fa-file-medical"></i></div>
+                    <div class="step-label">Reports</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Consultation</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Visa</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Travel</div>
+                </div>
             </div>
-            <button id="uploadBtn" onclick="uploadFile()" class="w-full mt-4 bg-blue-900 text-white font-bold py-3 rounded hover:bg-blue-800 transition hidden shadow-lg">
-                Confirm Upload
-            </button>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div class="px-6 py-4 border-b bg-gray-50 flex justify-between items-center">
-                <h3 class="font-bold text-gray-800">My Saved Documents</h3>
-                <button onclick="loadFiles()" class="text-blue-600 text-xs hover:underline"><i class="fas fa-sync"></i> Refresh List</button>
+        <div class="dashboard-grid">
+            <div class="main-col">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-cloud-upload-alt"></i> Upload Reports</div>
+                    </div>
+                    <div class="upload-zone" onclick="triggerUpload()">
+                        <div class="upload-icon"><i class="fas fa-file-pdf"></i></div>
+                        <div class="upload-text">Click to upload your medical files</div>
+                        <div class="upload-sub">PDF, JPG, or PNG (Max 5MB)</div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 30px;">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-user-md"></i> Recommended Doctors</div>
+                    </div>
+                    <p style="color:#64748b; font-size:0.95rem;">
+                        Our medical team is currently reviewing your reports. You will see recommended specialists here within 24 hours.
+                    </p>
+                </div>
             </div>
-            <div id="fileList" class="divide-y divide-gray-100 max-h-96 overflow-y-auto">
-                <div class="p-6 text-center text-gray-400 text-sm">Loading your locker...</div>
+
+            <div class="side-col">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-calendar-check"></i> Next Step</div>
+                    </div>
+                    <div class="appt-item">
+                        <div class="date-box">
+                            <span class="date-day">--</span>
+                            <span class="date-month">--</span>
+                        </div>
+                        <div class="appt-info">
+                            <h4>Awaiting Review</h4>
+                            <p>Video Consult</p>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/917039196489" class="block text-center text-blue-600 font-bold text-sm mt-4 hover:underline">
+                        Contact Support Team
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 
+    <a href="https://wa.me/917039196489" target="_blank" class="whatsapp-float">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
     <script>
-        // --- CONFIGURATION ---
-        const supabaseUrl = 'https://atsdebykxuhtruuwcmlx.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
-        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+        // --- BACKEND SIMULATION ---
+        
+        // 1. Get User Name from Registration
+        document.addEventListener('DOMContentLoaded', () => {
+            const userName = localStorage.getItem('treatInt_userName');
+            
+            // Security Check (Simulated)
+            const isLoggedIn = localStorage.getItem('treatInt_isLoggedIn');
+            if (!isLoggedIn) {
+                // If they tried to access dashboard without login, send them back
+                // Uncomment the line below to enforce security
+                // window.location.href = 'login.html';
+            }
 
-        // 1. CHECK LOGIN
-        const currentUser = localStorage.getItem('currentUser');
-        if (!currentUser) {
-            window.location.href = 'login.html';
-        } else {
-            document.getElementById('display-name').innerText = currentUser;
-            loadFiles(); // Load files on startup
-        }
+            if (userName) {
+                document.getElementById('welcomeMsg').innerText = `Welcome, ${userName}!`;
+                document.getElementById('avatarInitial').innerText = userName.charAt(0).toUpperCase();
+            }
+        });
 
-        function logout() {
-            localStorage.removeItem('currentUser');
+        // 2. Logout Logic
+        function handleLogout() {
+            localStorage.removeItem('treatInt_isLoggedIn');
             window.location.href = 'index.html';
         }
 
-        // 2. FILE SELECTION UI
-        function handleFileSelect() {
-            const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
-            if (file) {
-                document.getElementById('fileNameDisplay').innerText = "Selected: " + file.name;
-                document.getElementById('fileNameDisplay').classList.remove('hidden');
-                document.getElementById('uploadBtn').classList.remove('hidden');
-            }
-        }
-
-        // 3. UPLOAD LOGIC
-        async function uploadFile() {
-            const btn = document.getElementById('uploadBtn');
-            const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
-
-            if (!file) return;
-
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
-
-            try {
-                // Create a unique file name: "PatientName_Timestamp_FileName"
-                const fileName = `${currentUser}_${Date.now()}_${file.name}`;
-
-                // Upload to Supabase Storage Bucket 'medical-records'
-                const { data, error } = await supabaseClient
-                    .storage
-                    .from('medical-records')
-                    .upload(fileName, file);
-
-                if (error) throw error;
-
-                alert("Success! Your medical record has been securely stored.");
-                
-                // Reset UI
-                fileInput.value = "";
-                document.getElementById('fileNameDisplay').classList.add('hidden');
-                document.getElementById('uploadBtn').classList.add('hidden');
-                btn.disabled = false;
-                btn.innerText = "Confirm Upload";
-
-                // Refresh List
-                loadFiles();
-
-            } catch (err) {
-                alert("Upload Failed: " + err.message);
-                btn.disabled = false;
-                btn.innerText = "Confirm Upload";
-            }
-        }
-
-        // 4. LOAD FILES LOGIC
-        async function loadFiles() {
-            const listDiv = document.getElementById('fileList');
-            
-            try {
-                // List all files in the bucket
-                const { data, error } = await supabaseClient
-                    .storage
-                    .from('medical-records')
-                    .list();
-
-                if (error) throw error;
-
-                // Filter files that belong to THIS user (based on name prefix)
-                const myFiles = data.filter(file => file.name.startsWith(currentUser));
-
-                if (myFiles.length === 0) {
-                    listDiv.innerHTML = '<div class="p-6 text-center text-gray-400 text-sm">No documents uploaded yet.</div>';
-                    return;
-                }
-
-                listDiv.innerHTML = ""; // Clear loader
-
-                myFiles.forEach(file => {
-                    const date = new Date(file.created_at).toLocaleDateString();
-                    const cleanName = file.name.split('_').slice(2).join('_'); // Remove Prefix
-
-                    const row = `
-                        <div class="p-4 flex justify-between items-center hover:bg-gray-50 transition">
-                            <div class="flex items-center">
-                                <div class="bg-blue-100 p-3 rounded-full text-blue-600 mr-4">
-                                    <i class="fas fa-file-medical"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-bold text-gray-800">${cleanName}</p>
-                                    <p class="text-xs text-gray-400">${date} • ${(file.metadata.size / 1024).toFixed(1)} KB</p>
-                                </div>
-                            </div>
-                            <span class="text-green-600 text-xs font-bold bg-green-50 px-3 py-1 rounded-full border border-green-200">
-                                <i class="fas fa-check-circle"></i> Stored
-                            </span>
-                        </div>
-                    `;
-                    listDiv.innerHTML += row;
-                });
-
-            } catch (err) {
-                console.error(err);
-                listDiv.innerHTML = '<div class="p-6 text-center text-red-400 text-sm">Error loading files.</div>';
-            }
+        // 3. Upload Simulation
+        function triggerUpload() {
+            alert("This will open your file manager. (Demo Mode)");
         }
     </script>
+
 </body>
 </html>
