@@ -29,7 +29,6 @@
         .nav-links a:hover, .nav-links a.active { color: #2563eb; }
         .nav-actions { display: flex; align-items: center; gap: 20px; }
         
-        /* Language Button */
         .lang-btn {
             border: 1px solid #e2e8f0; padding: 8px 16px; border-radius: 50px;
             font-size: 0.9rem; cursor: pointer; background: white; display: flex; align-items: center; gap: 8px;
@@ -58,12 +57,12 @@
         .slide.active { opacity: 1; z-index: 1; }
         .hero-overlay {
             position: absolute; inset: 0;
-            background: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.3));
+            background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4)); /* Darker for better text contrast */
         }
         
         .hero-content {
             position: relative; z-index: 2; text-align: center; color: white;
-            max-width: 800px; padding: 0 20px; margin-bottom: 100px;
+            max-width: 900px; padding: 0 20px; margin-bottom: 100px;
         }
         
         #dynamic-badge {
@@ -79,7 +78,7 @@
             text-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
         .hero-subtitle {
-            font-size: 1.1rem; color: #e2e8f0; line-height: 1.6; margin-bottom: 30px;
+            font-size: 1.2rem; color: #e2e8f0; line-height: 1.6; margin-bottom: 30px; font-weight: 500;
         }
 
         /* --- FLOATING SEARCH CARD --- */
@@ -126,7 +125,7 @@
         }
         .search-btn:hover { background: #1e40af; transform: translateY(-2px); }
 
-        /* --- SERVICES / WORKFLOW SECTION (UPDATED) --- */
+        /* --- SERVICES / WORKFLOW SECTION --- */
         .workflow-section { padding: 140px 5% 80px 5%; text-align: center; background: #f8f9fa; }
         
         .section-header h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; color: #0f172a; }
@@ -140,53 +139,32 @@
             margin: 0 auto; 
         }
 
-        /* NEW CARD DESIGN FOR HIGHLIGHTING */
         .service-card { 
             background: white; 
             padding: 40px 30px; 
             border-radius: 20px; 
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
-            border: 2px solid transparent; /* Invisible border by default */
+            border: 2px solid transparent; 
             transition: all 0.4s ease;
             position: relative;
             overflow: hidden;
             text-align: left;
         }
 
-        /* Hover Effect: The "Highlight" */
-        .service-card:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15); /* Blue tinted shadow */
-            border-color: #bfdbfe; /* Light blue border */
-        }
-
-        /* Decorative line at top of card */
-        .service-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 0%; height: 5px;
-            background: #2563eb; transition: width 0.4s ease;
-        }
-        .service-card:hover::before { width: 100%; }
-
         .card-number {
             font-size: 4rem; font-weight: 900; color: #f1f5f9;
             position: absolute; top: 10px; right: 20px; z-index: 0;
             transition: color 0.3s;
         }
-        .service-card:hover .card-number { color: #eff6ff; }
-
+        
         .icon-box { 
             width: 70px; height: 70px; 
-            background: #eff6ff; color: #2563eb; 
+            background: #f1f5f9; color: #64748b; /* Neutral default state */
             border-radius: 16px; 
             display: flex; align-items: center; justify-content: center; 
             font-size: 1.8rem; margin-bottom: 25px; 
             position: relative; z-index: 1;
             transition: all 0.3s;
-        }
-        
-        .service-card:hover .icon-box {
-            background: #2563eb; color: white;
-            transform: scale(1.1) rotate(3deg);
         }
 
         .service-card h3 { 
@@ -207,7 +185,42 @@
             font-size: 0.85rem; color: #475569; margin-bottom: 8px;
             display: flex; align-items: center;
         }
-        .card-features li i { color: #10b981; margin-right: 8px; font-size: 0.8rem; }
+        .card-features li i { color: #94a3b8; margin-right: 8px; font-size: 0.8rem; transition: 0.3s; }
+
+        /* --- COLORFUL HOVER EFFECTS --- */
+        
+        .service-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 0%; height: 5px;
+            transition: width 0.4s ease;
+        }
+        .service-card:hover { transform: translateY(-12px); }
+        .service-card:hover::before { width: 100%; }
+        .service-card:hover .icon-box { color: white; transform: scale(1.1) rotate(3deg); }
+        .service-card:hover .card-number { color: #f8fafc; }
+
+        /* Card 1: Consultation (Blue) */
+        .service-card:nth-child(1):hover { border-color: #bfdbfe; box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15); }
+        .service-card:nth-child(1)::before { background: #2563eb; }
+        .service-card:nth-child(1):hover .icon-box { background: #2563eb; }
+        .service-card:nth-child(1):hover .card-features li i { color: #2563eb; }
+
+        /* Card 2: Visa/Travel (Orange/Gold) */
+        .service-card:nth-child(2):hover { border-color: #fde68a; box-shadow: 0 20px 40px rgba(245, 158, 11, 0.15); }
+        .service-card:nth-child(2)::before { background: #f59e0b; }
+        .service-card:nth-child(2):hover .icon-box { background: #f59e0b; }
+        .service-card:nth-child(2):hover .card-features li i { color: #f59e0b; }
+
+        /* Card 3: Stay (Green) */
+        .service-card:nth-child(3):hover { border-color: #a7f3d0; box-shadow: 0 20px 40px rgba(16, 185, 129, 0.15); }
+        .service-card:nth-child(3)::before { background: #10b981; }
+        .service-card:nth-child(3):hover .icon-box { background: #10b981; }
+        .service-card:nth-child(3):hover .card-features li i { color: #10b981; }
+
+        /* Card 4: Treatment (Purple/Pink) */
+        .service-card:nth-child(4):hover { border-color: #e9d5ff; box-shadow: 0 20px 40px rgba(147, 51, 234, 0.15); }
+        .service-card:nth-child(4)::before { background: #9333ea; }
+        .service-card:nth-child(4):hover .icon-box { background: #9333ea; }
+        .service-card:nth-child(4):hover .card-features li i { color: #9333ea; }
 
 
         /* --- FOOTER & REST --- */
@@ -253,6 +266,7 @@
     </nav>
 
     <section class="hero">
+        
         <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2074&auto=format&fit=crop');">
             <div class="hero-overlay"></div>
             <div class="hero-content">
@@ -268,7 +282,24 @@
                 </p>
             </div>
         </div>
-        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
+
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1593693397690-362cb9666fc2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <div class="inline-block px-4 py-1 bg-yellow-500/30 border border-yellow-400 rounded-full text-white text-sm font-bold mb-6">
+                    <i class="fas fa-umbrella-beach"></i> <span data-en="Healing & Happiness" data-bn="সুস্থতা ও আনন্দ">Healing & Happiness</span>
+                </div>
+                <h1 class="hero-title">
+                    <span data-en="Your Treatment" data-bn="আপনার চিকিৎসা">Your Treatment</span><br>
+                    <span style="color: #fcd34d;" data-en="Must Be Enjoyable." data-bn="হোক আনন্দদায়ক।">Must Be Enjoyable.</span>
+                </h1>
+                <p class="hero-subtitle" data-en="Experience Medical Tourism at its best. Healing coupled with the vibrant heritage of India." data-bn="মেডিকেল ট্যুরিজমের সেরা অভিজ্ঞতা। ভারতের ঐতিহ্যের সাথে মিশে আছে আপনার সুস্থতা।">
+                    Experience Medical Tourism at its best. Healing coupled with the vibrant heritage of India.
+                </p>
+            </div>
+        </div>
+
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
             <div class="hero-overlay"></div>
             <div class="hero-content">
                 <div class="inline-block px-4 py-1 bg-green-500/30 border border-green-400 rounded-full text-white text-sm font-bold mb-6">
@@ -283,6 +314,39 @@
                 </p>
             </div>
         </div>
+
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1551076805-e1869033e561?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <div class="inline-block px-4 py-1 bg-purple-500/30 border border-purple-400 rounded-full text-white text-sm font-bold mb-6">
+                    <i class="fas fa-robot"></i> <span data-en="Advanced Technology" data-bn="উন্নত প্রযুক্তি">Advanced Technology</span>
+                </div>
+                <h1 class="hero-title">
+                    <span data-en="Robotic Precision," data-bn="রোবোটিক সার্জারি,">Robotic Precision,</span><br>
+                    <span style="color: #d8b4fe;" data-en="Faster Recovery." data-bn="দ্রুত আরোগ্য।">Faster Recovery.</span>
+                </h1>
+                <p class="hero-subtitle" data-en="Access cutting-edge robotic surgery and advanced organ transplant facilities." data-bn="অত্যাধুনিক রোবোটিক সার্জারি এবং উন্নত অঙ্গ প্রতিস্থাপন সুবিধা গ্রহণ করুন।">
+                    Access cutting-edge robotic surgery and advanced organ transplant facilities.
+                </p>
+            </div>
+        </div>
+
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1505751172876-fa1923c5c528?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <div class="inline-block px-4 py-1 bg-pink-500/30 border border-pink-400 rounded-full text-white text-sm font-bold mb-6">
+                    <i class="fas fa-heart"></i> <span data-en="With You Always" data-bn="সর্বদা আপনার পাশে">With You Always</span>
+                </div>
+                <h1 class="hero-title">
+                    <span data-en="More Than Patients," data-bn="রোগী নয়,">More Than Patients,</span><br>
+                    <span style="color: #f9a8d4;" data-en="You Are Family." data-bn="আপনি আমাদের পরিবার।">You Are Family.</span>
+                </h1>
+                <p class="hero-subtitle" data-en="We provide emotional support, local assistance, and a home-like environment." data-bn="আমরা মানসিক সহায়তা, স্থানীয় সাহায্য এবং বাড়ির মতো পরিবেশ নিশ্চিত করি।">
+                    We provide emotional support, local assistance, and a home-like environment.
+                </p>
+            </div>
+        </div>
+
     </section>
 
     <div class="search-container">
@@ -343,7 +407,7 @@
                 <div class="card-number">01</div>
                 <div class="icon-box"><i class="fas fa-user-md"></i></div>
                 <h3 data-en="Consultation" data-bn="পরামর্শ ও পরিকল্পনা">Consultation</h3>
-                <p data-en="Free consultation with India's top specialists. We gather your reports and get you a treatment plan and cost estimate." data-bn="ভারতের সেরা বিশেষজ্ঞদের সাথে বিনামূল্যে পরামর্শ। আমরা আপনার রিপোর্ট দেখে চিকিৎসার পরিকল্পনা ও খরচের হিসাব দিই।">
+                <p data-en="Free consultation with India's top specialists. We gather your reports and get you a treatment plan." data-bn="ভারতের সেরা বিশেষজ্ঞদের সাথে বিনামূল্যে পরামর্শ। আমরা আপনার রিপোর্ট দেখে চিকিৎসার পরিকল্পনা ও খরচের হিসাব দিই।">
                     Free consultation with India's top specialists. We gather your reports and get you a treatment plan.
                 </p>
                 <ul class="card-features">
