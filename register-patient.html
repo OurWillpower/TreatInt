@@ -2,170 +2,142 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register | TreatInt</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        /* --- UNIFIED THEME --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body.bangla-active, body.bangla-active * { font-family: 'Hind Siliguri', sans-serif !important; }
-        
-        body { 
-            background-color: #fffbf2;
-            background-image: radial-gradient(#e2e8f0 0.5px, transparent 0.5px), radial-gradient(#e2e8f0 0.5px, #fffbf2 0.5px);
-            background-size: 20px 20px;
-            color: #1e293b; min-height: 100vh; display: flex; flex-direction: column;
-        }
-
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; position: absolute; top: 0; width: 100%; z-index: 10; }
-        .logo { display: flex; align-items: center; font-size: 1.5rem; font-weight: 900; color: #0f172a; gap: 10px; text-decoration: none; }
-        .logo i { background: linear-gradient(135deg, #2563eb, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .back-link { font-weight: 600; color: #64748b; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
-        .back-link:hover { color: #2563eb; }
-
-        .register-section { flex: 1; display: flex; align-items: center; justify-content: center; padding: 100px 20px 50px; }
-        .register-card { background: white; width: 100%; max-width: 550px; padding: 40px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(202, 138, 4, 0.15); border-top: 4px solid; border-image: linear-gradient(to right, #bf953f, #fcf6ba, #b38728) 1; position: relative; }
-
-        .form-header { text-align: center; margin-bottom: 30px; }
-        .form-header h1 { font-size: 2rem; font-weight: 800; color: #0f172a; margin-bottom: 10px; }
-        
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .full-width { grid-column: span 2; }
-        .input-group label { display: block; font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 8px; }
-        .input-field { width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; background: #f8fafc; outline: none; }
-        .input-field:focus { border-color: #2563eb; background: white; }
-
-        .submit-btn { width: 100%; padding: 16px; border: none; border-radius: 12px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-        .submit-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
-        
-        .footer-links { margin-top: 25px; text-align: center; font-size: 0.9rem; color: #64748b; }
-        .footer-links a { color: #2563eb; font-weight: 600; }
+        body { font-family: 'Inter', sans-serif; background: #fffbf2; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 500px; border-top: 5px solid #d4af37; }
+        h1 { color: #0f172a; margin-bottom: 5px; }
+        input { width: 100%; padding: 15px; margin-bottom: 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; }
+        button { width: 100%; padding: 15px; background: #2563eb; color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
+        button:hover { background: #1d4ed8; }
+        #status { margin-top: 20px; padding: 10px; border-radius: 5px; display: none; text-align: center; }
+        .error { background: #fee2e2; color: #991b1b; display: block !important; }
+        .success { background: #dcfce7; color: #166534; display: block !important; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <a href="index.html" class="logo"><i class="fas fa-heartbeat"></i> TreatInt</a>
-        <a href="index.html" class="back-link"><i class="fas fa-times"></i></a>
-    </nav>
+    <div class="card">
+        <h1>Create Profile</h1>
+        <p style="color:#64748b; margin-bottom:20px;">Join TreatInt for medical care.</p>
 
-    <section class="register-section">
-        <div class="register-card">
-            <div class="form-header">
-                <h1 data-en="Begin Your Journey" data-bn="আপনার যাত্রা শুরু করুন">Begin Your Journey</h1>
-                <p style="color: #64748b;">Create a secure medical profile.</p>
-            </div>
+        <div id="regForm">
+            <label style="font-weight:600; display:block; margin-bottom:5px;">Full Name</label>
+            <input type="text" id="fullName" placeholder="e.g. Rahul Sharma">
 
-            <form id="regForm">
-                <div class="form-grid">
-                    <div class="input-group full-width">
-                        <label>Full Name</label>
-                        <input type="text" id="fullName" class="input-field" placeholder="e.g. Rahul Sharma" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Email</label>
-                        <input type="email" id="email" class="input-field" placeholder="name@example.com" required>
-                    </div>
-                    <div class="input-group">
-                        <label>WhatsApp Number</label>
-                        <input type="tel" id="phone" class="input-field" placeholder="+91..." required>
-                    </div>
-                    <div class="input-group">
-                        <label>Country</label>
-                        <input type="text" id="country" class="input-field" placeholder="e.g. Bangladesh" required>
-                    </div>
-                    <div class="input-group full-width">
-                        <label>Create Password</label>
-                        <input type="password" id="password" class="input-field" placeholder="••••••••" required>
-                    </div>
-                </div>
+            <label style="font-weight:600; display:block; margin-bottom:5px;">Email</label>
+            <input type="email" id="email" placeholder="name@example.com">
 
-                <button type="submit" id="btnText" class="submit-btn">Create Profile</button>
-                
-                <div id="errorMsg" style="color: red; text-align: center; margin-top: 10px; font-size: 0.9rem; display: none;"></div>
+            <label style="font-weight:600; display:block; margin-bottom:5px;">WhatsApp</label>
+            <input type="text" id="phone" placeholder="+91...">
 
-                <div class="footer-links">
-                    <span>Already have an account?</span> 
-                    <a href="login.html">Login here</a>
-                </div>
-            </form>
+            <label style="font-weight:600; display:block; margin-bottom:5px;">Country</label>
+            <input type="text" id="country" placeholder="e.g. Bangladesh">
+
+            <label style="font-weight:600; display:block; margin-bottom:5px;">Password</label>
+            <input type="password" id="password" placeholder="Min 6 characters">
+
+            <button type="button" onclick="registerUser()" id="btnRegister">Create Account</button>
+            
+            <div id="status"></div>
+            
+            <p style="text-align:center; margin-top:20px;">
+                Already have an account? <a href="login.html" style="color:#2563eb; font-weight:bold;">Login</a>
+            </p>
         </div>
-    </section>
+    </div>
 
     <script>
-        // --- 1. SUPABASE CONFIGURATION ---
-        // PASTE YOUR KEYS HERE FROM SUPABASE DASHBOARD
-        const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL'; 
-        const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        // --- 1. CONFIGURATION ---
+        // PASTE YOUR KEYS HERE
+        const SUPABASE_URL = 'PASTE_YOUR_PROJECT_URL_HERE'; 
+        const SUPABASE_KEY = 'PASTE_YOUR_ANON_KEY_HERE';
         
-        const supabase = showSupabaseWarning() ? null : supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        function showSupabaseWarning() {
-            if (SUPABASE_URL === 'YOUR_SUPABASE_PROJECT_URL') {
-                alert("Please open the code and paste your Supabase URL and Key in the script tag!");
-                return true;
-            }
-            return false;
+        // Initialize
+        let supabase;
+        try {
+            supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        } catch(e) {
+            showStatus("Error: Could not load Supabase. Check Internet.", "error");
         }
 
-        // --- 2. HANDLE REGISTRATION ---
-        const form = document.getElementById('regForm');
-        const btn = document.getElementById('btnText');
-        const errorMsg = document.getElementById('errorMsg');
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            btn.innerText = "Creating...";
+        async function registerUser() {
+            const btn = document.getElementById('btnRegister');
+            const statusDiv = document.getElementById('status');
+            
+            // Clear previous status
+            statusDiv.className = ''; 
+            statusDiv.style.display = 'none';
+            btn.innerText = "Processing...";
             btn.disabled = true;
-            errorMsg.style.display = 'none';
 
+            // Get Values
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const fullName = document.getElementById('fullName').value;
+            const name = document.getElementById('fullName').value;
             const phone = document.getElementById('phone').value;
             const country = document.getElementById('country').value;
 
+            // Simple Validation
+            if(!email || !password || !name) {
+                showStatus("Please fill in all fields.", "error");
+                btn.innerText = "Create Account";
+                btn.disabled = false;
+                return;
+            }
+
             try {
-                // A. Create User in Supabase Auth
+                // A. Create Auth User
                 const { data: authData, error: authError } = await supabase.auth.signUp({
                     email: email,
-                    password: password,
+                    password: password
                 });
 
                 if (authError) throw authError;
+                
+                if (!authData.user) {
+                    throw new Error("Registration succeeded but no User ID returned. (Check Email Confirmation settings in Supabase)");
+                }
 
-                // B. Insert Profile into 'patients' table
-                // Note: Ensure your 'patients' table has these columns (name, phone, country)
+                // B. Save to Database
                 const { error: dbError } = await supabase
-                    .from('patients')
+                    .from('patients') // Make sure table name matches
                     .insert([
                         { 
-                            id: authData.user.id, // Links DB row to Auth User
-                            name: fullName,
+                            id: authData.user.id, // This is a UUID
+                            name: name,
                             phone: phone, 
-                            location: country, // Mapping country to 'location' based on your screenshot
-                            created_at: new Date()
+                            location: country 
                         }
                     ]);
 
                 if (dbError) throw dbError;
 
-                // C. Success! Redirect
-                alert("Registration Successful! Redirecting to Dashboard...");
-                window.location.href = 'dashboard-patient.html';
+                // C. Success
+                showStatus("Success! Redirecting...", "success");
+                setTimeout(() => {
+                    window.location.href = 'dashboard-patient.html';
+                }, 2000);
 
-            } catch (error) {
-                console.error(error);
-                errorMsg.innerText = error.message;
-                errorMsg.style.display = 'block';
-                btn.innerText = "Create Profile";
+            } catch (err) {
+                console.error(err);
+                showStatus("Error: " + err.message, "error");
+                btn.innerText = "Create Account";
                 btn.disabled = false;
             }
-        });
+        }
+
+        function showStatus(msg, type) {
+            const el = document.getElementById('status');
+            el.innerText = msg;
+            el.className = type; // applies .error or .success css
+            el.style.display = 'block';
+        }
     </script>
+
 </body>
 </html>
