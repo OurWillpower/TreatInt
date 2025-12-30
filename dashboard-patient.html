@@ -2,100 +2,233 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Debugger</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard | TreatInt</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: monospace; padding: 20px; background: #333; color: #0f0; }
-        .log-entry { margin-bottom: 5px; border-bottom: 1px solid #444; padding: 5px 0; }
-        .error { color: #ff4444; font-weight: bold; }
-        .success { color: #00ff00; }
-        .warning { color: orange; }
+        /* --- THEME SETUP --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        body { 
+            background-color: #fffbf2;
+            background-image: radial-gradient(#e2e8f0 0.5px, transparent 0.5px), radial-gradient(#e2e8f0 0.5px, #fffbf2 0.5px);
+            background-size: 20px 20px;
+            color: #1e293b;
+            min-height: 100vh;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 5%; background: white; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 50;
+        }
+        .logo { display: flex; align-items: center; font-size: 1.5rem; font-weight: 900; color: #0f172a; gap: 10px; text-decoration: none; }
+        .logo i { 
+            background: linear-gradient(135deg, #2563eb, #06b6d4);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        
+        .user-menu { display: flex; align-items: center; gap: 15px; }
+        .user-avatar { 
+            width: 40px; height: 40px; background: #eff6ff; color: #2563eb; 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;
+            border: 2px solid #bfdbfe;
+        }
+        .logout-btn { 
+            font-size: 0.9rem; color: #64748b; font-weight: 600; cursor: pointer; transition: 0.3s;
+        }
+        .logout-btn:hover { color: #ef4444; }
+
+        /* --- DASHBOARD LAYOUT --- */
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        
+        .welcome-header { margin-bottom: 40px; }
+        .welcome-header h1 { font-size: 2.2rem; font-weight: 800; color: #0f172a; margin-bottom: 5px; }
+        .welcome-header p { color: #64748b; font-size: 1.1rem; }
+
+        /* --- JOURNEY TRACKER (STATUS BAR) --- */
+        .status-card {
+            background: white; padding: 30px; border-radius: 20px;
+            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0; margin-bottom: 40px;
+        }
+        .status-title { font-weight: 700; color: #334155; margin-bottom: 20px; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
+        
+        .progress-track { display: flex; justify-content: space-between; position: relative; }
+        .progress-track::before {
+            content: ''; position: absolute; top: 15px; left: 0; width: 100%; height: 4px;
+            background: #f1f5f9; z-index: 0;
+        }
+        
+        .step { position: relative; z-index: 1; text-align: center; width: 25%; }
+        .step-circle {
+            width: 35px; height: 35px; background: #f1f5f9; border: 4px solid white;
+            border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center;
+            color: #94a3b8; font-weight: 700; transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .step-label { font-size: 0.9rem; font-weight: 600; color: #94a3b8; }
+
+        .step.active .step-circle { background: #2563eb; color: white; box-shadow: 0 0 0 4px #bfdbfe; }
+        .step.active .step-label { color: #2563eb; }
+
+        /* --- ACTION GRID --- */
+        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+
+        .card {
+            background: white; border-radius: 20px; padding: 30px;
+            box-shadow: 0 15px 30px -10px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0; transition: 0.3s;
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1); }
+        
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .card-title { font-weight: 700; font-size: 1.2rem; color: #0f172a; display: flex; align-items: center; gap: 10px; }
+        .card-title i { color: #2563eb; }
+
+        .upload-zone {
+            border: 2px dashed #cbd5e1; border-radius: 12px; padding: 40px;
+            text-align: center; cursor: pointer; transition: 0.3s; background: #f8fafc;
+        }
+        .upload-zone:hover { border-color: #2563eb; background: #eff6ff; }
+        .upload-icon { font-size: 2rem; color: #64748b; margin-bottom: 10px; }
+
+        /* Loading Screen */
+        #loading {
+            position: fixed; inset: 0; background: white; z-index: 999;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; color: #2563eb; font-size: 1.2rem;
+        }
     </style>
 </head>
 <body>
 
-    <h2>🛑 SYSTEM DIAGNOSTICS 🛑</h2>
-    <div id="console-log">Waiting for script...</div>
+    <div id="loading">Connecting to Secure Dashboard...</div>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <i class="fas fa-heartbeat"></i> TreatInt
+        </a>
+        <div class="user-menu">
+            <div class="user-avatar" id="avatarInitial">U</div>
+            <span class="logout-btn" onclick="logout()">Logout</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="welcome-header">
+            <h1 id="welcomeText">Welcome Back!</h1>
+            <p>Your medical profile status is active.</p>
+        </div>
+
+        <div class="status-card">
+            <div class="status-title">Current Status: Reports Review</div>
+            <div class="progress-track">
+                <div class="step active">
+                    <div class="step-circle"><i class="fas fa-file-medical"></i></div>
+                    <div class="step-label">Reports</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Consult</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Visa</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Travel</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="main-col">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-cloud-upload-alt"></i> Upload Reports</div>
+                    </div>
+                    <div class="upload-zone" onclick="triggerUpload()">
+                        <div class="upload-icon"><i class="fas fa-file-pdf"></i></div>
+                        <div style="font-weight:600; color:#334155;">Click to upload your medical files</div>
+                        <div style="font-size:0.8rem; color:#94a3b8;">PDF, JPG, or PNG (Max 5MB)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
-        const logger = document.getElementById('console-log');
-        function log(msg, type = 'normal') {
-            const time = new Date().toLocaleTimeString();
-            let color = type === 'error' ? 'red' : (type === 'success' ? '#0f0' : '#ccc');
-            logger.innerHTML += `<div class="log-entry" style="color:${color}">[${time}] ${msg}</div>`;
-        }
-
-        // --- STEP 1: CHECK KEYS ---
-        // ******************************************************
-        // PASTE YOUR KEYS HERE CAREFULLY
-        // ******************************************************
+        // ==========================================
+        // PASTE YOUR KEYS HERE
+        // ==========================================
         const SUPABASE_URL = 'https://atsdebykxuhtruuwcmlx.supabase.co'; 
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0c2RlYnlreHVodHJ1dXdjbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxNjA2NDQsImV4cCI6MjA4MTczNjY0NH0.-K8dMdgR-Jd9eI4zhz2oJ6vBA6B4GttVXtMDE7zKXS8';
+        // ==========================================
 
-        log("1. Starting System Check...");
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // --- STEP 2: CHECK LIBRARY ---
-        if (typeof supabase === 'undefined') {
-            log("CRITICAL ERROR: Supabase library not loaded. Check internet connection or CDN.", 'error');
-        } else {
-            log("2. Supabase Library Found.", 'success');
-        }
+        async function checkSession() {
+            try {
+                // 1. Check if user is logged in
+                const { data: { session }, error } = await supabase.auth.getSession();
 
-        // --- STEP 3: INIT CLIENT ---
-        let sbClient;
-        try {
-            sbClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-            log("3. Client Initialized.", 'success');
-        } catch (err) {
-            log("CRITICAL ERROR: Could not init client. Keys might be wrong format.", 'error');
-            console.error(err);
-        }
+                if (!session) {
+                    window.location.href = 'login.html';
+                    return;
+                }
 
-        // --- STEP 4: CHECK SESSION ---
-        async function runDiagnostics() {
-            log("4. Asking Supabase for Session...", 'warning');
-            
-            const { data, error } = await sbClient.auth.getSession();
+                // 2. Logged in! Now get their profile
+                loadUserProfile(session.user.id);
 
-            if (error) {
-                log("AUTH ERROR: " + error.message, 'error');
-                return;
-            }
-
-            if (!data.session) {
-                log("RESULT: No User Logged In.", 'error');
-                log("Action: You must go to register-patient.html or login.html first.", 'warning');
-                log("<br><a href='register-patient.html' style='color:white; font-size:1.5rem;'>CLICK HERE TO REGISTER</a>");
-                return;
-            }
-
-            log("5. SUCCESS: User is Logged In!", 'success');
-            log("User ID: " + data.session.user.id);
-            log("User Email: " + data.session.user.email);
-
-            // --- STEP 5: CHECK DATABASE ---
-            log("6. Attempting to fetch Profile from DB...", 'warning');
-            
-            const { data: profile, error: dbError } = await sbClient
-                .from('patients')
-                .select('*')
-                .eq('id', data.session.user.id);
-
-            if (dbError) {
-                log("DATABASE ERROR: " + dbError.message, 'error');
-                log("Hint: Is the table named 'patients'? Did you disable RLS?", 'warning');
-            } else if (profile.length === 0) {
-                log("DATABASE RESULT: User exists in Auth, but NO PROFILE found in 'patients' table.", 'error');
-                log("This usually means the Registration page logic failed to insert the row.", 'warning');
-            } else {
-                log("7. FINAL SUCCESS: Profile Found!", 'success');
-                log("Name in DB: " + profile[0].name);
-                log("Everything is working. You can restore the design code now.", 'success');
+            } catch (err) {
+                console.error("Session Error:", err);
+                alert("Authentication failed. Please login again.");
+                window.location.href = 'login.html';
             }
         }
 
-        runDiagnostics();
+        async function loadUserProfile(userId) {
+            try {
+                const { data, error } = await supabase
+                    .from('patients')
+                    .select('name')
+                    .eq('id', userId)
+                    .single();
+
+                if (data) {
+                    document.getElementById('welcomeText').innerText = `Welcome, ${data.name}!`;
+                    if(data.name) {
+                        document.getElementById('avatarInitial').innerText = data.name.charAt(0).toUpperCase();
+                    }
+                }
+                
+                // Hide loading screen
+                document.getElementById('loading').style.display = 'none';
+
+            } catch (err) {
+                console.error("Profile Load Error:", err);
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        async function logout() {
+            await supabase.auth.signOut();
+            window.location.href = 'index.html';
+        }
+
+        function triggerUpload() {
+            alert("File upload feature coming soon!");
+        }
+
+        // Run check
+        checkSession();
     </script>
-
 </body>
 </html>
